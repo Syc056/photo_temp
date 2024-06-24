@@ -1,0 +1,14 @@
+.add-device-content{
+    width: calc(100% - 40px);
+    height:calc(100% - 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+}
+.action-area{
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    gap: 30px;
+}

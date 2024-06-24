@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live View</title>
+</head>
+<body>
+    <h1>Camera Live View</h1>
+    <img src="http://localhost:5000/video_feed" width="640" height="480" alt="Live View">
+    <h1>Capture Image</h1>
+    <button onclick="captureImage()">Capture Image</button>
+    <script>
+        function captureImage() {
+            fetch('http://localhost:5000/capture/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('Image captured successfully');
+                    } else {
+                        console.log('Image capture failed');
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
