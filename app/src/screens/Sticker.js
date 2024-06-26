@@ -1711,7 +1711,7 @@ function Sticker() {
         const context = canvas.getContext('2d');
         canvas.width = img.width;
         canvas.height = img.height;
-    
+    // canvas.style.objectFit="cover"
         // 필터를 적용
         context.filter = filters;
         context.drawImage(img, 0, 0, img.width, img.height);
@@ -2249,7 +2249,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                     tempImg.src = photo.url;
     
                     tempImg.onload = () => {
-                        applyStyles(tempImg, { width: 800, height: 800, filter: photo.filter });
+                        applyStyles(tempImg, { width: 2400, height: 1600, filter: photo.filter });
                         // tempImg.style.filter= photo.filter
                         resolve(tempImg);
                     };
@@ -2591,7 +2591,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                                     crop={{
                                         x: crop.x,
                                         y: crop.y,
-                                        width: crop.width - crop.x,
+                                        width: crop.width - 0.1*crop.x,
                                         height: crop.height
                                     }}
                                     width={calcedWidth * ratio}
@@ -2619,8 +2619,18 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
                             const y = y1 + rowIndex * (calcedHeight + 12);
+                            const crop = getCrop(
+                                { width: tag.width, height: tag.height },
+                                { width: calcedWidth, height: calcedHeight }
+                            );
                             return (
                                 <KonvaImage
+                                crop={{
+                                    x: crop.x,
+                                    y: crop.y,
+                                    width: crop.width - 0.2*crop.x,
+                                    height: crop.height
+                                }}
                                     width={calcedWidth * ratio}
                                     height={calcedHeight * ratio}
                                     x={x * ratio}
@@ -2635,9 +2645,9 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
 
         }
         else {
-            const calcedWidth = width / 2.4;
+            const calcedWidth = (width / 2.4)*1.02;
             const calcedHeight = width / 2.4;
-            const x11 = 20;
+            const x11 = 16;
             const x12 = calcedWidth + x11 + 20;
             const y1 = 22;
 
@@ -2647,8 +2657,18 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
                             const y = y1 + rowIndex * (calcedHeight + 12);
+                            const crop = getCrop(
+                                { width: tag.width, height: tag.height },
+                                { width: calcedWidth, height: calcedHeight }
+                            );
                             return (
                                 <KonvaImage
+                                crop={{
+                                    x: crop.x,
+                                    y: crop.y,
+                                    width: crop.width -0.3* crop.x,
+                                    height: crop.height- crop.y
+                                }}
                                     width={calcedWidth * ratio}
                                     height={calcedHeight * ratio}
                                     x={x * ratio}
