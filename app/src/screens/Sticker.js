@@ -1897,9 +1897,10 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                         })
                         .then(response => {
                             const data = response.data;
-                            if (data.photo_url) {
-                                sessionStorage.setItem('uploadedCloudPhotoUrl', data.photo_url);
+                            if (data.photo_url!=null) {
+                                sessionStorage.setItem('uploadedCloudPhotoUrl', data.photo_url.toString());
                                 console.log("data url>>>", data.photo_url);
+                                
                             }
                         })
                         .catch(error => {
@@ -2576,7 +2577,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             const x12 = calcedWidth + x11 + 20;
             const y1 = 40;
 
-            return imgTag.length === 0 ? <></> : (
+            return imgTag.length === 0 ? <></> :(
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
