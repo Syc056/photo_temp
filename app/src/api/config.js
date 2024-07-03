@@ -1,12 +1,12 @@
 import axios from "axios";
 
 //urls
-const audioBaseURL="http://127.0.0.1:8001"
-const checkBaseUrl="http://127.0.0.1:9000"
-const OriginBaseURL="http://127.0.0.1:8000"
-export const startCashUrl="http://127.0.0.1:8002/api/start/"
-export const BaseURL = "http://127.0.0.1:5000"
-export const videoFeedUrl=`http://127.0.0.1:5000/video_feed`//Photo.js live view url
+const audioBaseURL="http://118.33.212.138:8001"
+const checkBaseUrl="http://118.33.212.138:9000"
+const OriginBaseURL="http://118.33.212.138:8000"
+export const startCashUrl="http://118.33.212.138:8002/api/start/"
+export const BaseURL = "http://118.33.212.138:5000"
+export const videoFeedUrl=`http://118.33.212.138:5000/video_feed`//Photo.js live view url
 //axios api
 const checkAxiosInstance = axios.create({
   baseURL: checkBaseUrl,
@@ -61,7 +61,7 @@ export const sendCaptureReq=async()=>{
 }
 export  const startLiveView = async () => {
   try {
-      await axios.get('http://127.0.0.1:5000/start_live_view');
+      await axios.get('http://118.33.212.138:5000/start_live_view');
   } catch (error) {
       console.error('Failed to start live view:', error);
   }

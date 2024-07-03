@@ -150,16 +150,16 @@ function Photo() {
     const getLiveStyle=()=>{
         const frame=JSON.parse(sessionStorage.getItem('selectedFrame')).frame
         if (frame==="6-cutx2") {
-            return {width:"714px",height:"700px",objectFit:"cover",position:"absolute",left:"12%"}
+            return {width:"714px",height:"700px",objectFit:"cover",position:"absolute",left:"12%",transform:"scaleX(-1)"}
         } 
         else if(frame==="Stripx2"){
-            return {width:"882px",height:"600px",objectFit:"cover",position:"absolute",left:"2%"}
+            return {width:"882px",height:"600px",objectFit:"cover",position:"absolute",left:"2%",transform:"scaleX(-1)"}
         }
         else if(frame==="2cut-x2"){
-            return {width:"600px",height:"678px",objectFit:"cover",position:"absolute",left:"18%"}
+            return {width:"600px",height:"678px",objectFit:"cover",position:"absolute",left:"18%",transform:"scaleX(-1)"}
         }
         else if(frame==="4-cutx2"){
-            return {width:"798px",height:"600px",objectFit:"cover",position:"absolute",left:"6%"} 
+            return {width:"798px",height:"600px",objectFit:"cover",position:"absolute",left:"6%",transform:"scaleX(-1)"} 
         }
         else {
             
@@ -186,7 +186,7 @@ function Photo() {
                                 : `url(${capturePhotos[index]?.url || null})`
                         }}
                     >
-                        <div className='preview-cnt'>{index + 1}/8</div>
+                        {/* <div className='preview-cnt'>{index + 1}/8</div> */}
                     </div>
                 ).slice(0,4):Array.from({ length: 8 }).map((_, index) => 
                     <div
