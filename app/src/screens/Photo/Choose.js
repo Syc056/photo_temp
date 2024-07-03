@@ -1154,7 +1154,7 @@ function Choose() {
         const selectedIndex = selectedPhotos.indexOf(index);
         if (selectedIndex === -1 && selectedPhotos.length < totalMeetsPhotos) {
             // Add the photo to selectedPhotos if it's not already selected
-            setSelectedPhotos([...selectedPhotos, index]);
+            setSelectedPhotos([...selectedPhotos, index,index]);
         } else {
             // Remove the photo from selectedPhotos if it's already selected
             setSelectedPhotos(selectedPhotos.filter((item) => item !== index));
