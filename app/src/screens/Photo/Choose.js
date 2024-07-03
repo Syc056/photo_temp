@@ -1154,7 +1154,12 @@ function Choose() {
         const selectedIndex = selectedPhotos.indexOf(index);
         if (selectedIndex === -1 && selectedPhotos.length < totalMeetsPhotos) {
             // Add the photo to selectedPhotos if it's not already selected
-            setSelectedPhotos([...selectedPhotos, index,index]);
+            if (selectedFrame == 'Stripx2') {
+                         setSelectedPhotos([...selectedPhotos, index,index]);
+            } else {
+                setSelectedPhotos([...selectedPhotos, index]);
+            }
+   
         } else {
             // Remove the photo from selectedPhotos if it's already selected
             setSelectedPhotos(selectedPhotos.filter((item) => item !== index));
