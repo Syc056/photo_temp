@@ -200,7 +200,7 @@ function Photo() {
                             : `url(${capturePhotos[index]?.url || null})`
                         }}
                     >
-                        <div className='preview-cnt'>{index + 1}/8</div>
+                        {/* <div className='preview-cnt'>{index + 1}/8</div> */}
                     </div>
                 ).slice(4,8)}
             </div>
