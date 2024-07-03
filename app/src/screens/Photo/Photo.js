@@ -136,9 +136,9 @@ function Photo() {
         const res=await getAudio({file_name:"take_photo.wav"})
         console.log("audio :",res)
           }
-    useEffect(()=>{
-    playAudio()
-    },[])
+    // useEffect(()=>{
+    // playAudio()
+    // },[])
     const playAudio = async() => {
         const res=await getAudio({file_name:"look_up_smile.wav"})
         console.log("audio :",res)

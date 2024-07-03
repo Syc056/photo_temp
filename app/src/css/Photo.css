@@ -301,10 +301,10 @@
 .right-choose-container {
      position: absolute;
      top: 30%;
-     right: 8%;
+     right: 7%;
      display: flex;
      flex-direction: column;
-     width: 45%;
+     width: 46%;
 }
 
 .choose-line {
@@ -314,12 +314,12 @@
 
 .choose-image {
      width: 100%;
-     height: 200px;
+     height: 128px;
      background-size: contain;
      background-image: url('../assets/Photo/Choose/photo_box.png');
      background-repeat: no-repeat;
      background-position: center;
-     margin: 10px auto;
+     margin: 30px 10px;
 }
 
 .bottom_choose_container {
@@ -800,3 +800,8 @@
           opacity: 0;
      }
 }
+.choose-image.clicked {
+     outline: 6px solid red;
+     box-sizing: border-box;
+     border-radius: 10px;
+ }

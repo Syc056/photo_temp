@@ -1489,7 +1489,7 @@ function Choose() {
                         {group.map((photo, photoIndex) => (
                             <div
                                 key={photoIndex}
-                                className="choose-image"
+                                className={`choose-image ${selectedPhotos.includes(photo.id)?"clicked":""}`}
                                 style={{ backgroundImage: `url(${photo.url})` }}
                                 onClick={() => toggleSelection(photo.id)}
                             />
