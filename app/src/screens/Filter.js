@@ -1529,8 +1529,7 @@
 //      );
 // }
 
-// export default Filter;
-import React, { useEffect, useState, useRef } from 'react';
+// export default Filter;import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import i18n from '../translations/i18n';
@@ -1613,6 +1612,7 @@ import continue_kr_hover from '../assets/Common/kr/continue_click.png';
 import continue_vn from '../assets/Common/vn/continue.png';
 import continue_vn_hover from '../assets/Common/vn/continue_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
+import { useEffect, useState } from 'react';
 
 function Filter() {
     const { t } = useTranslation();
@@ -1641,7 +1641,19 @@ function Filter() {
     const [goBackButton, setGoBackButton] = useState(goback_en);
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
+    const [clickedId,setClickedId]=useState(null)
     const effectFloat=0.05;
+    const handlePhotoClick = (selectedIndex) => {
+        if (selectedId.includes(selectedIndex)) {
+            const filteredIds = selectedId.filter((id) => id !== selectedIndex);
+            setSelectedId(filteredIds);
+    
+            const { [selectedIndex]: _, ...rest } = filterEffect;
+            setFilterEffect(rest);
+        } else {
+            setSelectedId([selectedIndex]);
+        }
+    };
     const selectedFilterEffects = [
         {
             id: 1,
@@ -1783,7 +1795,7 @@ function Filter() {
     };
 
     const handleFilter = (index) => {
-        getClickAudio()
+        // getClickAudio()
         setSliderChange(false);
         setPercentage(350);
         setFilterIndex(index);
@@ -1860,10 +1872,15 @@ function Filter() {
         if (!filterEffect[index]) {
             return '';
         }
-        const filters = filterEffect[index].map((option) => {
+        // if (selectedId.includes(index)) {
+             const filters = filterEffect[index].map((option) => {
             return `${option.property}(${option.value}${option.unit})`;
         });
         return filters.join(' ');
+        // } else {
+        //     return '';
+        // }
+       
     };
 
     const storeImageCanvas = async () => {
@@ -1914,75 +1931,86 @@ function Filter() {
         }
     };
 
-    const displayClassNameForPhoto = (rowIndex, photoIndex) => {
+    const displayClassNameForPhoto = (rowIndex, photoIndex, selectedIndex) => {
+        let className = 'choose-photo-item';
+
         if (selectedFrame === 'Stripx2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                return 'choose-photo-item-0-0';
+                className = 'choose-photo-item-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                return 'choose-photo-item-0-1';
+                className = 'choose-photo-item-0-1';
             } else if (rowIndex === 1 && photoIndex === 0) {
-                return 'choose-photo-item-1-0';
+                className = 'choose-photo-item-1-0';
             } else if (rowIndex === 1 && photoIndex === 1) {
-                return 'choose-photo-item-1-1';
+                className = 'choose-photo-item-1-1';
             } else if (rowIndex === 2 && photoIndex === 0) {
-                return 'choose-photo-item-2-0';
+                className = 'choose-photo-item-2-0';
             } else if (rowIndex === 2 && photoIndex === 1) {
-                return 'choose-photo-item-2-1';
+                className = 'choose-photo-item-2-1';
             } else if (rowIndex === 3 && photoIndex === 0) {
-                return 'choose-photo-item-3-0';
+                className = 'choose-photo-item-3-0';
             } else if (rowIndex === 3 && photoIndex === 1) {
-                return 'choose-photo-item-3-1';
+                className = 'choose-photo-item-3-1';
             }
         } else if (selectedFrame === '6-cutx2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                return 'choose-photo-item6-0-0';
+                className = 'choose-photo-item6-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                return 'choose-photo-item6-0-1';
+                className = 'choose-photo-item6-0-1';
             } else if (rowIndex === 1 && photoIndex === 0) {
-                return 'choose-photo-item6-1-0';
+                className = 'choose-photo-item6-1-0';
             } else if (rowIndex === 1 && photoIndex === 1) {
-                return 'choose-photo-item6-1-1';
+                className = 'choose-photo-item6-1-1';
             } else if (rowIndex === 2 && photoIndex === 0) {
-                return 'choose-photo-item6-2-0';
+                className = 'choose-photo-item6-2-0';
             } else if (rowIndex === 2 && photoIndex === 1) {
-                return 'choose-photo-item6-2-1';
+                className = 'choose-photo-item6-2-1';
             }
         } else if (selectedFrame === '2cut-x2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                return 'choose-photo-item-2cut-0-0';
+                className = 'choose-photo-item-2cut-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                return 'choose-photo-item-2cut-0-1';
+                className = 'choose-photo-item-2cut-0-1';
             }
         } else if (selectedFrame === '3-cutx2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                return 'choose-photo-item-3cut-0-0';
+                className = 'choose-photo-item-3cut-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                return 'choose-photo-item-3cut-0-1';
+                className = 'choose-photo-item-3cut-0-1';
             } else if (rowIndex === 1 && photoIndex === 0) {
-                return 'choose-photo-item-3cut-0-1';
+                className = 'choose-photo-item-3cut-0-1';
             }
         } else if (selectedFrame === '4-cutx2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                return 'choose-photo-item-4cut-0-0';
+                className = 'choose-photo-item-4cut-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                return 'choose-photo-item-4cut-0-1';
+                className = 'choose-photo-item-4cut-0-1';
             } else if (rowIndex === 1 && photoIndex === 0) {
-                return 'choose-photo-item-4cut-1-0';
+                className = 'choose-photo-item-4cut-1-0';
             } else if (rowIndex === 1 && photoIndex === 1) {
-                return 'choose-photo-item-4cut-1-1';
+                className = 'choose-photo-item-4cut-1-1';
             }
         } else if (selectedFrame === '5-cutx2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                return 'choose-photo-item-5cut-0-0';
+                className = 'choose-photo-item-5cut-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                return 'choose-photo-item-5cut-0-1';
+                className = 'choose-photo-item-5cut-0-1';
             } else if (rowIndex === 1 && photoIndex === 0) {
-                return 'choose-photo-item-5cut-1-0';
+                className = 'choose-photo-item-5cut-1-0';
             } else if (rowIndex === 1 && photoIndex === 1) {
-                return 'choose-photo-item-5cut-1-1';
+                className = 'choose-photo-item-5cut-1-1';
             }
         }
-        return 'choose-photo-item';
+
+        // if (selectedId.includes(clickedId)) {
+        //     className += ' clicked';
+        // }
+
+            // selectedId의 마지막 요소만 클릭된 것으로 표시
+    if (selectedId.length > 0 && selectedId[selectedId.length - 1] === selectedIndex) {
+        className += ' clicked';
+    }
+        return className;
     };
 
     const showSelectedPhotos = () => {
@@ -1992,6 +2020,7 @@ function Filter() {
                     <div
                         className="choose-photo-item-3cut-top-line"
                         style={{ backgroundImage: `url(${photos[selectedPhotos[0]].url})`, filter: getImageStyle(selectedPhotos[0]) }}
+                        onClick={() => handlePhotoClick(selectedPhotos[0])}
                     />
                 </div>
             );
@@ -2003,8 +2032,9 @@ function Filter() {
                         {row.map((selectedIndex, photoIndex) => (
                             <div
                                 key={photoIndex}
-                                className={displayClassNameForPhoto(rowIndex, photoIndex)}
+                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                 style={{ backgroundImage: `url(${photos[selectedIndex].url})`, filter: getImageStyle(selectedIndex) }}
+                                onClick={() => handlePhotoClick(selectedIndex)}
                             />
                         ))}
                     </div>
@@ -2017,6 +2047,7 @@ function Filter() {
                         <div
                             className="choose-photo-item-5cut-last-line"
                             style={{ backgroundImage: `url(${photos[selectedPhotos[selectedPhotos.length - 1]].url})`, filter: getImageStyle(selectedPhotos[selectedPhotos.length - 1]) }}
+                            onClick={() => handlePhotoClick(selectedPhotos.length - 1)}
                         />
                     </div>
                 );
@@ -2027,8 +2058,9 @@ function Filter() {
                             {row.map((selectedIndex, photoIndex) => (
                                 <div
                                     key={photoIndex}
-                                    className={displayClassNameForPhoto(rowIndex, photoIndex)}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     style={{ backgroundImage: `url(${photos[selectedIndex].url})`, filter: getImageStyle(selectedIndex) }}
+                                    onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
                         </div>
@@ -2043,8 +2075,9 @@ function Filter() {
                             {row.map((selectedIndex, photoIndex) => (
                                 <div
                                     key={photoIndex}
-                                    className={displayClassNameForPhoto(rowIndex, photoIndex)}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     style={{ backgroundImage: `url(${photos[selectedIndex].url})`, filter: getImageStyle(selectedIndex) }}
+                                    onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
                         </div>
@@ -2058,12 +2091,13 @@ function Filter() {
                     {row.map((selectedIndex, photoIndex) => (
                         <div
                             key={photoIndex}
-                            className={displayClassNameForPhoto(rowIndex, photoIndex)}
+                            className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
                                 // transform: 'scale(0.7)',
                                 backgroundImage: `url(${photos[selectedIndex].url})`,
                                 filter: getImageStyle(selectedIndex),
                             }}
+                            onClick={() => handlePhotoClick(selectedIndex)}
                         />
                     ))}
                 </div>
@@ -2086,15 +2120,8 @@ function Filter() {
                         {row.map((selectedIndex, photoIndex) => (
                             <div
                                 key={photoIndex}
-                                className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                onClick={() => {
-                                    if (selectedId.includes(selectedIndex)) {
-                                        const filtered = selectedId.filter((item) => item !== selectedIndex);
-                                        setSelectedId(filtered);
-                                    } else {
-                                        setSelectedId((prev) => [...prev, selectedIndex]);
-                                    }
-                                }}
+                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                onClick={() => handlePhotoClick(selectedIndex)}
                               
                             />
                         ))}
@@ -2118,15 +2145,8 @@ function Filter() {
                             {row.map((selectedIndex, photoIndex) => (
                                 <div
                                     key={photoIndex}
-                                    className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                    onClick={() => {
-                                        if (selectedId.includes(selectedIndex)) {
-                                            const filtered = selectedId.filter((item) => item !== selectedIndex);
-                                            setSelectedId(filtered);
-                                        } else {
-                                            setSelectedId((prev) => [...prev, selectedIndex]);
-                                        }
-                                    }}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                    onClick={() => handlePhotoClick(selectedIndex)}
                                
                                 />
                             ))}
@@ -2142,15 +2162,8 @@ function Filter() {
                             {row.map((selectedIndex, photoIndex) => (
                                 <div
                                     key={photoIndex}
-                                    className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                    onClick={() => {
-                                        if (selectedId.includes(selectedIndex)) {
-                                            const filtered = selectedId.filter((item) => item !== selectedIndex);
-                                            setSelectedId(filtered);
-                                        } else {
-                                            setSelectedId((prev) => [...prev, selectedIndex]);
-                                        }
-                                    }}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                    onClick={() => handlePhotoClick(selectedIndex)}
                                  
                                 />
                             ))}
@@ -2165,15 +2178,8 @@ function Filter() {
                     {row.map((selectedIndex, photoIndex) => (
                         <div
                             key={photoIndex}
-                            className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                            onClick={() => {
-                                if (selectedId.includes(selectedIndex)) {
-                                    const filtered = selectedId.filter((item) => item !== selectedIndex);
-                                    setSelectedId(filtered);
-                                } else {
-                                    setSelectedId((prev) => [...prev, selectedIndex]);
-                                }
-                            }}
+                            className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                            onClick={() => handlePhotoClick(selectedIndex)}
                            
                         />
                     ))}
@@ -2273,7 +2279,7 @@ function Filter() {
         const res=await getAudio({file_name:"choose_filter.wav"})
           }
 useEffect(()=>{
-    playAudio()
+    // playAudio()
 },[])
     return (
         <div className='filter-container' style={{ backgroundImage: `url(${background})` }}>
