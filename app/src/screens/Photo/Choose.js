@@ -1026,6 +1026,7 @@ import photo_frame from '../../assets/Photo/Choose/photo_frame.png';
 import background_en from '../../assets/Photo/Choose/BG.png';
 import background_kr from '../../assets/Photo/Choose/kr/BG.png';
 import background_vn from '../../assets/Photo/Choose/vn/BG.png';
+import background_mn from '../../assets/Photo/Choose/mn/BG.png';
 
 // Go Back
 import goback_en from '../../assets/Common/goback.png';
@@ -1034,7 +1035,8 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
-
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 // Continue
 import continue_en from '../../assets/Common/continue.png';
 import continue_en_hover from '../../assets/Common/continue_click.png';
@@ -1042,6 +1044,8 @@ import continue_kr from '../../assets/Common/kr/continue.png';
 import continue_kr_hover from '../../assets/Common/kr/continue_click.png';
 import continue_vn from '../../assets/Common/vn/continue.png';
 import continue_vn_hover from '../../assets/Common/vn/continue_click.png';
+import continue_mn from '../../assets/Common/mn/continue.png';
+import continue_mn_hover from '../../assets/Common/mn/continue_click.png';
 import { getAudio, getClickAudio, getPhotos } from '../../api/config';
 
 function Choose() {
@@ -1063,15 +1067,6 @@ function Choose() {
 
     const [formattedPhotos, setFormattedPhotos] = useState([]);
 
-    // const sound = './choose_photos.wav';
-
-    // useEffect(() => {
-    //     //음성 재생
-    //     const audio = new Audio(sound);
-    //     audio.muted = true;
-    //     audio.play();
-    //     audio.muted = false;
-    // }, []);
 
     const testGetPhotos = async () => {
         const photos = await getPhotos();
@@ -1104,6 +1099,10 @@ function Choose() {
                 setBackground(background_vn);
                 setContinueButton(continue_vn_hover);
             }
+            else if (storedLanguage === 'mn') {
+                setBackground(background_mn);
+                setContinueButton(continue_mn_hover);
+            }
         }
 
         // Retrieve selected frame from session storage
@@ -1116,7 +1115,6 @@ function Choose() {
     
         if (sessionSelectedLayout) {
             const parsedSelectedLayout = JSON.parse(sessionSelectedLayout);
-    // console.log("in choose>>>",parsedSelectedLayout)
             setMyBackground(parsedSelectedLayout[0].photo);
             setSelectedLayout(parsedSelectedLayout[0].photo_cover);
         }
@@ -1153,7 +1151,6 @@ function Choose() {
 
         const selectedIndex = selectedPhotos.indexOf(index);
         if (selectedIndex === -1 && selectedPhotos.length < totalMeetsPhotos) {
-            // Add the photo to selectedPhotos if it's not already selected
             if (selectedFrame == 'Stripx2') {
                          setSelectedPhotos([...selectedPhotos, index,index]);
             } else {
@@ -1161,11 +1158,9 @@ function Choose() {
             }
    
         } else {
-            // Remove the photo from selectedPhotos if it's already selected
             setSelectedPhotos(selectedPhotos.filter((item) => item !== index));
         }
 
-    // Check if all photos have been selected
         if (selectedPhotos.length === totalMeetsPhotos - 1) {
             setConfirmButton(true);
         } else {
@@ -1243,11 +1238,7 @@ function Choose() {
             setClickedButton(true);
             const result = await copyImageApi();
             console.log("go to filter before>>>",result)
-            // if (result) {
                 navigate("/filter");
-            // } else {
-            //     setClickedButton(false);
-            // }
         }
     }
 
@@ -1357,6 +1348,8 @@ function Choose() {
             setGoBackButton(goBackButton == goback_kr_hover ? goback_kr : goback_kr_hover);
         } else if (lang === 'vi') {
             setGoBackButton(goBackButton == goback_vn_hover ? goback_vn : goback_vn_hover);
+        } else if (lang === 'mn') {
+            setGoBackButton(goBackButton == goback_mn_hover ? goback_mn : goback_mn_hover);
         }
     }
     const playAudio = async() => {
@@ -1475,6 +1468,8 @@ function Choose() {
             setContinueButton(continueButton == continue_kr ? continue_kr_hover : continue_kr);
         } else if (storedLanguage === 'vi') {
             setContinueButton(continueButton == continue_vn ? continue_vn_hover : continue_vn);
+        }else if (storedLanguage === 'mn') {
+            setContinueButton(continueButton == continue_mn ? continue_mn_hover : continue_mn);
         }
     }
 

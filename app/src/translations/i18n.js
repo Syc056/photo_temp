@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 import translationEN from './en.json';
 import translationKO from './ko.json';
 import translationVI from './vi.json';
+import translationMn from './mn.json';
 
 const resources = {
   en: {
@@ -15,6 +16,9 @@ const resources = {
   },
   vi: {
     translation: translationVI,
+  },
+  mn: {
+    translation: translationMn,
   },
 };
 

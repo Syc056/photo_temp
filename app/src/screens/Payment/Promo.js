@@ -8,16 +8,19 @@ import "../../css/Payment.css";
 import promo_form from '../../assets/Payment/Promo/promo_form.png';
 import promo_form_kr from '../../assets/Payment/Promo/kr/promo_form.png';
 import promo_form_vn from '../../assets/Payment/Promo/vn/promo_form.png';
+import promo_form_mn from '../../assets/Payment/Promo/mn/promo_form.png';
 
 import promo_input from '../../assets/Payment/Promo/promo_input.png';
 
 import redeem from '../../assets/Payment/Promo/redeem.png';
 import redeem_kr from '../../assets/Payment/Promo/kr/redeem.png';
 import redeem_vn from '../../assets/Payment/Promo/vn/redeem.png';
+import redeem_mn from '../../assets/Payment/Promo/mn/redeem.png';
 
 import redeem_click from '../../assets/Payment/Promo/redeem_click.png';
 import redeem_click_kr from '../../assets/Payment/Promo/kr/redeem_click.png';
 import redeem_click_vn from '../../assets/Payment/Promo/vn/redeem_click.png';
+import redeem_click_mn from '../../assets/Payment/Promo/mn/redeem_click.png';
 
 // Promo images
 import button0 from '../../assets/Payment/Promo/button0.png';
@@ -47,6 +50,7 @@ import num9_click from '../../assets/Payment/Promo/num9_click.png';
 import background_en from '../../assets/Payment/Promo/BG.png';
 import background_kr from '../../assets/Payment/Promo/kr/BG.png';
 import background_vn from '../../assets/Payment/Promo/vn/BG.png';
+import background_mn from '../../assets/Payment/Promo/mn/BG.png';
 
 // Go Back
 import goback_en from '../../assets/Common/goback.png';
@@ -55,6 +59,8 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 
 import axios from 'axios';
 import { checkPromotionCode, getAudio, getClickAudio } from '../../api/config';
@@ -92,19 +98,15 @@ function Cash() {
                     setRedeemButton(redeem_vn);
                     setGoBackButton(goback_vn);
                }
+               else if (storedLanguage === 'mn') {
+                    setBackground(background_mn);
+                    setPromoForm(promo_form_mn);
+                    setRedeemButton(redeem_mn);
+                    setGoBackButton(goback_mn);
+               }
           }
      }, []);
-     // const sound='./enter_pro.wav'
-     // // const audioRef = useRef(null);
-   
-     // useEffect(() => {
-     //   //음성 재생
-     //   const audio = new Audio(sound); 
-     //   audio.muted=true
-     //   audio.play()
-     //   audio.muted=false
-   
-     // }, []);
+
      const handleMouseEnter = (image) => {
           setHoveredImage(image);
      }
@@ -120,6 +122,8 @@ function Cash() {
                setRedeemButton(redeemButton == redeem_click_kr ? redeem_kr : redeem_click_kr);
           } else if (lang === 'vi') {
                setRedeemButton(redeemButton == redeem_click_vn ? redeem_vn : redeem_click_vn);
+          } else if (lang === 'mn') {
+               setRedeemButton(redeemButton == redeem_click_mn ? redeem_mn : redeem_click_mn);
           }
      }
 
@@ -157,6 +161,8 @@ function Cash() {
                setGoBackButton(goBackButton == goback_kr_hover ? goback_kr : goback_kr_hover);
           } else if (lang === 'vi') {
                setGoBackButton(goBackButton == goback_vn_hover ? goback_vn : goback_vn_hover);
+          }else if (lang === 'mn') {
+               setGoBackButton(goBackButton == goback_mn_hover ? goback_mn : goback_mn_hover);
           }
      }
      const [ip, setIp] = useState()

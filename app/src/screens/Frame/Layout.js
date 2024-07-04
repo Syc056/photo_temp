@@ -17,6 +17,8 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 
 // Confirm
 import confirm_en from '../../assets/Frame/Layout/confirm.png';
@@ -25,6 +27,8 @@ import confirm_kr from '../../assets/Frame/Layout/Confirm/kr/confirm.png';
 import confirm_kr_hover from '../../assets/Frame/Layout/Confirm/kr/confirm_click.png';
 import confirm_vn from '../../assets/Frame/Layout/Confirm/vn/confirm.png';
 import confirm_vn_hover from '../../assets/Frame/Layout/Confirm/vn/confirm_click.png';
+import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
+import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../../api/config';
 import FrameCarousel from '../../components/FrameCarousel';
 
@@ -135,6 +139,11 @@ function Layout() {
                setConfirmButton(confirm_vn);
                setConfirmHoverButton(confirm_vn_hover);
           }
+          else if (storedLanguage === 'mn') {
+               setGoBackBg(goback_mn);
+               setConfirmButton(confirm_mn);
+               setConfirmHoverButton(confirm_mn_hover);
+          }
      }, []);
 
      useEffect(() => {
@@ -236,84 +245,13 @@ function Layout() {
                setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
           } else if (goBackBG === 'vi') {
                setGoBackBg(goBackBg === goback_vn ? goback_vn_hover : goback_vn);
-          } else {
+          }else if(goBackBG === 'mn'){
+               setGoBackBg(goBackBg === goback_mn ? goback_mn_hover : goback_mn);
+          } 
+          else {
                setGoBackBg(goBackBg === goback_en ? goback_en_hover : goback_en);
           }
      }
-// console.log("slide >>>",slicedLayouts)
-// const getBackground=(sliceIdx)=>{
-//      const storedLanguage = sessionStorage.getItem('language');
-//      if (storedLanguage) {
-//           i18n.changeLanguage(storedLanguage);
-//           setLanguage(storedLanguage);
-//      }
-
-//      const frame = sessionStorage.getItem('selectedFrame');
-//      if (frame) {
-//           setSelectedFrame(JSON.parse(frame).frame);
-//      }
-
-//      const sessionStyleBg = sessionStorage.getItem('styleBg');
-//      if (sessionStyleBg) {
-//           let layoutBg = '';
-//           if (sliceIdx===0) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Seasons/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Seasons/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Seasons/BG.png`);
-//                }
-//           } else if (sliceIdx===1) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Party/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Party/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Party/BG.png`);
-//                }
-//           } else if (sliceIdx===2) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/BG.png`);
-//                }
-//           } else if (sliceIdx===3) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/BG.png`);
-//                }
-//           } else if (sliceIdx===4) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Collab/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Collab/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Collab/BG.png`);
-//                }
-//           }
-//           setLayoutBackground(layoutBg);
-//      }
-
-//      if (storedLanguage === 'en') {
-//           setGoBackBg(goback_en);
-//           setConfirmButton(confirm_en);
-//           setConfirmHoverButton(confirm_en_hover);
-//      } else if (storedLanguage === 'ko') {
-//           setGoBackBg(goback_kr);
-//           setConfirmButton(confirm_kr);
-//           setConfirmHoverButton(confirm_kr_hover);
-//      } else if (storedLanguage === 'vi') {
-//           setGoBackBg(goback_vn);
-//           setConfirmButton(confirm_vn);
-//           setConfirmHoverButton(confirm_vn_hover);
-//      }
-// }
 useEffect(() => {
      const storedLanguage = sessionStorage.getItem('language');
      if (storedLanguage) {
@@ -325,40 +263,63 @@ useEffect(() => {
      if (frame) {
           setSelectedFrame(JSON.parse(frame).frame);
      }
-
+console.log("현재 언어>>>",storedLanguage)
      const sessionStyleBg = sessionStorage.getItem('styleBg');
      if (sessionStyleBg) {
           let layoutBg = '';
+     //season
           if (sessionStyleBg == 'Seasons') {
                if (storedLanguage == 'ko') {
                     layoutBg = require(`../../assets/Frame/Layout/Seasons/kr/BG.png`);
                } else if (storedLanguage == 'vi') {
                     layoutBg = require(`../../assets/Frame/Layout/Seasons/vn/BG.png`);
-               } else {
+               } 
+               else if (storedLanguage == 'mn') {
+                    layoutBg = require(`../../assets/Frame/Layout/Seasons/mn/BG.png`);
+               } 
+               else {
                     layoutBg = require(`../../assets/Frame/Layout/Seasons/BG.png`);
                }
-          } else if (sessionStyleBg == 'Party') {
+          }
+          //party 
+          else if (sessionStyleBg == 'Party') {
                if (storedLanguage == 'ko') {
                     layoutBg = require(`../../assets/Frame/Layout/Party/kr/BG.png`);
                } else if (storedLanguage == 'vi') {
                     layoutBg = require(`../../assets/Frame/Layout/Party/vn/BG.png`);
-               } else {
+               } 
+               else if (storedLanguage == 'mn') {
+                    layoutBg = require(`../../assets/Frame/Layout/Party/mn/BG.png`);
+               } 
+               else {
                     layoutBg = require(`../../assets/Frame/Layout/Party/BG.png`);
                }
-          } else if (sessionStyleBg == 'Cartoon') {
+          } 
+          //cartoon
+          else if (sessionStyleBg == 'Cartoon') {
                if (storedLanguage == 'ko') {
                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/kr/BG.png`);
                } else if (storedLanguage == 'vi') {
                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/vn/BG.png`);
-               } else {
+               } 
+               else if (storedLanguage == 'mn') {
+                    layoutBg = require(`../../assets/Frame/Layout/Cartoon/mn/BG.png`);
+               } 
+               else {
                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/BG.png`);
                }
-          } else if (sessionStyleBg == 'Minimalism') {
+          }
+          //minimalism 
+          else if (sessionStyleBg == 'Minimalism') {
                if (storedLanguage == 'ko') {
                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/kr/BG.png`);
                } else if (storedLanguage == 'vi') {
                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/vn/BG.png`);
-               } else {
+               }
+               else if (storedLanguage == 'mn') {
+                    layoutBg = require(`../../assets/Frame/Layout/Minimalism/mn/BG.png`);
+               }
+               else {
                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/BG.png`);
                }
           } else if (sessionStyleBg == 'Collab') {
@@ -366,13 +327,17 @@ useEffect(() => {
                     layoutBg = require(`../../assets/Frame/Layout/Collab/kr/BG.png`);
                } else if (storedLanguage == 'vi') {
                     layoutBg = require(`../../assets/Frame/Layout/Collab/vn/BG.png`);
-               } else {
+               }
+               else if (storedLanguage == 'mn') {
+                    layoutBg = require(`../../assets/Frame/Layout/Collab/mn/BG.png`);
+               }
+               else {
                     layoutBg = require(`../../assets/Frame/Layout/Collab/BG.png`);
                }
           }
           setLayoutBackground(layoutBg);
      }
-
+//영어
      if (storedLanguage === 'en') {
           setGoBackBg(goback_en);
           setConfirmButton(confirm_en);

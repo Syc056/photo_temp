@@ -10,6 +10,7 @@ import axios from 'axios';
 import background_en from '../../assets/Photo/Snap/BG.png';
 import background_kr from '../../assets/Photo/Snap/kr/BG.png';
 import background_vn from '../../assets/Photo/Snap/vn/BG.png';
+import background_mn from '../../assets/Photo/Snap/mn/BG.png';
 import { getAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 // import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
 
@@ -112,6 +113,8 @@ function Photo() {
             setBackgroundImage(background_kr);
         } else if (language === 'vi') {
             setBackgroundImage(background_vn);
+        }else if (language === 'mn') {
+            setBackgroundImage(background_mn);
         }
     }, []);
     

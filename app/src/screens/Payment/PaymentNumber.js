@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import background_en from '../../assets/PaymentNum/Common/BG.png';
 import background_vn from '../../assets/PaymentNum/Common/vn/BG.png';
 import backgrond_kr from '../../assets/PaymentNum/Common/kr/BG.png';
+import backgrond_mn from '../../assets/PaymentNum/Common/mn/BG.png';
 //btns
 import numField from '../../assets/Common/number-field.png';
 import priceField from '../../assets/Common/price-field.png';
@@ -19,6 +20,8 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 import { useNavigate } from 'react-router-dom';
 // Confirm
 import confirm_en from '../../assets/Frame/Layout/confirm.png';
@@ -27,6 +30,8 @@ import confirm_kr from '../../assets/Frame/Layout/Confirm/kr/confirm.png';
 import confirm_kr_hover from '../../assets/Frame/Layout/Confirm/kr/confirm_click.png';
 import confirm_vn from '../../assets/Frame/Layout/Confirm/vn/confirm.png';
 import confirm_vn_hover from '../../assets/Frame/Layout/Confirm/vn/confirm_click.png';
+import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
+import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getClickAudio, sendDongNum } from '../../api/config';
 
 function PaymentNumber(props) {
@@ -47,7 +52,11 @@ function PaymentNumber(props) {
           setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
         } else if (goBackBG === 'vi') {
           setGoBackBg(goBackBg === goback_vn ? goback_vn_hover : goback_vn);
-        } else {
+        } 
+        else if (goBackBG === 'mn') {
+          setGoBackBg(goBackBg === goback_mn ? goback_mn_hover : goback_mn);
+        }
+        else {
           setGoBackBg(goBackBg === goback_en ? goback_en_hover : goback_en);
         }
       }
@@ -65,7 +74,11 @@ function PaymentNumber(props) {
           setGoBackBg(goback_vn);
           setConfirmButton(confirm_vn)
         }
-        // setGoBackBg(goback_en);
+        else if(lang==="mn"){
+          setBackground(backgrond_mn)
+          setGoBackBg(goback_mn);
+          setConfirmButton(confirm_mn)
+        }
         setMinusBtn(minusDefault)
       },[])
       const onCheck=()=>{
@@ -82,18 +95,11 @@ function PaymentNumber(props) {
     };
       const goToPayment = async(dongNum,checkCoupon) => {  
     getClickAudio()
-        // if (confirmClick === confirmButton) {
 const res=await sendDongNum(dongNum,checkCoupon===true?1:0)
-     console.log("res>>>",res)
-          
              navigate('/payment');
-            //  navigate('/payment-number');
-        // }
    }
 const onMouseConfirmEnter=(lang)=>{
-  // setConfirmUrl(confirmPressed)
   if (lang==="kr") {
-    console.log("confirm enter>>>",lang)
     setConfirmButton(confirm_kr_hover)
   }
 }
@@ -116,7 +122,6 @@ const onMousePlusLeave=()=>{
 }
 const getDong=()=>{
   const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
-  console.log("선택 프레임>>>",storedSelectedFrame.frame,photoNum)
   let amount=0;
   if (storedSelectedFrame.frame==="Stripx2") {
     amount=70000

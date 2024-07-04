@@ -1469,11 +1469,14 @@ import goback_kr from '../assets/Common/kr/goback.png';
 import goback_kr_hover from '../assets/Common/kr/gobackhover.png';
 import goback_vn from '../assets/Common/vn/goback.png';
 import goback_vn_hover from '../assets/Common/vn/gobackhover.png';
+import goback_mn from '../assets/Common/mn/goback.png';
+import goback_mn_hover from '../assets/Common/mn/gobackhover.png';
 
 // Background
 import background_en from '../assets/Sticker/BG.png';
 import background_kr from '../assets/Sticker/kr/BG.png';
 import background_vn from '../assets/Sticker/vn/BG.png';
+import background_mn from '../assets/Sticker/mn/BG.png';
 
 // Sticker
 import mood_en from '../assets/Sticker/mood.png';
@@ -1482,6 +1485,8 @@ import mood_kr from '../assets/Sticker/kr/mood-default.png';
 import mood_kr_click from '../assets/Sticker/kr/mood-pressed.png';
 import mood_vn from '../assets/Sticker/vn/mood-default.png';
 import mood_vn_click from '../assets/Sticker/vn/mood-pressed.png';
+import mood_mn from '../assets/Sticker/mn/mood-default.png';
+import mood_mn_click from '../assets/Sticker/mn/mood-pressed.png';
 
 import lovely_en from '../assets/Sticker/lovely.png';
 import lovely_en_click from '../assets/Sticker/lovely-click.png';
@@ -1489,6 +1494,8 @@ import lovely_kr from '../assets/Sticker/kr/lovely-default.png';
 import lovely_kr_click from '../assets/Sticker/kr/lovely-pressed.png';
 import lovely_vn from '../assets/Sticker/vn/lovely-default.png';
 import lovely_vn_click from '../assets/Sticker/vn/lovely-pressed.png';
+import lovely_mn from '../assets/Sticker/mn/lovely-default.png';
+import lovely_mn_click from '../assets/Sticker/mn/lovely-pressed.png';
 
 import cartoon_en from '../assets/Sticker/cartoon.png';
 import cartoon_en_click from '../assets/Sticker/cartoon-click.png';
@@ -1496,6 +1503,8 @@ import cartoon_kr from '../assets/Sticker/kr/cartoon-default.png';
 import cartoon_kr_click from '../assets/Sticker/kr/cartoon-pressed.png';
 import cartoon_vn from '../assets/Sticker/vn/cartoon-default.png';
 import cartoon_vn_click from '../assets/Sticker/vn/cartoon-pressed.png';
+import cartoon_mn from '../assets/Sticker/mn/cartoon-default.png';
+import cartoon_mn_click from '../assets/Sticker/mn/cartoon-pressed.png';
 
 import y2k_en from '../assets/Sticker/y2k.png';
 import y2k_en_click from '../assets/Sticker/y2k-click.png';
@@ -1503,6 +1512,8 @@ import y2k_kr from '../assets/Sticker/kr/y2k-default.png';
 import y2k_kr_click from '../assets/Sticker/kr/y2k-pressed.png';
 import y2k_vn from '../assets/Sticker/vn/y2k-default.png';
 import y2k_vn_click from '../assets/Sticker/vn/y2k-pressed.png';
+import y2k_mn from '../assets/Sticker/mn/y2k-default.png';
+import y2k_mn_click from '../assets/Sticker/mn/y2k-pressed.png';
 
 import print from '../assets/Sticker/print.png';
 import print_click from '../assets/Sticker/print_click.png';
@@ -1510,6 +1521,8 @@ import print_kr from '../assets/Sticker/kr/print-default.png';
 import print_kr_click from '../assets/Sticker/kr/print-pressed.png';
 import print_vn from '../assets/Sticker/vn/print-default.png';
 import print_vn_click from '../assets/Sticker/vn/print-pressed.png';
+import print_mn from '../assets/Sticker/mn/print-default.png';
+import print_mn_click from '../assets/Sticker/mn/print-pressed.png';
 //frame나오는 공간
 import frame_box from '../assets/Sticker/frame_box.png';
 import CustomCarousel from '../components/CustomCarousel';
@@ -1615,6 +1628,15 @@ const chunkArray = (arr, size) => {
                 setPrintButton(print_vn);
                 setGoBackButton(goback_vn);
             }
+            else if (storedLanguage === 'mn') {
+                setBackgroundImage(background_mn);
+                setMood(mood_mn);
+                setLovely(lovely_mn);
+                setCartoon(cartoon_mn);
+                setY2k(y2k_mn);
+                setPrintButton(print_mn);
+                setGoBackButton(goback_mn);
+            }
         }
 
         const sessionSelectedLayout = sessionStorage.getItem('selectedLayout');
@@ -1676,47 +1698,7 @@ const chunkArray = (arr, size) => {
         Object.assign(img, styles);
     };
 
-    // const applyFilters = (img, filters) => {
-    //     console.log("in apply func>>>",filters)
-    //     const canvas = document.createElement('canvas');
-    //     const context = canvas.getContext('2d');
-    //     canvas.width = img.width;
-    //     canvas.height = img.height;
-    //     context.drawImage(img, 0, 0, img.width, img.height);
-    //     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    //     const data = imageData.data;
-
-    //     filters.split(' ').forEach(filter => {
-    //         const [name, value] = filter.replace(')', '').split('(');
-    //         const floatValue = parseFloat(value);
-
-    //         switch (name) {
-    //             case 'grayscale':
-    //                 applyGrayscaleFilter(data, floatValue);
-    //                 break;
-    //             case 'sepia':
-    //                 applySepiaFilter(data, floatValue);
-    //                 break;
-    //             case 'opacity':
-    //                 applyOpacityFilter(data, floatValue);
-    //                 break;
-    //             case 'saturate':
-    //                 applySaturateFilter(data, floatValue);
-    //                 break;
-    //             case 'contrast':
-    //                 applyContrastFilter(data, floatValue);
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //     });
-
-
-    //     // context.putImageData(imageData, 0, 0);
-    //     const newImage = new window.Image();
-    //     newImage.src = canvas.toDataURL();
-    //     return newImage;
-    // };
+   
     const applyFilters = (img, filters) => {
         console.log("filter function>>>")
         const canvas = document.createElement('canvas');
@@ -1771,7 +1753,6 @@ const chunkArray = (arr, size) => {
             data[i + 2] = gray * (1 - value) + b * value;
         }
     };
-// 394번째 줄
 const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     const uiRatio = 1; // UI용 스티커 배율
     const printRatio = getPrintRatio(); // 프린트용 스티커 배율
@@ -1965,6 +1946,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             setGoBackButton(goBackButton === goback_vn_hover ? goback_vn : goback_vn_hover);
         } else if (language === 'ko') {
             setGoBackButton(goBackButton === goback_kr_hover ? goback_kr : goback_kr_hover);
+        } else if (language === 'mn') {
+            setGoBackButton(goBackButton === goback_mn_hover ? goback_mn : goback_mn_hover);
         }
     };
 
@@ -1976,6 +1959,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                 setMood(mood === mood_vn_click ? mood_vn : mood_vn_click);
             } else if (language === 'ko') {
                 setMood(mood === mood_kr_click ? mood_kr : mood_kr_click);
+            } else if (language === 'mn') {
+                setMood(mood === mood_mn_click ? mood_mn : mood_mn_click);
             }
         } else if (stickerEffect === 'lovely') {
             if (language === 'en') {
@@ -1984,6 +1969,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                 setLovely(lovely === lovely_vn_click ? lovely_vn : lovely_vn_click);
             } else if (language === 'ko') {
                 setLovely(lovely === lovely_kr_click ? lovely_kr : lovely_kr_click);
+            } else if (language === 'mn') {
+                setLovely(lovely === lovely_mn_click ? lovely_mn : lovely_mn_click);
             }
         } else if (stickerEffect === 'cartoon') {
             if (language === 'en') {
@@ -1992,6 +1979,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                 setCartoon(cartoon === cartoon_vn_click ? cartoon_vn : cartoon_vn_click);
             } else if (language === 'ko') {
                 setCartoon(cartoon === cartoon_kr_click ? cartoon_kr : cartoon_kr_click);
+            } else if (language === 'mn') {
+                setCartoon(cartoon === cartoon_mn_click ? cartoon_mn : cartoon_mn_click);
             }
         } else if (stickerEffect === 'y2k') {
             if (language === 'en') {
@@ -2000,6 +1989,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                 setY2k(y2k === y2k_vn_click ? y2k_vn : y2k_vn_click);
             } else if (language === 'ko') {
                 setY2k(y2k === y2k_kr_click ? y2k_kr : y2k_kr_click);
+            }else if (language === 'mn') {
+                setY2k(y2k === y2k_mn_click ? y2k_mn : y2k_mn_click);
             }
         }
     };
@@ -2011,6 +2002,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             setPrintButton(printButton === print_vn_click ? print_vn : print_vn_click);
         } else if (language === 'ko') {
             setPrintButton(printButton === print_kr_click ? print_kr : print_kr_click);
+        }else if (language === 'mn') {
+            setPrintButton(printButton === print_mn_click ? print_mn : print_mn_click);
         }
     };
 
