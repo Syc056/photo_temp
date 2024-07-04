@@ -416,7 +416,7 @@ gap: 6%;
 }
 .print{
      /* 프린트용은 화면밖으로 밀어내기 */
-     margin-left: -1500px ;
+     margin-left: -20000px ;
      margin-bottom: 200px;
      width: 200vw;
      /* background-color: red; */

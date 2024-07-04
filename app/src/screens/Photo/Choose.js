@@ -1165,7 +1165,7 @@ function Choose() {
             setSelectedPhotos(selectedPhotos.filter((item) => item !== index));
         }
 
-        // Check if all photos have been selected
+    // Check if all photos have been selected
         if (selectedPhotos.length === totalMeetsPhotos - 1) {
             setConfirmButton(true);
         } else {

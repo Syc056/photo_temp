@@ -1641,11 +1641,11 @@ function Filter() {
     const [goBackButton, setGoBackButton] = useState(goback_en);
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
-
+    const effectFloat=0.05;
     const selectedFilterEffects = [
         {
             id: 1,
-            name: 'personality',
+            name: 'personality', 
             effect: [
                 { property: 'brightness', value: '1.2', unit: '' },
                 { property: 'saturate', value: '1.1', unit: '' },
@@ -1796,9 +1796,9 @@ function Filter() {
 
     const increasePercentage = () => {
         setSliderChange(true);
-        getClickAudio()
+        // getClickAudio()
         if (percentage < 570) {
-            setPercentage(percentage + 50);
+            setPercentage(percentage + 30);
         }
 
         if (!selectedId.length || !filterEffect[selectedId[selectedId.length - 1]]) {
@@ -1807,7 +1807,7 @@ function Filter() {
 
         const updatedEffect = filterEffect[selectedId[selectedId.length - 1]].map((effect) => {
             if (effect.property === 'brightness') {
-                return { ...effect, value: parseFloat(effect.value) + 0.01 };
+                return { ...effect, value: parseFloat(effect.value) + effectFloat };
             }
             return effect;
         });
@@ -1820,9 +1820,11 @@ function Filter() {
 
     const decreasePercentage = () => {
         setSliderChange(true);
-        getClickAudio()
-        if (percentage > 50) {
-            setPercentage(percentage - 50);
+        // getClickAudio()
+        console.log("in decrease percent>>>",percentage)
+        if (percentage > 30) {
+            setPercentage(percentage - 30);
+           
         }
 
         if (!selectedId.length || !filterEffect[selectedId[selectedId.length - 1]]) {
@@ -1831,7 +1833,7 @@ function Filter() {
 
         const updatedEffect = filterEffect[selectedId[selectedId.length - 1]].map((effect) => {
             if (effect.property === 'brightness') {
-                return { ...effect, value: parseFloat(effect.value) - 0.01 };
+                return { ...effect, value: parseFloat(effect.value) - effectFloat };
             }
             return effect;
         });

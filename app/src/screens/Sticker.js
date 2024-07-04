@@ -1563,8 +1563,20 @@ function Sticker() {
         width: "",
         height: ""
     });
-
-    const chunkArray = (arr, size) => {
+const printRatio=JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="2cut-x2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="4-cutx2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="6-cutx2"?8:7;
+    
+function getPrintRatio() {
+    const selectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame')).frame;
+    if (selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2") {
+        return 8
+    }
+    else if(selectedFrame === "6-cutx2"){
+        return 7.2
+    }else{
+        return 7;
+    }
+  }
+const chunkArray = (arr, size) => {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
     };
 
@@ -1762,7 +1774,7 @@ function Sticker() {
 // 394번째 줄
 const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     const uiRatio = 1; // UI용 스티커 배율
-    const printRatio = 3; // 프린트용 스티커 배율
+    const printRatio = getPrintRatio(); // 프린트용 스티커 배율
 
     const item = {
         width: width,
@@ -1897,11 +1909,11 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                         })
                         .then(response => {
                             const data = response.data;
-                            if (data.photo_url!=null) {
+                            // if (data.photo_url!=null) {
                                 sessionStorage.setItem('uploadedCloudPhotoUrl', data.photo_url.toString());
                                 console.log("data url>>>", data.photo_url);
                                 
-                            }
+                            // }
                         })
                         .catch(error => {
                             console.log(error);
@@ -2549,6 +2561,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
                             );
+                            console.log("stripx2 width height>>>",calcedWidth*ratio,calcedHeight*ratio)
                             return (
                                 <KonvaImage
                                     crop={{
@@ -2689,6 +2702,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         const largeRatio = 1.45;
         if (selectedFrame === "6-cutx2") {
             setFrameSize({ width: 1920 * 1 / 6, height: 2900 * 1 / 6 });
+            // setFrameSize({ width:6000, height: 4000 });
         }
         else if (selectedFrame === "Stripx2") {
             setFrameSize({ width: 257.79 * largeRatio, height: 384 * largeRatio });
@@ -2730,6 +2744,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     };
 // 670번째 줄
 const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) => {
+    const printRatio=getPrintRatio()
     setImages((currentImages) => {
         const newImages = [...currentImages];
         newImages[bgIdx][index] = {
@@ -2746,10 +2761,10 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
         const newImages = [...currentImages];
         newImages[bgIdx][index] = {
             ...newImages[bgIdx][index],
-            x: newX * 3,
-            y: newY * 3,
-            width: newWidth * 3,
-            height: newHeight * 3,
+            x: newX * printRatio,
+            y: newY * printRatio,
+            width: newWidth * printRatio,
+            height: newHeight * printRatio,
         };
         return newImages;
     });
@@ -2820,8 +2835,8 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
             {/* 프린트용 */}
             <div className='print'>
                 <Stage
-                    width={frameSize.width * 3}
-                    height={frameSize.height * 3}
+                    width={frameSize.width * getPrintRatio()}
+                    height={frameSize.height * getPrintRatio()}
                     scale={{ x: 1, y: 1 }}
                     x={0}
                     y={0}
@@ -2836,20 +2851,20 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
                         {backgroundList[bgIdx] && (
                             <KonvaImage
                                 image={backgroundList[bgIdx].img}
-                                width={frameSize.width * 3}
-                                height={frameSize.height * 3 - 20}
+                                width={frameSize.width * getPrintRatio()}
+                                height={frameSize.height * getPrintRatio() - 20}
                                 x={0}
                                 y={10}
                             />
                         )}
-                        {tempImage && showKonvaImgLayout(selectedFrame, frameSize.width, frameSize.height, tempImage, 3)}
+                        {tempImage && showKonvaImgLayout(selectedFrame, frameSize.width, frameSize.height, tempImage, getPrintRatio())}
                     </Layer>
                     <Layer>
                         {layoutList[bgIdx] && (
                             <KonvaImage
                                 image={layoutList[bgIdx].img}
-                                width={frameSize.width * 3}
-                                height={frameSize.height * 3 - 20}
+                                width={frameSize.width * getPrintRatio()}
+                                height={frameSize.height * getPrintRatio() - 20}
                                 x={0}
                                 y={10}
                             />
