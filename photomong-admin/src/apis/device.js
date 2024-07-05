@@ -1,7 +1,7 @@
 // import { axiosInstance } from "../config/config";
 import axios from "axios";
 //Env variable
-export const BaseURL = "http://127.0.0.1:9000";
+export const BaseURL = "http://118.33.212.138:9000";
 axios.defaults.withCredentials = true;
 // Created an axios instance adding our api BaseURL
 export const axiosInstance = axios.create({

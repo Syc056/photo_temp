@@ -14,7 +14,23 @@ import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
 import goback_mn from '../../assets/Common/mn/goback.png';
 import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
-
+//임시 카드 이미지--시작
+//season
+import season_default_mn from '../../assets/Common/mn/season-default.png'
+import season_pressed_mn from '../../assets/Common/mn/season-pressed.png'
+//party
+import party_default_mn from '../../assets/Common/mn/party-default.png'
+import party_pressed_mn from '../../assets/Common/mn/party-pressed.png'
+//cartoon
+import cartoon_default_mn from '../../assets/Common/mn/cartoon-default.png'
+import cartoon_pressed_mn from '../../assets/Common/mn/cartoon-pressed.png'
+//minimalism
+import minimalism_default_mn from '../../assets/Common/mn/minimalism-default.png'
+import minimalism_pressed_mn from '../../assets/Common/mn/minimalism-pressed.png'
+//collab
+import collab_default_mn from '../../assets/Common/mn/collab-default.png'
+import collab_pressed_mn from '../../assets/Common/mn/collab-pressed.png'
+//임시 카드 이미지--끝
 // Background
 import background_en from '../../assets/Frame/Style/BG.png';
 import background_kr from '../../assets/Frame/Style/kr/BG.png';
@@ -69,40 +85,63 @@ function Background() {
               // const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/backgrounds/api`)
               const response = await originAxiosInstance.get(`/backgrounds/api`);
               const backgroundDatas = response.data;
+              console.log("ba datas>>",backgroundDatas)
               const storedLanguage = sessionStorage.getItem('language');
       
               const newBackgrounds = backgroundDatas.map(item => {
-                  let photo, photo_hover;
-      console.log("몽골>>>",item)
-                  switch (storedLanguage) {
-                      case 'en':
-                          photo = process.env.REACT_APP_BACKEND + item.photo;
-                          photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
-                          break;
-                      case 'ko':
-                          photo = process.env.REACT_APP_BACKEND + item.photo_kr;
-                          photo_hover = process.env.REACT_APP_BACKEND + item.photo_kr_hover;
-                          break;
-                      case 'vi':
-                          photo = process.env.REACT_APP_BACKEND + item.photo_vn;
-                          photo_hover = process.env.REACT_APP_BACKEND + item.photo_vn_hover;
-                          break;
-                      case 'mn':
-                          photo = process.env.REACT_APP_BACKEND + item.photo_mn;
-                          photo_hover = process.env.REACT_APP_BACKEND + item.photo_mn_hover;
-                          break;
-                      default:
-                          photo = process.env.REACT_APP_BACKEND + item.photo;
-                          photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
-                  }
-      
-                  return {
-                      title: item.title,
-                      photo: photo,
-                      photo_hover: photo_hover
-                  };
-              });
-      
+               let photo, photo_hover;
+               console.log("몽골>>>", item)
+               switch (storedLanguage) {
+                   case 'en':
+                       photo = process.env.REACT_APP_BACKEND + item.photo;
+                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
+                       break;
+                   case 'ko':
+                       photo = process.env.REACT_APP_BACKEND + item.photo_kr;
+                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_kr_hover;
+                       break;
+                   case 'vi':
+                       photo = process.env.REACT_APP_BACKEND + item.photo_vn;
+                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_vn_hover;
+                       break;
+                   case 'mn':
+                       switch (item.title) {
+                           case 'Season':
+                               photo = season_default_mn;
+                               photo_hover=season_pressed_mn;
+                               break;
+                           case 'Party':
+                               photo = party_default_mn;
+                               photo_hover=party_pressed_mn
+                               break;
+                           case 'Cartoon':
+                               photo = cartoon_default_mn;
+                               photo_hover=cartoon_pressed_mn
+                               break;
+                               case 'Minimalism':
+                                   photo = minimalism_default_mn;
+                                   photo_hover=minimalism_pressed_mn
+                                   break;
+                           default:
+                               photo = season_default_mn; // default value if title is not Season, Party, or Cartoon
+                               photo_hover=season_pressed_mn
+                               break;
+                       }
+                    //    photo_hover = process.env.REACT_APP_BACKEND + item.photo_mn_hover;
+                       break;
+                   default:
+                       photo = process.env.REACT_APP_BACKEND + item.photo;
+                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
+               }
+           
+               return {
+                   title: item.title,
+                   photo: photo,
+                   photo_hover: photo_hover
+               };
+           });
+           
+      console.log("set bgs>>>",backgrounds.concat(newBackgrounds))
               setBackgrounds(backgrounds.concat(newBackgrounds));
           } catch (error) {
               console.error(error);
@@ -111,6 +150,7 @@ function Background() {
       
 
      const handleMouseEnter = (image) => {
+          console.log("hover image>>>",image)
           setHoveredImage(image);
      }
 
