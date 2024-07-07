@@ -86,6 +86,7 @@ let playAddEmojiSound=false;
 function Sticker() {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const uuid=sessionStorage.getItem("uuid")
     const [src, setSrc] = useState(null);
     const [hoveredImage, setHoveredImage] = useState(null);
     const [selectedLayout, setSelectedLayout] = useState(null);
@@ -464,34 +465,103 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             console.log(error);
         }
     };
-
     const callPrinter = async () => {
         const stageRef = printRefs[bgIdx];
         if (!stageRef.current) {
             console.log("stageRef.current is null");
             return;
         }
-
+    
         const originalDataURL = stageRef.current.toDataURL();
+        const blobBin = atob(originalDataURL.split(',')[1]);
+        const array = [];
+        for (let i = 0; i < blobBin.length; i++) {
+            array.push(blobBin.charCodeAt(i));
+        }
+        const newFile = new Blob([new Uint8Array(array)], { type: 'image/png' });
+        
         const formData = new FormData();
-        formData.append("photo", originalDataURL);
-        formData.append("frame", selectedFrame);
-
-        originAxiosInstance.post(
-            `${process.env.REACT_APP_BACKEND}/frames/api/print`,
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        formData.append("photo", newFile);
+        // formData.append("uuid", JSON.stringify({uuid:uuid})); // uuid 
+        // formData.append('uuid', new Blob([JSON.stringify({uuid:uuid})], {
+        //     type: "application/json"
+        // }));
+        formData.append("uuid",uuid ); // uuid 
+        formData.append("frame", selectedFrame); // frame 개별 필드로 추가
+        formData.append("photoNum",photoNum ); // photoNum 
+    
+        try {
+            const response = await originAxiosInstance.post(
+                `${process.env.REACT_APP_BACKEND}/frames/api/print`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+            console.log("=====================================================111")
+    
+            const printUrl = response.data.print_url;
+            const printData = response.data.print_data;
+            const uploadsDataPath = response.data.print_data.file_path;
+    
+            const res = await getPhotos(uuid);
+            const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
+            console.log('upload url>>>',res.unsorted_images, uploadsDataPath,filtered);
+            console.log(filtered)
+            console.log(uploadsDataPath)
+           
+    let newUrl=convertUrl(filtered[0].url) 
+    console.log('upload url>>>', uploadsDataPath,newUrl);
+            const fileResponse = await fetch(newUrl);
+            const fileBlob = await fileResponse.blob();
+    
+            const formDataToFlask = new FormData();
+            formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
+            formDataToFlask.append('frame', printData.frame);
+    
+    
+            for (let i = 0; i < photoNum; i++) {
+                const fileResponse = await fetch(filtered[0].url.replace('uploads', 'get_photo/uploads'));
+                console.log(filtered[0].url.replace('uploads', 'get_photo/uploads'))
+                console.log(filtered[0].url.replace('uploads', 'get_photo/uploads'))
+                console.log(filtered[0].url.replace('uploads', 'get_photo/uploads'))
+                // const fileResponse = await fetch(filtered[0].url);
+                const fileBlob = await fileResponse.blob();
+    
+                const formDataToFlask = new FormData();
+                formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
+                formDataToFlask.append('frame', printData.frame);
+    
+                const localPrintResponse = await fetch(printUrl, {
+                    method: 'POST',
+                    body: formDataToFlask,
+                });
+    
+                if (localPrintResponse.ok) {
+                    console.log(`Print job ${i + 1} started successfully.`);
+                } else {
+                    console.log(`Failed to start print job ${i + 1}.`);
                 }
             }
-        )
-            .then(response => {
-                console.log('print response', response);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        } catch (error) {
+            console.error('Error during printing process:', error);
+        }
+            
+        //     const localPrintResponse = await fetch(printUrl, {
+        //         method: 'POST',
+        //         body: formDataToFlask,
+        //     });
+    
+        //     if (localPrintResponse.ok) {
+        //         console.log('Print job started successfully.');
+        //     } else {
+        //         console.log('Failed to start print job.');
+        //     }
+        // } catch (error) {
+        //     console.error('Error during printing process:', error);
+        // }
     };
 
     const hoverGoBackButton = () => {

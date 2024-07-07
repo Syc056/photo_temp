@@ -307,7 +307,7 @@ function Filter() {
 
     const increasePercentage = () => {
         setSliderChange(true);
-        // getClickAudio()
+        getClickAudio()
         if (percentage < 570) {
             setPercentage(percentage + 30);
         }

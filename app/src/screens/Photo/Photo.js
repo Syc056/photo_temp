@@ -13,6 +13,7 @@ import background_vn from '../../assets/Photo/Snap/vn/BG.png';
 import background_mn from '../../assets/Photo/Snap/mn/BG.png';
 import { getAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 // import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
+import Uid from "react-uuid"
 
 function Photo() {
     const { t } = useTranslation();
@@ -24,8 +25,18 @@ function Photo() {
     const [capturing, setCapturing] = useState(false);
     const [capturePhotos, setCapturePhotos] = useState([]);
     const [showFirstSet, setShowFirstSet] = useState(true);
-    const timerRef = useRef(null);
+    const [uuid, setUuid] = useState(sessionStorage.getItem("uuid") || null);
 
+    const timerRef = useRef(null);
+    useEffect(() => {
+        // if (!uuid) {
+            const newUuid = Uid().toString();
+            setUuid(newUuid);
+            // console.log('newnew uuid>>>>>>>>>>>>>>>>>>>>>>>>',newUuid)
+           
+        // }
+
+    }, []);
     const sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     };
@@ -37,7 +48,7 @@ function Photo() {
         await sleep(100); // 서버가 stop_live_view를 호출하고 안정화될 시간을 줌
         setCapturing(true);
         try {
-            await sendCaptureReq();
+            const res = await sendCaptureReq(uuid);
             setPhotoCount((prevCount) => prevCount + 1);
         } catch (error) {
             console.error('Failed to capture image:', error);
@@ -66,7 +77,7 @@ function Photo() {
     };
 
     const getLatestPhoto = async (currentPhotoCount) => {
-        const photos = await getPhotos();
+        const photos = await getPhotos(uuid); 
         console.log("axios photos", photos);
 
         if (photos && photos.images && photos.images.length > 0) {
@@ -80,7 +91,7 @@ function Photo() {
 
             setCapturePhotos((prevPhotos) => {
                 const newPhotos = [...prevPhotos];
-                newPhotos[currentPhotoCount] = { id: formattedImage.id, url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo') };
+                newPhotos[currentPhotoCount] = { id: formattedImage.id, url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads/${uuid}`) };
                 return newPhotos;
             });
         } else {
@@ -89,21 +100,23 @@ function Photo() {
     };
 
     useEffect(() => {
-        if (photoCount > 0) {
-            playTakePhotoAudio()
-            getLatestPhoto(photoCount - 1);
+        if (uuid != null) {
+            if (photoCount > 0) {
+                playTakePhotoAudio();
+                getLatestPhoto(photoCount - 1);
+            }
+            if (photoCount > 4) {
+                setShowFirstSet(false);
+            }
         }
-        if (photoCount>4) {
-            setShowFirstSet(false)
-        }
-        
-    }, [photoCount]);
+    }, [photoCount, uuid]);
 
     useEffect(() => {
         if (capturePhotos.length === 8) {
+            sessionStorage.setItem("uuid", uuid);
             navigate('/photo-choose');
         }
-    }, [capturePhotos]);
+    }, [capturePhotos, navigate]);
 
     useEffect(() => {
         const language = sessionStorage.getItem('language');
@@ -124,17 +137,21 @@ function Photo() {
 
     console.log("photos>>>", capturePhotos);
     useEffect(() => {
-        const initializeLiveView = async () => {
-            await startLiveView();
-        };
 
-        initializeLiveView();
-        startTimer();
-
-        return () => {
-            clearInterval(timerRef.current);
-        };
-    }, []);
+        if (uuid) {
+              const initializeLiveView = async () => {
+                    await startLiveView();
+                };
+        
+                initializeLiveView();
+                startTimer();
+        }
+              
+        
+                return () => {
+                    clearInterval(timerRef.current);
+                };
+            }, [uuid]);
     const playTakePhotoAudio = async() => {
         const res=await getAudio({file_name:"take_photo.wav"})
         console.log("audio :",res)

@@ -50,15 +50,20 @@ export const checkPromotionCode=async(payload)=>{
 
 
 //Photo.js
-export const getPhotos=async()=>{
-  const { data } = await originAxiosInstance.get('/get_photo/')
-  return data
-}
-export const sendCaptureReq=async()=>{
+export const getPhotos = async (uuid) => {
+  console.log('in getphoto func uuid>>>',uuid);
 
-  const {data} = await axiosInstance.get('/capture')
+  const { data, status } = await originAxiosInstance.get(`/get_photo/`,{
+    params:{uuid:uuid}
+  });
+  console.log('in getphoto func>>>', data, status);
   return data;
-}
+};
+export const sendCaptureReq = async (uuid,photoNum) => {
+  const { data } = await axiosInstance.post('/capture', { uuid:uuid,photoNum:photoNum });
+  return data;
+};
+
 export  const startLiveView = async () => {
   try {
       await axios.get('http://118.33.212.138:5000/start_live_view');
@@ -69,8 +74,8 @@ export  const startLiveView = async () => {
 
 //sound get
 export const getAudio=async(payload)=>{
-  // const {data}=await audioAxiosInstance.post(`/api/play_sound/`,payload)
-  return ""//data;
+  const {data}=await audioAxiosInstance.post(`/api/play_sound/`,payload)
+  return data;
 }
 export const getClickAudio=async()=>{
   const {data}=await audioAxiosInstance.post(`/api/play_sound/`,{file_name:"click_sound.wav"})
