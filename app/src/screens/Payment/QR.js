@@ -32,7 +32,6 @@ function QR() {
      const [background, setBackground] = useState(background_en);
      const playAudio = async() => {
           const res=await getAudio({file_name:"scan_qr.wav"})
-          console.log("audio :",res)
             }
       useEffect(()=>{
       playAudio()
@@ -124,7 +123,6 @@ function QR() {
      const hoverGoBackButton = () => {
           setGoBackBg([goback_en_hover, goback_en_hover]);
      }
-console.log("qr code",sessionStorage)
      return (
           <div className='qr-container' style={{ backgroundImage: `url(${background})` }}>
                <div className='qr-code'>

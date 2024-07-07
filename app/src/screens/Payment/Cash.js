@@ -137,7 +137,6 @@ function Cash() {
   }, []);
   const playAudio = async() => {
     const res=await getAudio({file_name:"insert_cash.wav"})
-    console.log("audio :",res)
       }
 useEffect(()=>{
 playAudio()
@@ -159,7 +158,6 @@ playAudio()
     const intervalId = setInterval(() => {
       const ooCode = sessionStorage.getItem('orderCodeNum');
       if (ooCode) {        
-        console.log(ooCode);
         checkPaymentStatus(ooCode);
       }
     }, 3000);

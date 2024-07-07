@@ -114,7 +114,6 @@ function Payment() {
   }, [])
   const playAudio = async() => {
     const res=await getAudio({file_name:"choose_pay_method.wav"})
-    console.log("audio :",res)
       }
 useEffect(()=>{
 playAudio()

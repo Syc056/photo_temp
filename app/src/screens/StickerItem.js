@@ -51,14 +51,10 @@ isStickerDrag,
         }
       }, [isSelected,resizeImgae]);
     const onLongPress = () => {
-      // setStickerDrag(true)
-      // setStickerDrag(true)
-      console.log("스티커 드래그중!!!")
         setShowDeleteButton(true);
     }
 
     image.resetButtonRef.current = () => {
-      console.log("스티커 드래그중!!! 끝")
         setShowDeleteButton(false);
        
     }
@@ -106,20 +102,14 @@ isStickerDrag,
             x={image.x}
             y={image.y}
             onTransform={(newWidth)=>{
-              console.log("리사이즈!!!")
-              // updateStickerSize(sticker.id, newWidth);
             }}
             onDragStart={()=>{setIsDragging(true)
-              setStickerDrag(true)
-              // setIsDown(false)
-              console.log("스티커 드래그 시작")}}
-            // onClick={}
+              setStickerDrag(true)}}
             width={image.width}
-            onMouseEnter={()=>{console.log("스티커에 마우스 올림")}}
+            onMouseEnter={()=>{}}
           
             onDragEnd={(event) => {
               setStickerDrag(false)
-              console.log("스티커 드래그중!!! 끝")
               setShowDeleteButton(false)
                 //  onChange({
                 //     ...shapeProps,
@@ -144,7 +134,6 @@ isStickerDrag,
                 // we will reset it back
                 node.scaleX(1);
                 node.scaleY(1);
-                console.log("리사이즈 한 너비 높이>>",Math.max(5, node.width() * scaleX),Math.max(node.height() * scaleY))
                 onChange({
                   ...image,
                   x: node.x(),
@@ -192,7 +181,6 @@ rotateEnabled={false}
         onMouseOut={()=>{
           // setShowDeleteButton(false)
           setStickerDrag(false);
-          console.log("transformer out")
         }}
    
 
@@ -207,16 +195,13 @@ rotateEnabled={false}
           anchorStyleFunc={anchorStyleFunc}
           boundBoxFunc={(oldBox, newBox) => {  
             setStickerDrag(true);
-            console.log("transformer drag start");
         
             // limit resize
             if (Math.abs(newBox.width) < 25 || Math.abs(newBox.height) < 25) {
               // setStickerDrag(false);
               // requestAnimationFrame(() => setStickerDrag(false));
-              console.log("transformer drag end00");
               return oldBox;
             }
-            console.log("transformer drag end11",newBox);
             if (newBox) {
               onTransform(oldBox.x,oldBox.y,newBox.width,newBox.height)
             }

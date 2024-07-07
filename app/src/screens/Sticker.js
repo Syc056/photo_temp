@@ -81,12 +81,13 @@ import print_mn_click from '../assets/Sticker/mn/print-pressed.png';
 import frame_box from '../assets/Sticker/frame_box.png';
 import CustomCarousel from '../components/CustomCarousel';
 import VerticalCustomCarousel from '../components/VerticalCustomCarousel';
-import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
+import { getAudio, getClickAudio, getPhotos, originAxiosInstance } from '../api/config';
 let playAddEmojiSound=false;
 function Sticker() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const uuid=sessionStorage.getItem("uuid")
+    const photoNum=sessionStorage.getItem("photoNum")
     const [src, setSrc] = useState(null);
     const [hoveredImage, setHoveredImage] = useState(null);
     const [selectedLayout, setSelectedLayout] = useState(null);
@@ -256,7 +257,6 @@ const chunkArray = (arr, size) => {
 
    
     const applyFilters = (img, filters) => {
-        console.log("filter function>>>")
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         canvas.width = img.width;
@@ -393,7 +393,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         setClickPrint(true);
 
         callPrinter();
-        uploadCloud();
+       await uploadCloud();
 
         setTimeout(() => {
             navigate("/print");
@@ -446,15 +446,11 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                         })
                         .then(response => {
                             const data = response.data;
-                            // if (data.photo_url!=null) {
-                                sessionStorage.setItem('uploadedCloudPhotoUrl', data.photo_url.toString());
-                                console.log("data url>>>", data.photo_url);
-                                
-                            // }
+                            const qrVal = data.photo_url;
+                                sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
                         })
                         .catch(error => {
                             console.log(error);
-                            console.log("업로드 에러");
                         });
                 })
                 .catch(error => {
@@ -465,10 +461,30 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             console.log(error);
         }
     };
+    const convertUrl = (url) => {
+        // 'uploads'를 'get_photos/uploads'로 변경
+        let newUrl = url.replace('uploads', 'get_photo/uploads');
+    
+        // URL을 슬래시('/')로 분리
+        const urlParts = newUrl.split('/');
+    
+        // UUID를 제거하고 슬래시를 하나로 유지
+        const newUrlParts = urlParts.filter((part, index) => {
+            // UUID의 형태를 가지는 부분을 제거
+            if (index === 4 && /^[0-9a-fA-F-]{36}$/.test(part)) {
+                return false;
+            }
+            return true;
+        });
+    
+        // URL 다시 합치기
+        newUrl = newUrlParts.join('/');
+    
+        return newUrl;
+    };
     const callPrinter = async () => {
         const stageRef = printRefs[bgIdx];
         if (!stageRef.current) {
-            console.log("stageRef.current is null");
             return;
         }
     
@@ -482,13 +498,15 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         
         const formData = new FormData();
         formData.append("photo", newFile);
-        // formData.append("uuid", JSON.stringify({uuid:uuid})); // uuid 
-        // formData.append('uuid', new Blob([JSON.stringify({uuid:uuid})], {
-        //     type: "application/json"
-        // }));
-        formData.append("uuid",uuid ); // uuid 
+        let newPhotoNum=parseInt(photoNum)
+        if (selectedFrame==="Stripx2") {
+            newPhotoNum=(parseInt(photoNum)).toString()
+        } else {
+            newPhotoNum=(parseInt(photoNum)+1).toString()
+        }
+                formData.append("uuid",uuid ); // uuid 
         formData.append("frame", selectedFrame); // frame 개별 필드로 추가
-        formData.append("photoNum",photoNum ); // photoNum 
+        formData.append("photoNum",newPhotoNum ); // photoNum 
     
         try {
             const response = await originAxiosInstance.post(
@@ -500,7 +518,6 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                     }
                 }
             );
-            console.log("=====================================================111")
     
             const printUrl = response.data.print_url;
             const printData = response.data.print_data;
@@ -508,12 +525,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     
             const res = await getPhotos(uuid);
             const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
-            console.log('upload url>>>',res.unsorted_images, uploadsDataPath,filtered);
-            console.log(filtered)
-            console.log(uploadsDataPath)
            
     let newUrl=convertUrl(filtered[0].url) 
-    console.log('upload url>>>', uploadsDataPath,newUrl);
             const fileResponse = await fetch(newUrl);
             const fileBlob = await fileResponse.blob();
     
@@ -524,10 +537,6 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     
             for (let i = 0; i < photoNum; i++) {
                 const fileResponse = await fetch(filtered[0].url.replace('uploads', 'get_photo/uploads'));
-                console.log(filtered[0].url.replace('uploads', 'get_photo/uploads'))
-                console.log(filtered[0].url.replace('uploads', 'get_photo/uploads'))
-                console.log(filtered[0].url.replace('uploads', 'get_photo/uploads'))
-                // const fileResponse = await fetch(filtered[0].url);
                 const fileBlob = await fileResponse.blob();
     
                 const formDataToFlask = new FormData();
@@ -1179,7 +1188,6 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
                             );
-                            console.log("stripx2 width height>>>",calcedWidth*ratio,calcedHeight*ratio)
                             return (
                                 <KonvaImage
                                     crop={{
@@ -1391,7 +1399,7 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
     const getCarouselStyle=(selFrame)=>{
         //  return "77%"
         if (selFrame==="Stripx2") {
-            return {height:"78%",bottom:"16%",right:"12%"}
+            return {height:"74%",bottom:"16%",right:"12%"}
         }
         else if(selFrame==="6-cutx2")
             {
@@ -1414,12 +1422,10 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
     }
     const playPrintAudio = async() => {
         const res=await getAudio({file_name:"print.wav"})
-        console.log("audio :",res)
           }
 
     const playAudio = async() => {
         const res=await getAudio({file_name:"add_emoji.wav"})
-        console.log("audio :",res)
           }
      
     useEffect(()=>{

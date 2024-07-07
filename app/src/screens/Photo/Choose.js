@@ -57,8 +57,9 @@ function Choose() {
         if (photos && photos.images) {
             const formattedImages = photos.images.map(img => ({
                 ...img,
-                url: img.url.replace(/\\/g, '/')
+                url: img.url.replace(/uploads/g, `get_photo/uploads`)
             }));
+
             setFormattedPhotos(formattedImages);
             sessionStorage.setItem('photos', JSON.stringify({ status: photos.status, images: formattedImages }));
         }
@@ -184,7 +185,6 @@ function Choose() {
                 body: JSON.stringify(copyImageData)
             });
             const data = await response.json();
-            console.log(data);
             sessionStorage.setItem('copiedPhoto', data.photo_path);
             sessionStorage.setItem('copiedPhotoCover', data.photo_cover_path);
             return true;
@@ -221,7 +221,6 @@ function Choose() {
             hoverContinueButton();
             setClickedButton(true);
             const result = await copyImageApi();
-            console.log("go to filter before>>>",result)
                 navigate("/filter");
         }
     }
@@ -338,12 +337,12 @@ function Choose() {
     }
     const playAudio = async() => {
         const res=await getAudio({file_name:"choose_photos.wav"})
-        console.log("audio :",res)
           }
    useEffect(()=>{
     playAudio()
    },[])
     const showSelectedPhotos = () => {
+
         if (selectedFrame == '3-cutx2' && selectedPhotos.length > 0) {
             const firstPhotoTpl = (
                 <div className="choose-photo-row">

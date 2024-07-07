@@ -76,7 +76,6 @@ function Frame() {
   }, []);
   const playAudio = async() => {
     const res=await getAudio({file_name:"choose_frame_layout.wav"})
-    console.log("audio :",res)
       }
 useEffect(()=>{
 playAudio()

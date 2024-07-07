@@ -85,12 +85,10 @@ function Background() {
               // const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/backgrounds/api`)
               const response = await originAxiosInstance.get(`/backgrounds/api`);
               const backgroundDatas = response.data;
-              console.log("ba datas>>",backgroundDatas)
               const storedLanguage = sessionStorage.getItem('language');
       
               const newBackgrounds = backgroundDatas.map(item => {
                let photo, photo_hover;
-               console.log("몽골>>>", item)
                switch (storedLanguage) {
                    case 'en':
                        photo = process.env.REACT_APP_BACKEND + item.photo;
@@ -141,7 +139,6 @@ function Background() {
                };
            });
            
-      console.log("set bgs>>>",backgrounds.concat(newBackgrounds))
               setBackgrounds(backgrounds.concat(newBackgrounds));
           } catch (error) {
               console.error(error);
@@ -150,7 +147,6 @@ function Background() {
       
 
      const handleMouseEnter = (image) => {
-          console.log("hover image>>>",image)
           setHoveredImage(image);
      }
 

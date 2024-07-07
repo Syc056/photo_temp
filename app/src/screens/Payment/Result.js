@@ -42,7 +42,6 @@ function QR() {
      }, []);
      const playAudio = async() => {
           const res=await getAudio({file_name:"pay_success.wav"})
-          console.log("audio :",res)
             }
       useEffect(()=>{
       playAudio()

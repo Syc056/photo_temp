@@ -169,9 +169,8 @@ function Cash() {
 
      const getIp = async () => {
        // Connect ipapi.co with fetch()
-       const response = await fetch("https://ipapi.co/json/")
+       const response = await fetch("https://api.ipify.org?format=json")
        const data = await response.json()
-       console.log("ip data>>>",data.ip)
        // Set the IP address to the constant `ip`
        setIp(data.ip)
      }
@@ -188,7 +187,6 @@ function Cash() {
           }
 
           const storedFrameAmount = sessionStorage.getItem('framePrice');
-          console.log(storedFrameAmount);
           if (storedFrameAmount) {
                setFrameAmount(storedFrameAmount);
           }
@@ -220,7 +218,6 @@ function Cash() {
      }
      const playAudio = async() => {
           const res=await getAudio({file_name:"enter_pro.wav"})
-          console.log("audio :",res)
             }
      useEffect(()=>{
       playAudio()

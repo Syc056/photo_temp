@@ -56,7 +56,6 @@ function Layout() {
           const nextSliceIdx = (sliceIdx + 1) % 4; // 다음에 가져올 slicedLayouts의 시작 인덱스
           // 0,5
           // 5,10
-          console.log("가져오는 인덱스들>>>",5*nextSliceIdx,5*(1+nextSliceIdx))
 //     const nextSlicedLayouts = layouts[nextSliceIdx];
 //     getBackground(nextSliceIdx)
 //     setSlicedLayouts(...nextSlicedLayouts);
@@ -64,7 +63,6 @@ function Layout() {
       };
       const onDrag=(e)=>{
           // e.preventDefault()
-          console.log("드래그 중!!")
           setDraging(true)
       }
      useEffect(() => {
@@ -168,7 +166,6 @@ function Layout() {
                    6-cutx2
                    */
                    const resAll=newBackgrounds        
-                   console.log("frame>>>",frame,newBackgrounds)
                    if (frame==="4-cutx2") {
                     setLayouts(resAll.filter(r=>r.title!="Cartoon-5cut-4"))
                    }else{
@@ -222,7 +219,6 @@ function Layout() {
                         
                          for (let l = 0; l < clickedTitles.length; l++) {
                            if (element.title===clickedTitles[l]) {
-                               console.log("선택된 거",element.title) 
                                selectedLayouts.push(element)
                            }
                               
@@ -231,7 +227,6 @@ function Layout() {
                     }
                     
                }
-               console.log("버튼 클릭",clickedTitles,layouts.filter(layout=>clickedTitles.includes(layout.title)))
                sessionStorage.setItem('selectedLayout', JSON.stringify(layouts.filter(layout=>clickedTitles.includes(layout.title))));
                // sessionStorage.setItem('selectedLayout', JSON.stringify(layouts[index]));
           
@@ -263,7 +258,6 @@ useEffect(() => {
      if (frame) {
           setSelectedFrame(JSON.parse(frame).frame);
      }
-console.log("현재 언어>>>",storedLanguage)
      const sessionStyleBg = sessionStorage.getItem('styleBg');
      if (sessionStyleBg) {
           let layoutBg = '';
@@ -354,7 +348,6 @@ console.log("현재 언어>>>",storedLanguage)
 }, []);
 const playAudio = async() => {
      const res=await getAudio({file_name:"choose_frame_style.wav"})
-     console.log("audio :",res)
        }
 useEffect(()=>{
  playAudio()

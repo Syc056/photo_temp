@@ -78,7 +78,6 @@ function Photo() {
 
     const getLatestPhoto = async (currentPhotoCount) => {
         const photos = await getPhotos(uuid); 
-        console.log("axios photos", photos);
 
         if (photos && photos.images && photos.images.length > 0) {
             const latestImage = photos.images[photos.images.length - 1];
@@ -87,7 +86,6 @@ function Photo() {
                 ...latestImage,
                 url: `${process.env.REACT_APP_BACKEND}/serve_photo/${imageName}`
             };
-            console.log("Latest photo", photos.images.length, formattedImage.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo'));
 
             setCapturePhotos((prevPhotos) => {
                 const newPhotos = [...prevPhotos];
@@ -135,7 +133,6 @@ function Photo() {
         setShowFirstSet((prevShowFirstSet) => !prevShowFirstSet);
     };
 
-    console.log("photos>>>", capturePhotos);
     useEffect(() => {
 
         if (uuid) {
@@ -154,19 +151,16 @@ function Photo() {
             }, [uuid]);
     const playTakePhotoAudio = async() => {
         const res=await getAudio({file_name:"take_photo.wav"})
-        console.log("audio :",res)
           }
     // useEffect(()=>{
     // playAudio()
     // },[])
     const playAudio = async() => {
         const res=await getAudio({file_name:"look_up_smile.wav"})
-        console.log("audio :",res)
           }
    useEffect(()=>{
     playAudio()
    },[])
-    console.log("포토 js",JSON.parse(sessionStorage.getItem('selectedFrame')).frame)
     const getLiveStyle=()=>{
         const frame=JSON.parse(sessionStorage.getItem('selectedFrame')).frame
         if (frame==="6-cutx2") {

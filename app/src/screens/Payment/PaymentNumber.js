@@ -63,7 +63,6 @@ function PaymentNumber(props) {
       useEffect(()=>{
         const lang=sessionStorage.getItem("language")
         setLanguage(lang)
-        console.log("lang in num>>>",lang)
         if (lang==="ko") {
           setBackground(backgrond_kr)
           setGoBackBg(goback_kr);
@@ -95,6 +94,7 @@ function PaymentNumber(props) {
     };
       const goToPayment = async(dongNum,checkCoupon) => {  
     getClickAudio()
+  sessionStorage.setItem("photoNum",dongNum)
 const res=await sendDongNum(dongNum,checkCoupon===true?1:0)
              navigate('/payment');
    }
