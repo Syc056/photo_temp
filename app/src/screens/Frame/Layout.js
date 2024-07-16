@@ -17,6 +17,8 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 
 // Confirm
 import confirm_en from '../../assets/Frame/Layout/confirm.png';
@@ -25,6 +27,8 @@ import confirm_kr from '../../assets/Frame/Layout/Confirm/kr/confirm.png';
 import confirm_kr_hover from '../../assets/Frame/Layout/Confirm/kr/confirm_click.png';
 import confirm_vn from '../../assets/Frame/Layout/Confirm/vn/confirm.png';
 import confirm_vn_hover from '../../assets/Frame/Layout/Confirm/vn/confirm_click.png';
+import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
+import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../../api/config';
 import FrameCarousel from '../../components/FrameCarousel';
 
@@ -52,7 +56,6 @@ function Layout() {
           const nextSliceIdx = (sliceIdx + 1) % 4; // 다음에 가져올 slicedLayouts의 시작 인덱스
           // 0,5
           // 5,10
-          console.log("가져오는 인덱스들>>>",5*nextSliceIdx,5*(1+nextSliceIdx))
 //     const nextSlicedLayouts = layouts[nextSliceIdx];
 //     getBackground(nextSliceIdx)
 //     setSlicedLayouts(...nextSlicedLayouts);
@@ -60,7 +63,6 @@ function Layout() {
       };
       const onDrag=(e)=>{
           // e.preventDefault()
-          console.log("드래그 중!!")
           setDraging(true)
       }
      useEffect(() => {
@@ -135,6 +137,11 @@ function Layout() {
                setConfirmButton(confirm_vn);
                setConfirmHoverButton(confirm_vn_hover);
           }
+          else if (storedLanguage === 'mn') {
+               setGoBackBg(goback_mn);
+               setConfirmButton(confirm_mn);
+               setConfirmHoverButton(confirm_mn_hover);
+          }
      }, []);
 
      useEffect(() => {
@@ -144,6 +151,8 @@ function Layout() {
                   
                
                     const bgStyle=sessionStorage.getItem('styleBg')
+                    console.log(bgStyle)
+                    console.log(String(`${process.env.REACT_APP_BACKEND}/layouts/api/by-background/` + bgStyle + '/frame/' + frame))
                     const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/layouts/api/by-background/` + bgStyle + '/frame/' + frame);
                     const layoutDatas = response.data
                     const newBackgrounds = layoutDatas.map(item => ({
@@ -159,7 +168,9 @@ function Layout() {
                    6-cutx2
                    */
                    const resAll=newBackgrounds        
-                   console.log("frame>>>",frame,newBackgrounds)
+
+                    console.log("collab bg>>>",resAll)
+
                    if (frame==="4-cutx2") {
                     setLayouts(resAll.filter(r=>r.title!="Cartoon-5cut-4"))
                    }else{
@@ -213,7 +224,6 @@ function Layout() {
                         
                          for (let l = 0; l < clickedTitles.length; l++) {
                            if (element.title===clickedTitles[l]) {
-                               console.log("선택된 거",element.title) 
                                selectedLayouts.push(element)
                            }
                               
@@ -222,7 +232,6 @@ function Layout() {
                     }
                     
                }
-               console.log("버튼 클릭",clickedTitles,layouts.filter(layout=>clickedTitles.includes(layout.title)))
                sessionStorage.setItem('selectedLayout', JSON.stringify(layouts.filter(layout=>clickedTitles.includes(layout.title))));
                // sessionStorage.setItem('selectedLayout', JSON.stringify(layouts[index]));
           
@@ -236,84 +245,13 @@ function Layout() {
                setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
           } else if (goBackBG === 'vi') {
                setGoBackBg(goBackBg === goback_vn ? goback_vn_hover : goback_vn);
-          } else {
+          }else if(goBackBG === 'mn'){
+               setGoBackBg(goBackBg === goback_mn ? goback_mn_hover : goback_mn);
+          } 
+          else {
                setGoBackBg(goBackBg === goback_en ? goback_en_hover : goback_en);
           }
      }
-// console.log("slide >>>",slicedLayouts)
-// const getBackground=(sliceIdx)=>{
-//      const storedLanguage = sessionStorage.getItem('language');
-//      if (storedLanguage) {
-//           i18n.changeLanguage(storedLanguage);
-//           setLanguage(storedLanguage);
-//      }
-
-//      const frame = sessionStorage.getItem('selectedFrame');
-//      if (frame) {
-//           setSelectedFrame(JSON.parse(frame).frame);
-//      }
-
-//      const sessionStyleBg = sessionStorage.getItem('styleBg');
-//      if (sessionStyleBg) {
-//           let layoutBg = '';
-//           if (sliceIdx===0) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Seasons/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Seasons/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Seasons/BG.png`);
-//                }
-//           } else if (sliceIdx===1) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Party/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Party/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Party/BG.png`);
-//                }
-//           } else if (sliceIdx===2) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Cartoon/BG.png`);
-//                }
-//           } else if (sliceIdx===3) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Minimalism/BG.png`);
-//                }
-//           } else if (sliceIdx===4) {
-//                if (storedLanguage == 'ko') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Collab/kr/BG.png`);
-//                } else if (storedLanguage == 'vi') {
-//                     layoutBg = require(`../../assets/Frame/Layout/Collab/vn/BG.png`);
-//                } else {
-//                     layoutBg = require(`../../assets/Frame/Layout/Collab/BG.png`);
-//                }
-//           }
-//           setLayoutBackground(layoutBg);
-//      }
-
-//      if (storedLanguage === 'en') {
-//           setGoBackBg(goback_en);
-//           setConfirmButton(confirm_en);
-//           setConfirmHoverButton(confirm_en_hover);
-//      } else if (storedLanguage === 'ko') {
-//           setGoBackBg(goback_kr);
-//           setConfirmButton(confirm_kr);
-//           setConfirmHoverButton(confirm_kr_hover);
-//      } else if (storedLanguage === 'vi') {
-//           setGoBackBg(goback_vn);
-//           setConfirmButton(confirm_vn);
-//           setConfirmHoverButton(confirm_vn_hover);
-//      }
-// }
 useEffect(() => {
      const storedLanguage = sessionStorage.getItem('language');
      if (storedLanguage) {
@@ -325,7 +263,6 @@ useEffect(() => {
      if (frame) {
           setSelectedFrame(JSON.parse(frame).frame);
      }
-
      const sessionStyleBg = sessionStorage.getItem('styleBg');
      if (sessionStyleBg) {
           let layoutBg = '';
@@ -372,7 +309,79 @@ useEffect(() => {
           }
           setLayoutBackground(layoutBg);
      }
-
+     // const sessionStyleBg = sessionStorage.getItem('styleBg');
+     // if (sessionStyleBg) {
+     //      let layoutBg = '';
+     // //season
+     //      if (sessionStyleBg == 'Seasons') {
+     //           if (storedLanguage == 'ko') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Seasons/kr/BG.png`);
+     //           } else if (storedLanguage == 'vi') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Seasons/vn/BG.png`);
+     //           } 
+     //           else if (storedLanguage == 'mn') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Seasons/mn/BG.png`);
+     //           } 
+     //           else {
+     //                layoutBg = require(`../../assets/Frame/Layout/Seasons/BG.png`);
+     //           }
+     //      }
+     //      //party 
+     //      else if (sessionStyleBg == 'Party') {
+     //           if (storedLanguage == 'ko') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Party/kr/BG.png`);
+     //           } else if (storedLanguage == 'vi') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Party/vn/BG.png`);
+     //           } 
+     //           else if (storedLanguage == 'mn') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Party/mn/BG.png`);
+     //           } 
+     //           else {
+     //                layoutBg = require(`../../assets/Frame/Layout/Party/BG.png`);
+     //           }
+     //      } 
+     //      //cartoon
+     //      else if (sessionStyleBg == 'Cartoon') {
+     //           if (storedLanguage == 'ko') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Cartoon/kr/BG.png`);
+     //           } else if (storedLanguage == 'vi') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Cartoon/vn/BG.png`);
+     //           } 
+     //           else if (storedLanguage == 'mn') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Cartoon/mn/BG.png`);
+     //           } 
+     //           else {
+     //                layoutBg = require(`../../assets/Frame/Layout/Cartoon/BG.png`);
+     //           }
+     //      }
+     //      //minimalism 
+     //      else if (sessionStyleBg == 'Minimalism') {
+     //           if (storedLanguage == 'ko') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Minimalism/kr/BG.png`);
+     //           } else if (storedLanguage == 'vi') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Minimalism/vn/BG.png`);
+     //           }
+     //           else if (storedLanguage == 'mn') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Minimalism/mn/BG.png`);
+     //           }
+     //           else {
+     //                layoutBg = require(`../../assets/Frame/Layout/Minimalism/BG.png`);
+     //           }
+     //      } else if (sessionStyleBg == 'Collab') { 
+     //                layoutBg = require(`../../assets/Frame/Layout/Collab/kr/BG.png`);
+     //           } else if (storedLanguage == 'vi') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Collab/vn/BG.png`);
+     //           }
+     //           else if (storedLanguage == 'mn') {
+     //                layoutBg = require(`../../assets/Frame/Layout/Collab/mn/BG.png`);
+     //           }
+     //           else {
+     //                layoutBg = require(`../../assets/Frame/Layout/Collab/BG.png`);
+     //           }
+     //      }
+     //      setLayoutBackground(layoutBg);
+     // }
+//영어
      if (storedLanguage === 'en') {
           setGoBackBg(goback_en);
           setConfirmButton(confirm_en);
@@ -389,7 +398,6 @@ useEffect(() => {
 }, []);
 const playAudio = async() => {
      const res=await getAudio({file_name:"choose_frame_style.wav"})
-     console.log("audio :",res)
        }
 useEffect(()=>{
  playAudio()

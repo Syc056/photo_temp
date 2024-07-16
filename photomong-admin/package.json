@@ -40,6 +40,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ],
-      "proxy": "http://localhost:9000"
+      "proxy": "http://13.54.234.18:9000"
   }
 }

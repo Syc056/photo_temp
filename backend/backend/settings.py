@@ -59,7 +59,7 @@ SECRET_KEY = 'django-insecure-mk2xtk=yk6e7g%ro2xoh-h+7e0=-@s(*ri+j@6qf61cu$=l4e%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['172.21.112.1', '127.0.0.1','172.30.1.16']
+ALLOWED_HOSTS = ['172.21.112.1', '127.0.0.1','172.30.1.16','api.ipify.org','www.shadowserver.org']
 # ALLOWED_HOSTS = ['*']
 
 APPEND_SLASH = False

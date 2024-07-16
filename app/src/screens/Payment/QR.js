@@ -12,11 +12,13 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
-
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 // Background
 import background_en from '../../assets/Payment/QR/BG.png';
 import background_vn from '../../assets/Payment/QR/vn/BG.png';
 import background_kr from '../../assets/Payment/QR/kr/BG.png';
+import background_mn from '../../assets/Payment/QR/mn/BG.png';
 import { getAudio, getClickAudio } from '../../api/config';
 
 function QR() {
@@ -30,7 +32,6 @@ function QR() {
      const [background, setBackground] = useState(background_en);
      const playAudio = async() => {
           const res=await getAudio({file_name:"scan_qr.wav"})
-          console.log("audio :",res)
             }
       useEffect(()=>{
       playAudio()
@@ -43,22 +44,16 @@ function QR() {
           } else if (storedLanguage === 'vi') {
                setGoBackBg(goback_vn);
                setBackground(background_vn);
-          } else {
+          }
+          else if (storedLanguage === 'mn') {
+               setGoBackBg(goback_mn);
+               setBackground(background_mn);
+          }
+          else {
                setGoBackBg(goback_en);
                setBackground(background_en);
           }
      })
-     // const sound='./scan_qr.wav'
-     // // const audioRef = useRef(null);
-   
-     // useEffect(() => {
-     //   //음성 재생
-     //   const audio = new Audio(sound); 
-     //   audio.muted=true
-     //   audio.play()
-     //   audio.muted=false
-   
-     // }, []);
      useEffect(() => {
           const fetchQRPayment = async () => {
                try {
@@ -128,11 +123,10 @@ function QR() {
      const hoverGoBackButton = () => {
           setGoBackBg([goback_en_hover, goback_en_hover]);
      }
-console.log("qr code",sessionStorage)
      return (
           <div className='qr-container' style={{ backgroundImage: `url(${background})` }}>
                <div className='qr-code'>
-                    {qrCode && <QRCode value={qrCode} size={200}/>}
+               {qrCode && <QRCode value={qrCode} size={200}/>}
                </div>
                <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={goBack} ></div>
           </div>

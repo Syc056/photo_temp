@@ -11,6 +11,8 @@ def upload_file(request):
             upload_dir = os.path.join('uploads')
             # uploads 디렉터리가 없다면 생성
             os.makedirs(upload_dir, exist_ok=True)
+            upload_dir = os.path.join(upload_dir,file.uuid) 
+            os.makedirs(upload_dir, exist_ok=True)
             # 파일 경로 조합
             file_path = os.path.join(upload_dir, file.name)
 

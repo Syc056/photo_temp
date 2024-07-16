@@ -95,6 +95,8 @@
 .preview-default-0{
      /* overflow: hidden;
      border-radius: 20px; */
+     transform:scaleX(-1);
+
      z-index: 900;
      position: absolute;
      top: 12%;
@@ -107,6 +109,7 @@
 }
 .preview-default-5,
 .preview-default-1{
+     transform:scaleX(-1);
      z-index: 900;
      position: absolute;
      top: 32.5%;
@@ -119,6 +122,7 @@
 }
 .preview-default-6,
 .preview-default-2{
+     transform:scaleX(-1);
      z-index: 900;
      position: absolute;
      top: 52.5%;
@@ -131,6 +135,7 @@
 }
 .preview-default-7,
 .preview-default-3{
+     transform:scaleX(-1);
      z-index: 900;
      position: absolute;
      top: 72.5%;
@@ -301,10 +306,10 @@
 .right-choose-container {
      position: absolute;
      top: 30%;
-     right: 8%;
+     right: 7%;
      display: flex;
      flex-direction: column;
-     width: 45%;
+     width: 46%;
 }
 
 .choose-line {
@@ -314,12 +319,12 @@
 
 .choose-image {
      width: 100%;
-     height: 200px;
+     height: 128px;
      background-size: contain;
      background-image: url('../assets/Photo/Choose/photo_box.png');
      background-repeat: no-repeat;
      background-position: center;
-     margin: 10px auto;
+     margin: 30px 10px;
 }
 
 .bottom_choose_container {
@@ -413,7 +418,33 @@
 }
 
 /** Frame 4cut **/
-
+.choose-photo-item-4cut-0-0.clicked,
+.choose-photo-item-4cut-0-1.clicked,
+.choose-photo-item-4cut-1-0.clicked,
+.choose-photo-item-4cut-1-1.clicked,
+.choose-photo-item-3cut-0-0.clicked,
+.choose-photo-item-3cut-0-1.clicked,
+.choose-photo-item-2cut-0-0.clicked,
+.choose-photo-item-2cut-0-1.clicked,
+.choose-photo-item6-0-0.clicked,
+.choose-photo-item6-0-1.clicked,
+.choose-photo-item6-1-0.clicked,
+.choose-photo-item6-1-1.clicked,
+.choose-photo-item6-2-0.clicked,
+.choose-photo-item6-2-1.clicked,
+.choose-photo-item-0-0.clicked,
+.choose-photo-item-0-1.clicked,
+.choose-photo-item-1-0.clicked,
+.choose-photo-item-1-1.clicked,
+.choose-photo-item-2-0.clicked,
+.choose-photo-item-2-1.clicked,
+.choose-photo-item-3-0.clicked,
+.choose-photo-item-3-1.clicked
+{
+     border: 6px solid red;
+     box-sizing: border-box;
+     border-radius: 10px;
+}
 .choose-photo-item-4cut-0-0 {
      width: 232.75px;
      height: 175px;
@@ -800,3 +831,8 @@
           opacity: 0;
      }
 }
+.choose-image.clicked {
+     outline: 6px solid red;
+     box-sizing: border-box;
+     border-radius: 10px;
+ }

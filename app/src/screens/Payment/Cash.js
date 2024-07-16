@@ -13,28 +13,34 @@ import goback_kr from '../../assets/Common/kr/goback.png';
 import goback_kr_hover from '../../assets/Common/kr/gobackhover.png';
 import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
-
+import goback_mn from '../../assets/Common/mn/goback.png';
+import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
 // Background
 import background_en from '../../assets/Payment/Cash/BG.png';
 import background_vn from '../../assets/Payment/Cash/vn/BG.png';
 import background_kr from '../../assets/Payment/Cash/kr/BG.png';
+import background_mn from '../../assets/Payment/Cash/mn/BG.png';
 
 // Inserted Money
 import inserted from '../../assets/Payment/Cash/inserted.png';
 import inserted_kr from '../../assets/Payment/Cash/kr/inserted.png';
 import inserted_vn from '../../assets/Payment/Cash/vn/inserted.png';
+import inserted_mn from '../../assets/Payment/Cash/mn/inserted.png';
 // Paid
 import paid_en from '../../assets/Payment/Cash/paid.png';
 import paid_kr from '../../assets/Payment/Cash/kr/paid.png';
 import paid_vn from '../../assets/Payment/Cash/vn/paid.png';
+import paid_mn from '../../assets/Payment/Cash/mn/paid.png';
 // Done
 import done_en from '../../assets/Payment/Cash/done.png';
 import done_kr from '../../assets/Payment/Cash/kr/done.png';
 import done_vn from '../../assets/Payment/Cash/vn/done.png';
+import done_mn from '../../assets/Payment/Cash/mn/done.png';
 // Done Click
 import done_click_en from '../../assets/Payment/Cash/done_click.png';
 import done_click_kr from '../../assets/Payment/Cash/kr/done_click.png';
 import done_click_vn from '../../assets/Payment/Cash/vn/done_click.png';
+import done_click_mn from '../../assets/Payment/Cash/mn/done_click.png';
 
 import axios from 'axios';
 import { getAudio, getClickAudio, originAxiosInstance,startCashUrl } from '../../api/config';
@@ -76,19 +82,16 @@ function Cash() {
         setPaidImage(paid_vn);
         setDoneImage(done_vn);
       }
+      else if (storedLanguage === 'mn') {
+        setBackground(background_mn);
+        setGoBackButton(goback_mn);
+        setInsertedImage(inserted_mn);
+        setPaidImage(paid_mn);
+        setDoneImage(done_mn);
+      }
     }
   }, []);
-  // const sound='./insert_cash.wav'
-  // // const audioRef = useRef(null);
 
-  // useEffect(() => {
-  //   //음성 재생
-  //   const audio = new Audio(sound); 
-  //   audio.muted=true
-  //   audio.play()
-  //   audio.muted=false
-
-  // }, []);
   useEffect(() => {
     const startCashPayment = async () => {
       try {
@@ -134,7 +137,6 @@ function Cash() {
   }, []);
   const playAudio = async() => {
     const res=await getAudio({file_name:"insert_cash.wav"})
-    console.log("audio :",res)
       }
 useEffect(()=>{
 playAudio()
@@ -156,7 +158,6 @@ playAudio()
     const intervalId = setInterval(() => {
       const ooCode = sessionStorage.getItem('orderCodeNum');
       if (ooCode) {        
-        console.log(ooCode);
         checkPaymentStatus(ooCode);
       }
     }, 3000);
@@ -195,6 +196,9 @@ playAudio()
     } else if (lang === 'vi') {
       setGoBackButton(goBackButton == goback_vn_hover ? goback_vn : goback_vn_hover);
     }
+    else if (lang === 'mn') {
+      setGoBackButton(goBackButton == goback_mn_hover ? goback_mn : goback_mn_hover);
+    }
   }
 
   const hoverDoneImage = (lang) => {
@@ -204,6 +208,9 @@ playAudio()
       setDoneImage(doneImage == done_click_kr ? done_kr : done_click_kr);
     } else if (lang == 'vi') {
       setDoneImage(doneImage == done_click_vn ? done : done_click_vn);
+    }
+    else if (lang == 'mn') {
+      setDoneImage(doneImage == done_click_mn ? done_mn : done_click_mn);
     }
   }
 

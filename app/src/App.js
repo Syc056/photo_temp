@@ -14,8 +14,10 @@ import Choose from './screens/Photo/Choose';
 import Filter from './screens/Filter';
 import Sticker from './screens/Sticker';
 import Print from './screens/Print';
+import Landing from './screens/Landing';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PaymentNumber from './screens/Payment/PaymentNumber';
+import QrDownload from './screens/QrDownload';
 
 function App() {
   return (
@@ -36,7 +38,8 @@ function App() {
         <Route path="/filter" element={<Filter />} />
         <Route path="/sticker" element={<Sticker />} />
         <Route path="/print" element={<Print />} />
-        
+        <Route path="/landing" element={<Landing/>} />
+        <Route path="/download" element={<QrDownload/>} />
       </Routes>
     </Router>
   );

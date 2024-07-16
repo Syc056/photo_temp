@@ -8,6 +8,7 @@ import "../css/Print.css";
 import background_en from '../assets/Prints/BG.png';
 import background_kr from '../assets/Prints/kr/BG.png';
 import background_vn from '../assets/Prints/vn/BG.png';
+import background_mn from '../assets/Prints/mn/BG.png';
 
 // QR
 import QRCode from 'qrcode.react';
@@ -19,17 +20,7 @@ function Print() {
      const [hoveredImage, setHoveredImage] = useState(null);
 
      const [background, setBackground] = useState(background_en);
-     // const sound='./thank_being.wav'
-     // // const audioRef = useRef(null);
-   
-     // useEffect(() => {
-     //   //음성 재생
-     //   const audio = new Audio(sound); 
-     //   audio.muted=true
-     //   audio.play()
-     //   audio.muted=false
-   
-     // }, []);
+    
      useEffect(() => {
           const storedLanguage = sessionStorage.getItem('language');
           if (storedLanguage === 'en') {
@@ -38,19 +29,11 @@ function Print() {
                setBackground(background_kr);
           } else if (storedLanguage === 'vi') {
                setBackground(background_vn);
+          }else if (storedLanguage === 'mn') {
+               setBackground(background_mn);
           }
      }, []);
-     // const src='./print.wav'
-     // // const audioRef = useRef(null);
-   
-     // useEffect(() => {
-     //   //음성 재생
-     //   const audio = new Audio(src); 
-     //   audio.muted=true
-     //   audio.play()
-     //   audio.muted=false
-   
-     // }, []);
+
      const playAudio = async() => {
           const res=await getAudio({file_name:"thank_being.wav"})
             }
@@ -67,8 +50,8 @@ function Print() {
      }
 
      const clearSessionStorageAndLeaveOut = () => {
-          sessionStorage.clear();
-          navigate('/');
+          // sessionStorage.clear();
+          navigate('/landing');
      }
 
      const QRCodeComponent = () => {
@@ -76,7 +59,16 @@ function Print() {
           return (
                <QRCode
                     value={myImage}
-                    size={200}
+                    size={160}
+               />
+          )
+     }
+     const GifQRCodeComponent = () => {
+          const myImage = sessionStorage.getItem('gifPhoto');
+          return (
+               <QRCode
+                    value={myImage}
+                    size={160}
                />
           )
      }
@@ -85,6 +77,9 @@ function Print() {
           <div className='print-container' style={{ backgroundImage: `url(${background})` }} onClick={clearSessionStorageAndLeaveOut}>
                <div className="qr-code-container">
                     <QRCodeComponent />
+               </div>
+               <div className="gif-qr-code-container">
+                    <GifQRCodeComponent />
                </div>
           </div>
      );
