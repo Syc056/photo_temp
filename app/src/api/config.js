@@ -84,10 +84,10 @@ export  const startLiveView = async () => {
 
 //sound get
 export const getAudio=async(payload)=>{
-  // const {data}=await audioAxiosInstance.post(`/api/play_sound/`,payload)
+  const {data}=await audioAxiosInstance.post(`/api/play_sound/`,payload)
   return "";
 }
 export const getClickAudio=async()=>{
-  // const {data}=await audioAxiosInstance.post(`/api/play_sound/`,{file_name:"click_sound.wav"})
+  const {data}=await audioAxiosInstance.post(`/api/play_sound/`,{file_name:"click_sound.wav"})
   return "";
 }

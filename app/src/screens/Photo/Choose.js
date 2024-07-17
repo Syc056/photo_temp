@@ -76,7 +76,7 @@ const testGetPhotos = async () => {
             const imageName = img.url.split('/').pop(); // URL에서 이미지 이름을 추출합니다.
             return {
                 ...img,
-                url: `${process.env.REACT_APP_BACKEND}/serve_photo/${imageName}` // 백엔드 URL 형식으로 변환합니다.
+                url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}` // 백엔드 URL 형식으로 변환합니다.
             };
         });
         

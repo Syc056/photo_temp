@@ -90,12 +90,12 @@ function PhotoChoose() {
         }
     }, [capturePhotos, navigate, uuid]);
 
-    useEffect(() => {
-        if (uuid) {
-            const url = `http://127.0.0.1:5000/video/${uuid}`;
-            setVideoUrl(url);
-        }
-    }, [uuid]);
+    // useEffect(() => {
+    //     if (uuid) {
+    //         const url = `http://3.26.21.10:5000/video/${uuid}`;
+    //         setVideoUrl(url);
+    //     }
+    // }, [uuid]);
 
     const handleImageDownload = async () => {
         // 이미지 다운로드 로직 구현

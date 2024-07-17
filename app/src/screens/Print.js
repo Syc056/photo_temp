@@ -56,6 +56,10 @@ function Print() {
 
      const QRCodeComponent = () => {
           const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
+          console.log("!@#");
+          console.log("!@#");
+          console.log(myImage);
+          // myImage = myImage.replace("get_photo","download_photo")
           return (
                <QRCode
                     value={myImage}
@@ -65,6 +69,11 @@ function Print() {
      }
      const GifQRCodeComponent = () => {
           const myImage = sessionStorage.getItem('gifPhoto');
+          console.log("!@#");
+          console.log("!@#");
+          console.log("!@#");
+          // console.log(myImage);;
+          // myImage = str(myImage).replace("get_photo","download_photo")
           console.log(myImage);
           return (
                <QRCode
