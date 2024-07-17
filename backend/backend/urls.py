@@ -50,7 +50,6 @@ urlpatterns = [
     path('zalopay/', include(zalopay_urls)),
     path('redeem/', include(redeem_urls)),
     path('upload/', include(upload_urls)),  # upload 앱의 URL을 include
-    
     path('get_photo/', include(get_photo_urls)),  # upload 앱의 URL을 include
     path('get_photo/uploads/<path:file_path>', serve_photo, name='serve_photo'),
 ]

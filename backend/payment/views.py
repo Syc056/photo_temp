@@ -243,3 +243,10 @@ class PaymentEditView(LoginRequiredMixin, View):
         else:
             messages.error(request, form.errors)
         return render(request, "payments/edit.html", {"form": form, "payment": payment})
+    
+class PaymentDeleteView(LoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        payment = Payment.objects.get(id=pk)
+        payment.delete()
+        return redirect("payments")    

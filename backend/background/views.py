@@ -21,7 +21,7 @@ BACKGROUND_POSITIONS = ['row-1-1', 'row-1-2', 'row-1-3', 'row-1-4', 'row-1-5']
 class BackgroundAPI(APIView):    
     
     def get(self, request, *args, **kwargs):
-        backgrounds = Background.objects.exclude(title='Collab')
+        backgrounds = Background.objects.exclude(title='')
         serializer = BackgroundSerializer(backgrounds, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)     
     
@@ -89,3 +89,10 @@ class BackgroundEditView(LoginRequiredMixin, View):
         else:
             messages.error(request, form.errors)
         return render(request, 'backgrounds/edit.html', {'form': form, 'background': background, 'positions': BACKGROUND_POSITIONS})    
+
+class BackgroundDeleteView(LoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        background = Background.objects.get(id=pk)
+        background.delete()
+        return redirect('backgrounds')    

@@ -132,9 +132,9 @@ function Photo() {
           
         }
         if (capturePhotos.length === 9) {
-              console.log("gif in list",capturePhotos.filter(photo=>photo.url.includes(".gif")))
-        if (capturePhotos.filter(photo=>photo.url.includes(".gif")).length>0) {
-          const idx=  capturePhotos.findIndex(photo=>photo.url.includes(".gif"))
+              console.log("mp4 in list",capturePhotos.filter(photo=>photo.url.includes(".mp4")))
+        if (capturePhotos.filter(photo=>photo.url.includes(".mp4")).length>0) {
+          const idx=  capturePhotos.findIndex(photo=>photo.url.includes(".mp4"))
           const gifPhoto=capturePhotos[idx].url
                     sessionStorage.setItem("gifPhoto", gifPhoto);
         }

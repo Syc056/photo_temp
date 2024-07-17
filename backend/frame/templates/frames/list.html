@@ -7,7 +7,8 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">
-          <a href="{% url 'frames-add' %}" type="button" class="btn btn-gradient-primary btn-rounded btn-fw">Add Frame</a>
+          <a href="{% url 'frames-add' %}" type="button"
+            class="btn btn-gradient-primary btn-rounded btn-fw"><span class="mdi mdi-plus"></span> Add Frame</a>
         </li>
       </ol>
     </nav>
@@ -18,16 +19,16 @@
         <div class="card-body">
           <h4 class="card-title">Frames List</h4>
           <p>
-            <select class="form-control" id="devices_select">
+            <select class="form-select select" id="devices_select">
               <option value="0">All Devices</option>
               {% for device in devices %}
               <option value="{{ device.id }}">{{ device.name }}</option>
               {% endfor %}
             </select>
           </p>
-          <table id="frames-table" class="table table-hover">
+          <table id="frames-table" class="table table-bordered">
             <thead>
-              <tr>                                
+              <tr>
                 <th>Title</th>
                 <th>Position</th>
                 <th>Photo</th>
@@ -40,19 +41,30 @@
             <tbody>
               {% if frames %}
               {% for frame in frames %}
-              <tr data-device-id="{{frame.device_id.id}}">                                
-                <td>{{frame.title}}</td>
-                <td>{{frame.position}}</td>
-                <td><img src="{{frame.photo.url}}" alt="Photo"></td>
-                <td>{{frame.device_id.name}}</td>
+              <tr data-device-id="{{ frame.device_id.id }}">
+                <td>{{ frame.title }}</td>
+                <td>{{ frame.position }}</td>
+                <td>
+                  <img src="{{ frame.photo.url }}" alt="Photo" />
+                </td>
+                <td>{{ frame.device_id.name }}</td>
                 <td class="text-danger">
-                  {{frame.price|floatformat}} <i class="mdi mdi-cash"></i>
+                  {{ frame.price|floatformat }} <i class="mdi mdi-cash"></i>
                 </td>
+                <td>{{ frame.created_at }}</td>
                 <td>
-                  {{frame.created_at}}
-                </td>
-                <td>
-                  <a href="{% url 'frames-edit' frame.id %}" type="button" class="btn btn-outline-info btn-fw">Edit</button>
+                  <div class="row">
+                    <div class="col-sm-6 text-end">
+                      <a href="{% url 'frames-edit' frame.id %}" type="button"
+                        class="btn btn-gradient-primary btn-rounded btn-fw"><span
+                          class="mdi mdi-pencil"></span> Edit</a>
+                    </div>
+                    <div class="col-sm-6 text-start">
+                      <a href="{% url 'frames-delete' frame.id %}" type="button"
+                        class="delete-frame btn btn-danger btn-rounded"><span
+                          class="mdi mdi-trash-can"></span> Delete</a>
+                    </div>
+                  </div>
                 </td>
               </tr>
               {% endfor %}
@@ -68,17 +80,39 @@
 </div>
 
 <script>
-    document.getElementById('devices_select').addEventListener('change', function() {
-      var selectedDeviceId = this.value
-      var rows = document.querySelectorAll('#frames-table tbody tr');
-      rows.forEach(function(row) {
-        var deviceId = row.getAttribute('data-device-id')
-        if (!selectedDeviceId || selectedDeviceId === deviceId || selectedDeviceId == 0) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
+    function getURLParams(url) {
+      return Object.fromEntries(new URL(url).searchParams.entries())
+    }
+    
+    let table = new DataTable('#frames-table')
+    $(document).ready(function () {
+      var urlParams = getURLParams(window.location.href)
+      $('.select').select2()
+      if (urlParams['device']) {
+        $('.select').val(urlParams['device']).trigger('change.select2')
+      }
+    
+      $('#devices_select').on('select2:select', function (e) {
+        var device = $('#devices_select').val()
+        var currentUrl = window.location.href.split('?')[0]
+        if (device == 0) {
+          window.location.href = currentUrl
         }
+        // Check if the current URL already contains query parameters
+        var separator = currentUrl.includes('?') ? '&' : '?'
+    
+        var redirectUrl = currentUrl + separator + 'device=' + device
+    
+        window.location.href = redirectUrl
       })
     })
-</script>
+    
+    $('.delete-frame').on('click', function (e) {
+      e.preventDefault()
+      if (confirm('Are you sure you want to delete this frame?') == true) {
+        var url = $(this).attr('href')
+        window.location.href = url
+      }
+    })
+  </script>
 {% endblock %}

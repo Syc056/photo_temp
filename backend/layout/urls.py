@@ -5,7 +5,8 @@ from .views import (
       LayoutByBackgroundAPI,
       LayoutList,
       LayoutCreateView,
-      LayoutEditView
+      LayoutEditView,
+      LayoutDeleteView
   )
 
 urlpatterns = [
@@ -17,5 +18,6 @@ urlpatterns = [
       # WEB
       path('', LayoutList.as_view(), name='layouts'),
       path('create', LayoutCreateView.as_view(), name='layouts-add'),
-      path('edit/<int:pk>', LayoutEditView.as_view(), name='layouts-edit')
+      path('edit/<int:pk>', LayoutEditView.as_view(), name='layouts-edit'),
+      path('delete/<int:pk>', LayoutDeleteView.as_view(), name='layouts-delete'),
 ]

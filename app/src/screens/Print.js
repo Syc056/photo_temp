@@ -65,6 +65,7 @@ function Print() {
      }
      const GifQRCodeComponent = () => {
           const myImage = sessionStorage.getItem('gifPhoto');
+          console.log(myImage);
           return (
                <QRCode
                     value={myImage}

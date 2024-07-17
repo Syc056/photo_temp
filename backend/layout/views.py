@@ -92,14 +92,12 @@ class LayoutList(LoginRequiredMixin, ListView):
         
         all_data = Layout.objects.all().order_by('-id')
         if background_query:
-            background = Background.objects.get(title=background_query)
-            all_data = Layout.objects.filter(background=background.id).order_by('-id')
-        paginator = Paginator(all_data, 10)
-        layouts = paginator.get_page(page_number)
+            background = Background.objects.get(id=background_query)
+            all_data = Layout.objects.filter(background=background.id).order_by('-id')        
         
         backgrounds = Background.objects.all()
         frames = Frame.objects.all()
-        return render(request, 'layouts/list.html', {'layouts': layouts, 'backgrounds': backgrounds, 'frames': frames, 'position_list': POSITION_LIST})
+        return render(request, 'layouts/list.html', {'layouts': all_data, 'backgrounds': backgrounds, 'frames': frames, 'position_list': POSITION_LIST})
 
 class LayoutCreateView(LoginRequiredMixin, View):
     template_name = 'layouts/add.html'
@@ -115,7 +113,7 @@ class LayoutCreateView(LoginRequiredMixin, View):
         frames = Frame.objects.all()
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('layouts'))
+            return redirect(f'{reverse_lazy("layouts")}?background={form.instance.background.id}')
         return render(request, self.template_name, {'form': form, 'backgrounds': backgrounds, 'frames': frames, 'position_list': POSITION_LIST})
 
 class LayoutEditView(LoginRequiredMixin, View):
@@ -135,3 +133,10 @@ class LayoutEditView(LoginRequiredMixin, View):
             form.save()
             return redirect(reverse_lazy('layouts'))
         return render(request, 'layouts/edit.html', {'form': form, 'backgrounds': backgrounds, 'frames': frames, 'layout': layout, 'position_list': POSITION_LIST})
+    
+class LayoutDeleteView(LoginRequiredMixin, View):
+    
+    def get(self, request, pk):
+        layout = Layout.objects.get(id=pk)
+        layout.delete()
+        return redirect(reverse_lazy('layouts'))    

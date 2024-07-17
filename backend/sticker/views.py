@@ -83,3 +83,10 @@ class StickerEditView(LoginRequiredMixin, View):
             form.save()
             return redirect('stickers')
         return render(request, 'stickers/edit.html', {'form': form, 'sticker': sticker})
+    
+class StickerDeleteView(LoginRequiredMixin, View):
+
+    def get(self, request, pk, *args, **kwargs):
+        sticker = Sticker.objects.get(id=pk)
+        sticker.delete()
+        return redirect('stickers')    

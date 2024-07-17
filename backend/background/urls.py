@@ -4,7 +4,8 @@ from .views import (
   BackgroundDetailAPI,
   BackgroundList,
   BackgroundCreateView,
-  BackgroundEditView
+  BackgroundEditView,
+  BackgroundDeleteView
 )
 
 urlpatterns = [
@@ -14,5 +15,6 @@ urlpatterns = [
   # WEB
   path('', BackgroundList.as_view(), name='backgrounds'),
   path('add', BackgroundCreateView.as_view(), name='backgrounds-add'),
-  path('edit/<int:pk>', BackgroundEditView.as_view(), name='backgrounds-edit')
+  path('edit/<int:pk>', BackgroundEditView.as_view(), name='backgrounds-edit'),
+  path('delete/<int:pk>', BackgroundDeleteView.as_view(), name='backgrounds-delete'),
 ]

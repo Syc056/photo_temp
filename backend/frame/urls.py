@@ -5,6 +5,7 @@ from .views import (
     FrameList,
     FrameCreateView,
     FrameEditView,
+    FrameDeleteView,
     FrameImageCopyAPI,
     UploadPhotoCloud  ,
     ClearImagesAPIView  
@@ -26,5 +27,6 @@ urlpatterns = [
     # WEB
     path('', FrameList.as_view(), name='frames'),
     path('add', FrameCreateView.as_view(), name='frames-add'),
-    path('edit/<int:pk>', FrameEditView.as_view(), name='frames-edit')
+    path('edit/<int:pk>', FrameEditView.as_view(), name='frames-edit'),
+    path('delete/<int:pk>', FrameDeleteView.as_view(), name='frames-delete')
 ]
