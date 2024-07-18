@@ -177,6 +177,9 @@ playAudio()
 
   const goToPay = (method) => {
     sessionStorage.setItem("payMethod",method)
+    
+    
+    console.log(sessionStorage.getItem("payMethod"))
     getClickAudio()
     if (method === 'cash') {
       navigate('/payment-cash');

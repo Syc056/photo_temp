@@ -528,29 +528,29 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     
             const printUrl = response.data.print_url;
             const printData = response.data.print_data;
-            const uploadsDataPath = response.data.print_data.file_path;
+            // const uploadsDataPath = response.data.print_data.file_path;
     
-            console.log(uploadsDataPath)
-            console.log(uploadsDataPath)
-            console.log(uploadsDataPath)
-            console.log(uploadsDataPath)
+            // // console.log(uploadsDataPath)
+            // // console.log(uploadsDataPath)
+            // // console.log(uploadsDataPath)
+            // // console.log(uploadsDataPath)
 
-            const res = await getPhotos(uuid);
-            console.log(res)
-            // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
+            // // const res = await getPhotos(uuid);
+            // // console.log(res)
+            // // // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
     
-            let newUrl = convertUrl(res.images.url);
-            const fileResponse = await fetch(newUrl);
-            const fileBlob = await fileResponse.blob();
+            // // let newUrl = convertUrl(res.images.url);
+            // // const fileResponse = await fetch(newUrl);
+            // // const fileBlob = await fileResponse.blob();
     
-            const formDataToFlask = new FormData();
-            formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
-            formDataToFlask.append('frame', printData.frame);
-            console.log("photoNum")
-            console.log(photoNum)
+            // // const formDataToFlask = new FormData();
+            // // formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
+            // // formDataToFlask.append('frame', printData.frame);
+            // // console.log("photoNum")
+            // // console.log(newPhotoNum)
             const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
     
-            for (let i = 0; i < photoNum; i++) {
+            for (let i = 0; i < newPhotoNum; i++) {
                 // const fileResponse = await fetch(res.images[i].url.replace('uploads', 'get_photo/uploads'));
                 // const fileResponse = await fetch(res.images[i].url);
                 const fileResponse = await fetch(myImage);
@@ -575,6 +575,99 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                     console.log(`Failed to start print job ${i + 1}.`);
                 }
             }
+
+
+            const ipResponse = await fetch("https://api.ipify.org?format=json");
+            const ipData = await ipResponse.json();
+            const userIp = ipData.ip;
+    
+            // Step 2: Fetch all devices
+            const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
+            const allDevices = await allDevicesResponse.json();
+    
+            // Step 3: Find the device with the matching IP address
+            const device = allDevices.find(device => device.ip === userIp);
+            
+            if (!device) {
+                console.error(`No device found with IP address: ${userIp}`);
+                return;
+            }
+    
+            const deviceId = device.id;
+            const sales = sessionStorage.getItem('sales')
+    
+            const testformData = {
+                "Sales": sales // 예제 변경값
+            };
+            
+            const updateSalesResponse = await fetch(`http://3.26.21.10:9000/api/update_sales/${deviceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(testformData)
+            });
+    
+            const printAmountResponse = await fetch(`http://3.26.21.10:9000/api/update_print_amount/${deviceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ remaining_amount: device.remaining_amount - newPhotoNum }) // 예제 변경값
+            });
+    
+        const paymentMethod = sessionStorage.getItem("payMethod")
+        // Step 6: Log the payment
+        const logPaymentData = {
+            device: device.name,
+            device_code: device.device_code,
+            payment_amount: sales, // 예제 변경값
+            payment_method: paymentMethod, // 실제 결제 방식으로 변경 필요
+        };
+        
+        const logPaymentResponse = await fetch(`http://3.26.21.10:9000/api/log_payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(logPaymentData)
+        });
+        
+        const logPaymentResult = await logPaymentResponse.json();
+            const updateSalesResult = await updateSalesResponse.json();
+            const printAmountResult = await printAmountResponse.json();
+    
+        // Handle the responses as needed
+        console.log('Update Sales Result:', updateSalesResult);
+        console.log('Update Print Amount Result:', printAmountResult);
+        console.log('Log Payment Result:', logPaymentResult);
+
+            // const ip_response = await fetch("https://api.ipify.org?format=json")
+            // const data = await ip_response.json()
+            
+            // const all_device = await fetch(`${process.env.REACT_APP_BACKEND}/api/devices`, {
+            //     method: 'POST',
+            //     body: formDataToFlask,
+            // });
+
+            // const sales_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/edit_device/${data.ip}`, {
+            //     method: 'POST',
+            //     body: formDataToFlask,
+            // });
+            // const print_amount_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/update_print_amount/${data.ip}`, {
+            //     method: 'POST',
+            //     body: formDataToFlask,
+            // });
+
+            
+            // @app.route('/api/update_print_amount/<int:id>', methods=['PUT'])
+            // def update_print_amount(id):
+            //     data = request.get_json()
+            //     device = Device.query.get_or_404(id)
+            //     device.remaining_amount = data['remaining_amount']
+            //     db.session.commit()
+            //     return jsonify({'message': 'Print amount updated successfully'}), 200
+
         // } catch (error) {
         //     console.error('Error during printing process:', error);
         // }

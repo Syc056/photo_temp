@@ -125,6 +125,8 @@ from pydub.playback import play
 from flask_cors import CORS
 from datetime import datetime
 import requests
+import uuid
+
 
 app = Flask(__name__)
 
@@ -132,6 +134,13 @@ CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
 
+
+
+@app.route('/get-mac-address', methods=['GET'])
+def get_mac_address():
+    mac = uuid.UUID(int=uuid.getnode()).hex[-12:]
+    mac_address = ':'.join(mac[i:i+2] for i in range(0, 12, 2))
+    return mac_address
 
 
 def print_image_with_rundll32(image_path, frame_type):

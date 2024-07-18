@@ -302,6 +302,7 @@ function Photo() {
     const [loadBgImage, setLoadBgImage] = useState(load_en);
     const [capturing, setCapturing] = useState(false);
     const [capturePhotos, setCapturePhotos] = useState([]);
+    
     const [showFirstSet, setShowFirstSet] = useState(true);
     const [uuid, setUuid] = useState(sessionStorage.getItem("uuid") || null);
 
@@ -351,13 +352,24 @@ function Photo() {
 
     const getLatestPhoto = async (currentPhotoCount) => {
         const photos = await getPhotos(uuid);
+        sessionStorage.setItem("getphotos", photos);
         if (photos && photos.images && photos.images.length > 0) {
             const latestImage = photos.images[photos.images.length - 1];
+            console.log(photos)
             const imageName = latestImage.url.split('/').pop();
             const formattedImage = {
                 ...latestImage,
                 url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
             };
+            if (photos.videos!=undefined) {
+                if (photos.videos.length!=0) {
+                          const videoUrl=photos.videos[0].url.replace("get_photo","download_photo")
+            console.log('videoUrl>>>',videoUrl)
+            sessionStorage.setItem("videoUrl",videoUrl)
+                }
+           
+            }
+           
             setCapturePhotos((prevPhotos) => {
                 const newPhotos = [...prevPhotos];
                 newPhotos[currentPhotoCount] = {
@@ -389,11 +401,13 @@ function Photo() {
 
     useEffect(() => {
         if (capturePhotos.length === 8) {
-            const gifPhoto = capturePhotos.find(photo => photo.url.includes(".mp4"));
-            console.log("mp4 qr>>>" ,capturePhotos)
-            if (gifPhoto) {
-                sessionStorage.setItem("gifPhoto", gifPhoto.url.replace("get_photo","download_photo"));
-            }
+            // const myGif = sessionStorage.getItem('getphotos');
+            // console.log(myGif.video)
+            // const videoPhoto = myGif.find(photo => photo.video.includes(".mp4"));
+            // console.log("mp4 qr>>>" ,capturePhotos)
+            // if (videoPhoto) {
+            //     // sessionStorage.setItem("gifPhoto", gifPhoto.url.replace("get_photo","download_photo"));
+            // }
             sessionStorage.setItem("uuid", uuid);
             navigate('/photo-choose');
         }

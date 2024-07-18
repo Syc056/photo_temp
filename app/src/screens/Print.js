@@ -56,11 +56,15 @@ function Print() {
 
      const QRCodeComponent = () => {
           const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
-          const myVideo=sessionStorage.getItem("gifPhoto")
+          const myVideo=sessionStorage.getItem("videoUrl")
+          const encodedImage = encodeURIComponent(myImage);
+          const encodedVideo = encodeURIComponent(myVideo);
           console.log("!@#");
           console.log("!@#");
           console.log(myImage);
-          const downloadUrl=`http://3.26.21.10:8000/download?image_path=${myImage}&video_path=${myVideo}` 
+          
+          console.log(myVideo);
+          const downloadUrl=`http://3.26.21.10:8000/download?image_path=${encodedImage}&video_path=${encodedVideo}` 
           // myImage = myImage.replace("get_photo","download_photo")
           return (
                <QRCode

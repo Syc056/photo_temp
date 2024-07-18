@@ -92,7 +92,7 @@ function PhotoChoose() {
 
     // useEffect(() => {
     //     if (uuid) {
-    //         const url = `http://3.26.21.10:5000/video/${uuid}`;
+    //         const url = `http://127.0.0.1:5000/video/${uuid}`;
     //         setVideoUrl(url);
     //     }
     // }, [uuid]);

@@ -94,8 +94,8 @@ function PaymentNumber(props) {
     };
       const goToPayment = async(dongNum,checkCoupon) => {  
     getClickAudio()
-  sessionStorage.setItem("photoNum",dongNum)
-const res=await sendDongNum(dongNum,checkCoupon===true?1:0)
+  sessionStorage.setItem("photoNum",dongNum);
+  const res=await sendDongNum(dongNum,checkCoupon===true?1:0)
              navigate('/payment');
    }
 const onMouseConfirmEnter=(lang)=>{
@@ -129,6 +129,10 @@ const getDong=()=>{
   else {
 amount=100000
   }
+  const sales = sessionStorage.setItem("sales",amount+50000*(photoNum-1));
+  const test = sessionStorage.getItem('sales')
+  console.log(test)
+  console.log(photoNum)
  
 return amount+50000*(photoNum-1)
 }
