@@ -70,7 +70,7 @@ console.log("login data>>>",loginData)
         if (userExists.length>0) {
           sessionStorage.setItem("user", loginData.id);
           sessionStorage.setItem("ip", newIp);
-          navigate("/all-devices");
+          navigate("/store");
         } else {
           window.confirm("login fail");
         }

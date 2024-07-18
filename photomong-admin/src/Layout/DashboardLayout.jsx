@@ -149,7 +149,7 @@ console.log("user id>>>", )
                 <ListItemText primary={"device"} />
               </ListItemButton>
             </ListItem>
-          {true&&  <ListItem 
+          {userId!="photomong"&&  <ListItem 
             sx={{
               textIndent:"10px"
             }}

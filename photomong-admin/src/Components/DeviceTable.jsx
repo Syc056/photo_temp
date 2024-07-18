@@ -26,12 +26,18 @@ export default function DeviceTable() {
   const fetchDeviceInfo = async () => {
     const res = await getDeivceInfo();
     console.log("현재 아이피>>>",res)
+    const nowUser=sessionStorage.getItem("user")
     const nowIp=sessionStorage.getItem("ip")
     const filtered=res.filter(d=>d.ip===nowIp)
        // Calculate total sales
        const salesSum = filtered.reduce((acc, device) => parseInt(acc) + parseInt(device.sales), 0);
        setTotalSales(salesSum);
-    setDeviceInfo(filtered);
+       if (nowUser==="photomong") {
+        setDeviceInfo(res);
+       } else {
+         setDeviceInfo(filtered);
+       }
+   
   };
 
   React.useEffect(() => {
