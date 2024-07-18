@@ -56,41 +56,27 @@ function Print() {
 
      const QRCodeComponent = () => {
           const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
+          const myVideo=sessionStorage.getItem("gifPhoto")
           console.log("!@#");
           console.log("!@#");
           console.log(myImage);
+          const downloadUrl=`http://3.26.21.10:8000/download?image_path=${myImage}&video_path=${myVideo}` 
           // myImage = myImage.replace("get_photo","download_photo")
           return (
                <QRCode
-                    value={myImage}
+                    value={downloadUrl}
                     size={160}
                />
           )
      }
-     const GifQRCodeComponent = () => {
-          const myImage = sessionStorage.getItem('gifPhoto');
-          console.log("!@#");
-          console.log("!@#");
-          console.log("!@#");
-          // console.log(myImage);;
-          // myImage = str(myImage).replace("get_photo","download_photo")
-          console.log(myImage);
-          return (
-               <QRCode
-                    value={myImage}
-                    size={160}
-               />
-          )
-     }
+ 
 
      return (
           <div className='print-container' style={{ backgroundImage: `url(${background})` }} onClick={clearSessionStorageAndLeaveOut}>
                <div className="qr-code-container">
                     <QRCodeComponent />
                </div>
-               <div className="gif-qr-code-container">
-                    <GifQRCodeComponent />
-               </div>
+           
           </div>
      );
 }

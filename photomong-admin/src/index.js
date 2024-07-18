@@ -9,6 +9,7 @@ import DashboardLayout from './Layout/DashboardLayout';
 import AllDevice from './Content/AllDevice';
 import AddDevice from './Content/AddDevice';
 import EditDevice from './Content/EditDevice';
+import Store from './Content/Store';
 const router = createBrowserRouter(
 
   [
@@ -26,6 +27,11 @@ const router = createBrowserRouter(
           
       path: "/all-devices",
       element: <AllDevice/>,
+    },
+    {
+          
+      path: "/store",
+      element: <Store/>,
     },
     {
           

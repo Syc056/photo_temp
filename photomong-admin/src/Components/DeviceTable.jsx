@@ -53,7 +53,7 @@ export default function DeviceTable() {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
+  const userId=sessionStorage.getItem("user")
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -63,9 +63,12 @@ export default function DeviceTable() {
             <TableCell align="left">Device Code</TableCell>
             <TableCell align="left">Remaining amount</TableCell>
             <TableCell align="center" width={150}>Promotion Code</TableCell>
-            <TableCell align="left" width={250}></TableCell>
+          
+            <TableCell align="left" width={250}></TableCell> 
+             { userId!="photomong"&& <TableCell align="left" width={200}>Promotion Code Number</TableCell>}
             <TableCell align="left">IP</TableCell>
             <TableCell align="left">Sales</TableCell>
+         
             <TableCell align="left"></TableCell>
             <TableCell align="left"></TableCell>
           </TableRow>
@@ -84,6 +87,7 @@ export default function DeviceTable() {
                   <Button onClick={(e) => handleMoreClick(e, row.promotion_code)}>MORE+</Button>
                 ) : null}
               </TableCell>
+              { userId!="photomong"&& <TableCell align="left" width={200}>Promotion Code Number</TableCell>}
               <TableCell align="left">{row.ip}</TableCell>
               <TableCell align="left">{row.sales}</TableCell>
               <TableCell align="left">

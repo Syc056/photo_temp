@@ -70,6 +70,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function DashboardLayout() {
+  const userId=sessionStorage.getItem("user")
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 const navigate=useNavigate()
@@ -80,7 +81,7 @@ const navigate=useNavigate()
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+console.log("user id>>>", )
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -148,7 +149,23 @@ const navigate=useNavigate()
                 <ListItemText primary={"device"} />
               </ListItemButton>
             </ListItem>
-            <ListItem 
+          {userId!="photomong"&&  <ListItem 
+            sx={{
+              textIndent:"10px"
+            }}
+            key={"Store"} disablePadding>
+              <ListItemButton
+                  onClick={()=>{
+                    navigate("/store")
+                  }}
+              >
+                <ListItemIcon>
+                  {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+                </ListItemIcon>
+                <ListItemText primary={"Store"} />
+              </ListItemButton>
+            </ListItem>}
+          {userId==="photomong"&&  <ListItem 
             sx={{
               textIndent:"10px"
             }}
@@ -163,7 +180,7 @@ const navigate=useNavigate()
                 </ListItemIcon>
                 <ListItemText primary={"All Device"} />
               </ListItemButton>
-            </ListItem>
+            </ListItem>}
             <ListItem
               sx={{
                 textIndent:"10px"
