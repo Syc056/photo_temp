@@ -1,7 +1,7 @@
 import React from 'react';
 import "./Set.css"
 import { Button, TextField, Typography } from '@mui/material';
-function TxtfieldSet({value,onChange,title,placeholder="",useBtn=false,btnTitle,onClick}) {
+function TxtfieldSet({readOnly=false,value,onChange,title,placeholder="",useBtn=false,btnTitle,onClick}) {
     return (
         <div
         className='set'
@@ -17,6 +17,7 @@ function TxtfieldSet({value,onChange,title,placeholder="",useBtn=false,btnTitle,
             sx={{
                 width:"100%"
             }}
+            disabled={readOnly}
             value={value}
             onChange={onChange}
             placeholder={placeholder===""?title:placeholder}

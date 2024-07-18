@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import { Button, Popover, Typography } from '@mui/material';
 import { getDeivceInfo, putDeleteDevice } from '../apis/device';
 import { useNavigate } from 'react-router-dom';
+import { totalSalesAtom } from '../atom/atom';
+import { useRecoilState } from 'recoil';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -18,11 +20,18 @@ export default function DeviceTable() {
   const [deviceInfo, setDeviceInfo] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedPromotionCodes, setSelectedPromotionCodes] = React.useState([]);
+  const [totalSaeles,setTotalSales]=useRecoilState(totalSalesAtom)
   const navigate = useNavigate();
 
   const fetchDeviceInfo = async () => {
     const res = await getDeivceInfo();
-    setDeviceInfo(res);
+    console.log("현재 아이피>>>",res)
+    const nowIp=sessionStorage.getItem("ip")
+    const filtered=res.filter(d=>d.ip===nowIp)
+       // Calculate total sales
+       const salesSum = filtered.reduce((acc, device) => parseInt(acc) + parseInt(device.sales), 0);
+       setTotalSales(salesSum);
+    setDeviceInfo(filtered);
   };
 
   React.useEffect(() => {
@@ -54,6 +63,7 @@ export default function DeviceTable() {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const userId=sessionStorage.getItem("user")
+  console.log("device info>>>",deviceInfo)
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

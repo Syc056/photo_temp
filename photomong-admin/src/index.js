@@ -10,47 +10,51 @@ import AllDevice from './Content/AllDevice';
 import AddDevice from './Content/AddDevice';
 import EditDevice from './Content/EditDevice';
 import Store from './Content/Store';
+import { RecoilRoot } from 'recoil';
 const router = createBrowserRouter(
 
   [
-  // //첫페이지->로그인
-  // { 
-  //   element: <InitPage/>, path: "/" },
-  { 
-    element: <LoginPage />, path: "/" },
+    // //첫페이지->로그인
+    // { 
+    //   element: <InitPage/>, path: "/" },
     {
-      element:<DashboardLayout />,
+      element: <LoginPage />, path: "/"
+    },
+    {
+      element: <DashboardLayout />,
       //내부 화면만 교체
-      children:[
-       
-         {
-          
-      path: "/all-devices",
-      element: <AllDevice/>,
-    },
-    {
-          
-      path: "/store",
-      element: <Store/>,
-    },
-    {
-          
-      path: "/add-device",
-      element: <AddDevice/>,
-    },
-    {
-          
-      path: "/edit-device/:id",
-      element: <EditDevice/>,
-    },
+      children: [
 
-],}]
+        {
+
+          path: "/all-devices",
+          element: <AllDevice />,
+        },
+        {
+
+          path: "/store",
+          element: <Store />,
+        },
+        {
+
+          path: "/add-device",
+          element: <AddDevice />,
+        },
+        {
+
+          path: "/edit-device/:id",
+          element: <EditDevice />,
+        },
+
+      ],
+    }]
 
 );
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-   <RouterProvider   router={router} />
+  <RecoilRoot><RouterProvider router={router} /></RecoilRoot>
+
   // </React.StrictMode>
 );
 

@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./AddDevice.css"
 import TxtfieldSet from '../Components/TxtfieldSet';
 import SelectSet from '../Components/SelectSet';
 import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { postAddDeivce } from '../apis/device';
+import { getMacAddress, postAddDeivce } from '../apis/device';
 function AddDevice(props) {
     const navigate=useNavigate()
     const [name,setName]=useState("")
     const [code,setCode]=useState("")
     const [remain,setRemain]=useState("")
     const [ip,setIp]=useState("")
+    const [macAddress,setMacAddress]=useState("")
     const [promotionCodes,setPromotionCodes]=useState("")
     const [sales,setSales]=useState("")
     const [newPromotionCode,setNewPromotionCode]=useState("")
+    const [readOnly,setReadOnly]=useState(false)
     const onChangeNewPromo = (e) => {
         const inputValue = e.target.value;
         // 정규식을 사용하여 숫자만 입력되도록 확인
@@ -46,7 +48,13 @@ if (addCondition) {
 console.log('디바이스 추가!!',res)
 if (res[1]===201) {
     window.confirm("add success")
-    navigate("/all-devices")
+    const nowUser=sessionStorage.getItem("user")
+    if (nowUser==="photomong") {
+        navigate("/all-devices")
+    } else {
+        navigate("/store")
+    }
+   
 } else {
     window.confirm("fail")
 }
@@ -81,6 +89,26 @@ if (res[1]===201) {
     const onChangeIp=(e)=>{
         setIp(e.target.value)
     }
+    const fetchMacAddress=async()=>{
+        const res=await getMacAddress()
+        console.log("mac address>>>",res)
+        setMacAddress(res)
+    }
+    // useEffect(()=>{
+    //     //mac 주소(기계주소)
+    //     fetchMacAddress()
+    // },[])
+    useEffect(()=>{
+        //관리자, 아이디 photomong이면 ip맘대로 수정 가능,
+        const nowUser=sessionStorage.getItem("user")
+        const nowIp=sessionStorage.getItem("ip")
+        if (nowUser==="photomong") {
+           
+        } else {
+            setReadOnly(true)
+            setIp(nowIp)
+        }
+    },[])
     return (
         <div
              className='add-device-content'
@@ -97,7 +125,9 @@ if (res[1]===201) {
             value={remain}
             onChange={onChangeRemain}
             title={"Remaining amount"}/>
-                <TxtfieldSet
+     
+                 <TxtfieldSet
+            readOnly={readOnly}
             value={ip}
             onChange={onChangeIp}
             title={"IP"}/>

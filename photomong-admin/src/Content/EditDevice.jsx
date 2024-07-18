@@ -17,6 +17,7 @@ function EditDevice(props) {
     const [sales,setSales]=useState("") 
     const [newPromotionCode,setNewPromotionCode]=useState("")
     const editRow=JSON.parse(sessionStorage.getItem("editRow"))
+    const [readOnly,setReadOnly]=useState(false)
     useEffect(()=>{
 
        setIp(editRow.ip)
@@ -49,7 +50,12 @@ if (editCondition) {
 console.log('디바이스 수정!!',res)
 if (res[1]===200) {
     window.confirm("edit success")
-    navigate("/all-devices")
+    const nowUser=sessionStorage.getItem("user")
+    if (nowUser==="photomong") {
+        navigate("/all-devices")
+    } else {
+        navigate("/store")
+    }
 } else {
     window.confirm("fail")
 }
@@ -101,6 +107,15 @@ if (res[1]===200) {
         const filtered=promotionCodes.filter((code,cIdx)=>cIdx!=idx)
         setPromotionCodes(filtered)
     }
+    useEffect(()=>{
+        //관리자, 아이디 photomong이면 ip맘대로 수정 가능,
+        const nowUser=sessionStorage.getItem("user")
+        if (nowUser==="photomong") {
+           
+        } else {
+            setReadOnly(true)
+        }
+    },[])
     return (
         <div
              className='add-device-content'
@@ -119,6 +134,7 @@ if (res[1]===200) {
             onChange={onChangeRemain}
             title={"Remaining amount"}/>
               <TxtfieldSet
+              readOnly={readOnly}
             value={ip}
             onChange={onChangeIp}
             title={"IP"}/>
