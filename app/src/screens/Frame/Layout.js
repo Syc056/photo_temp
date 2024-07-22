@@ -590,11 +590,11 @@ function Layout() {
                 navigate(-1);
             } else {
                 event.preventDefault();
-               //  window.history.pushState(null, '', window.location.href);
+                window.history.pushState(null, '', window.location.href);
             }
         };
 
-     //    window.history.pushState(null, '', window.location.href);
+        window.history.pushState(null, '', window.location.href);
         window.addEventListener('popstate', handleBackButton);
 
         return () => {
@@ -750,7 +750,12 @@ function Layout() {
         <div className='layout-container' 
             style={{backgroundImage: `url(${layoutBackground})`}}
         >
-            <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => navigate("/background")} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
+            <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() =>{
+          
+          navigate("/background")
+          // navigate(-1)
+          // window.history.pushState(null, '', window.location.href)
+               }} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
             <div className="style-section"
                 draggable={false}
                 onDragStart={onDrag}
