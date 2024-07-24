@@ -18,11 +18,11 @@
 }
 
 .left-big-frame {
-     position: absolute;
-     top: 20%;
-     left: 3%;
-     width: 45%;
-     height: 75%;
+     position: relative;
+     top: 50px;
+     left: -400px;
+     width: 700px;
+     height: 750px;
      background-image: url('../assets/Common/frame.png');
      background-size: contain;
      background-repeat: no-repeat;

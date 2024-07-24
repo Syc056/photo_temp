@@ -286,6 +286,7 @@ const testGetPhotos = async () => {
     }
 
     const displayClassNameForPhoto = (rowIndex, photoIndex) => {
+       console.log("six cuts>>>",selectedFrame)
         if (selectedFrame === 'Stripx2') {
             if (rowIndex === 0 && photoIndex === 0) {
                 return 'choose-photo-item-0-0';
@@ -378,7 +379,7 @@ const testGetPhotos = async () => {
     playAudio()
    },[])
     const showSelectedPhotos = () => {
-
+console.log("in frame photos>>>",selectedFrame)
         if (selectedFrame == '3-cutx2' && selectedPhotos.length > 0) {
             const firstPhotoTpl = (
                 <div className="choose-photo-row">
@@ -462,6 +463,7 @@ const testGetPhotos = async () => {
             );
         }
         else {
+            
             const selectedPhotoRows = chunkArray(selectedPhotos, 2);
             return (
                 selectedPhotoRows.map((row, rowIndex) => (
@@ -495,12 +497,12 @@ const testGetPhotos = async () => {
     return (
         <div className='photo-choose-container' style={{ backgroundImage: `url(${background})` }}>
             <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/photo")} onMouseEnter={() => hoverGoBackButton(language)} onMouseLeave={() => hoverGoBackButton(language)}></div>
-            <div className="left-big-frame">
+            <div className="left-big-frame-11">
                 {/* 프레임속 회색네모 갯수만큼 나오는 곳 */}
                 <div ref={parentRef} className={displayClassNameForBackground()} style={{ backgroundImage: `url(${myBackground})` }}>
                     {showSelectedPhotos()}
                 </div>
-                <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
+                <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})`}}></div>
             </div>
             <div className="right-choose-container">
                 {chunkArray(formattedPhotos.slice(-8), 4).map((group, index) => (

@@ -1365,19 +1365,19 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             );
         }
         else if (selectedFrame === "Stripx2") {
-            const calcedHeight = height / 5.3;
-            const calcedWidth = calcedHeight * 1.47;
+            const calcedHeight = height / 4.9;
+            const calcedWidth = calcedHeight * 1.48;
 
-            const x11 = 22;
-            const x12 = calcedWidth + x11 + 22;
-            const y1 = 40;
+            const x11 = 10;
+            const x12 = calcedWidth + x11 + 20;
+            const y1 = 28;
 
             return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 22);
+                            const y = y1 + rowIndex * (calcedHeight + 8);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
@@ -1404,18 +1404,18 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         }
 
         if (selectedFrame === "2cut-x2") {
-            const calcedWidth = width / 2.3;
-            const calcedHeight = calcedWidth * 1.13;
-            const x11 = 20;
-            const x12 = calcedWidth + x11 + 20;
-            const y1 = 40;
+            const calcedWidth = width / 2.23;
+            const calcedHeight = calcedWidth * 1.16;
+            const x11 = 18;
+            const x12 = calcedWidth + x11 + 10;
+            const y1 = 28;
 
             return imgTag.length === 0 ? <></> :(
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 12);
+                            const y = y1 + rowIndex * (calcedHeight + 8);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
@@ -1441,11 +1441,11 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             );
         }
         else if (selectedFrame === "4-cutx2") {
-            const calcedHeight = height / 2.4;
-            const calcedWidth = calcedHeight * 1.33;
-            const x11 = 50;
-            const x12 = calcedWidth + x11 + 30;
-            const y1 = 22;
+            const calcedHeight = height / 2.54;
+            const calcedWidth = calcedHeight * 1.34;
+            const x11 = 60;
+            const x12 = calcedWidth + x11 + 16;
+            const y1 = 26;
 
             return imgTag.length === 0 ? <></> : (
                 <>
@@ -1479,18 +1479,18 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
 
         }
         else {
-            const calcedWidth = (width / 2.4)*1.02;
-            const calcedHeight = width / 2.4;
-            const x11 = 16;
-            const x12 = calcedWidth + x11 + 20;
-            const y1 = 22;
+            const calcedWidth = (width / 2.4);
+            const calcedHeight = width / 2.42;
+            const x11 = 22;
+            const x12 = calcedWidth + x11 + 7;
+            const y1 = 20;
 
             return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 12);
+                            const y = y1 + rowIndex * (calcedHeight + 8);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
@@ -1668,6 +1668,7 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
                     <Layer>
                         {backgroundList[bgIdx] && (
                             <KonvaImage
+                         
                                 image={backgroundList[bgIdx].img}
                                 width={frameSize.width * getPrintRatio()}
                                 height={frameSize.height * getPrintRatio() - 20}

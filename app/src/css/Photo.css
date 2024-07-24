@@ -38,19 +38,41 @@
      cursor: pointer;
      /* Change cursor on hover */
 }
-
-.left-big-frame {
-     position: absolute;
-     top: 20%;
-     left: 3%;
+/* no f11 */
+/* .left-big-frame-11 {
+     position: relative;
+     top: 8%;
+     left: -22%;
      width: 45%;
      height: 75%;
      background-image: url('../assets/Common/frame.png');
      background-size: contain;
      background-repeat: no-repeat;
      background-position: center;
+} */
+/* .left-big-frame-11 {
+     position: relative;
+     width: 45%; 
+     height: 75%; 
+     top: 8%;
+     left: -22%;
+     background-image: url('../assets/Common/frame.png');
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
+     margin: auto;
+ } */
+ .left-big-frame-11 {
+     position: relative;
+     top: 50px;
+     left: -500px;
+     width: 700px;
+     height: 750px;
+     background-image: url('../assets/Common/frame.png');
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
 }
-
 .left-photo-div {
      position: absolute;
      top: 14%;
@@ -339,6 +361,7 @@
 }
 
 .choose-photo-row {
+     background-color: red;
      display: flex;
      justify-content: center;
      align-items: center;
@@ -446,51 +469,51 @@
      border-radius: 10px;
 }
 .choose-photo-item-4cut-0-0 {
-     width: 232.75px;
-     height: 175px;
-     background-size: cover;
+     width: 150px;
+     height: 110px;
+     background-size: cover; 
      background-repeat: no-repeat;
-     background-position: center;
+     background-position: center; 
      margin: 1%;
-     position: fixed;
-     top: 31%;
-     left: 11%;
+     position: absolute;
+     top: 31.8%;
+     left: 27.6%;
 }
 
 .choose-photo-item-4cut-0-1 {
-     width: 232.75px;
-     height: 175px;
-     background-size: cover;
+     width: 150px;
+     height: 110px;
+     background-size: cover; 
      background-repeat: no-repeat;
-     background-position: center;
+     background-position: center; 
      margin: 1%;
-     position: fixed;
-     top: 31%;
-     left: 26%;
+     position: absolute;
+     top: 31.8%;
+     left: 50%;
 }
 
 .choose-photo-item-4cut-1-0 {
-     width: 232.75px;
-     height: 175px;
-     background-size: cover;
+     width: 150px;
+     height: 110px;
+     background-size: cover; 
      background-repeat: no-repeat;
-     background-position: center;
+     background-position: center; 
      margin: 1%;
-     position: fixed;
-     top: 52%;
-     left: 11%;
+     position: absolute;
+     top: 47.8%;
+     left: 27.6%;
 }
 
 .choose-photo-item-4cut-1-1 {
-     width: 232.75px;
-     height: 175px;
-     background-size: cover;
+     width: 150px;
+     height: 110px;
+     background-size: cover; 
      background-repeat: no-repeat;
-     background-position: center;
+     background-position: center; 
      margin: 1%;
-     position: fixed;
-     top: 52%;
-     left: 26%;
+     position: absolute;
+     top: 47.8%;
+     left: 50%;
 }
 
 /** Frame 3cut **/
@@ -516,7 +539,7 @@
      margin: 1%;
      position: fixed;
      top: 57%;
-     left: 16%;
+     left: 22%;
 }
 
 .choose-photo-item-3cut-0-1 {
@@ -533,194 +556,257 @@
 
 /** Frame 2cut **/
 .choose-photo-item-2cut-0-0 {
-     width: 300px;
-     height: 339px;
+
+     width: 252px;
+     height: 285px;
      background-size: cover;
      background-repeat: revert-layer;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 33%;
-     left: 8%;
+     position: absolute;
+     top: 25.6%;
+     left: 12%;
 }
 
 .choose-photo-item-2cut-0-1 {
-     width: 300px;
-     height: 339px;
+     width: 252px;
+     height: 285px;
      background-size: cover;
-     background-repeat: no-repeat;
+     background-repeat: revert-layer;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 33%;
-     left: 25%;
+     position: absolute;
+     top: 25.6%;
+     left: 50%;
 }
 
 /** Frame 6 cut **/
 .choose-photo-item6-0-0 {
      width: 163.2px; /* 가로 크기 */
-     height:160px; /* 세로 크기: 가로 크기의 1.02배 */
+     height:162px; /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 28%;
-     left: 16%;
+     position: absolute;
+     top: 18%;
+     left: 26%;
 }
 
 .choose-photo-item6-0-1 {
      width: 163.2px; /* 가로 크기 */
-     height:160px; /* 세로 크기: 가로 크기의 1.02배 */
+     height:162px; /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 28%;
-     left: 26%;
+     position: absolute;
+     top: 18%;
+     left: 51%;
 }
 
 .choose-photo-item6-1-0 {
      width: 163.2px; /* 가로 크기 */
-     height:160px; /* 세로 크기: 가로 크기의 1.02배 */
+     height:162px; /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 48%;
-     left: 16%;
+     position: absolute;
+     top: 41%;
+     left: 26%;
 }
 
 .choose-photo-item6-1-1 {
      width: 163.2px; /* 가로 크기 */
-     height:160px; /* 세로 크기: 가로 크기의 1.02배 */
+     height:162px; /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 48%;
-     left: 26%;
+     position: absolute;
+     top: 41%;
+     left: 51%;
 }
 
 .choose-photo-item6-2-0 {
      width: 163.2px; /* 가로 크기 */
-     height:160px; /* 세로 크기: 가로 크기의 1.02배 */
+     height:162px; /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 68%;
-     left: 16%;
+     position: absolute;
+     top: 64%;
+     left: 26%;
 }
 
 .choose-photo-item6-2-1 {
      width: 163.2px; /* 가로 크기 */
-     height:160px; /* 세로 크기: 가로 크기의 1.02배 */
+     height:162px; /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 68%;
-     left: 26%;
+     position: absolute;
+     top: 64%;
+     left: 51%;
 }
 
 /** Frame 6 cut-end **/
 
-/** Frame 8 cut **/
+/** Frame 8 cut no f11**/
 .choose-photo-item-0-0 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 28%;
-     left: 15.8%;
+     position: absolute;
+     top: 19%;
+     left: 23.9%;
 }
 
 .choose-photo-item-0-1 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 28%;
-     left: 26.1%;
+     position: absolute;
+     top: 19%;
+     left: 52%;
 }
 
 .choose-photo-item-1-0 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 42%;
-     left: 15.8%;
+     position: absolute;
+     top: 36.5%;
+     left: 23.9%;
 }
 
 .choose-photo-item-1-1 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 42%;
-     left: 26.1%;
+     position: absolute;
+     top: 36.5%;
+     left: 52%;
 }
 
 .choose-photo-item-2-0 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 56%;
-     left: 15.8%;
+     position: absolute;
+     top: 54%;
+     left: 23.9%;
 }
 
 .choose-photo-item-2-1 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 56%;
-     left: 26.1%;
+     position: absolute;
+     top: 54%;
+     left: 52%;
 }
 
 .choose-photo-item-3-0 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 70%;
-     left: 15.8%;
+     position: absolute;
+     top: 71%;
+     left: 23.9%;
 }
 
 .choose-photo-item-3-1 {
-     width:161.7px;
-     height:110px ;
+     width:176px;
+     height:122px ;
      background-size: cover;
      background-repeat: no-repeat;
+     background-position: center;
      margin: 1%;
-     position: fixed;
-     top: 70%;
-     left: 26.1%;
+     position: absolute;
+     top: 71%;
+     left: 52%;
+}
+/* .choose-photo-item-0-0,
+.choose-photo-item-0-1,
+.choose-photo-item-1-0,
+.choose-photo-item-1-1,
+.choose-photo-item-2-0,
+.choose-photo-item-2-1,
+.choose-photo-item-3-0,
+.choose-photo-item-3-1 {
+    width: 19.6%; 
+    height: 16.3%; 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
 }
 
+.choose-photo-item-0-0 {
+    top: 18.7%;
+    left: 29.8%;
+}
+
+.choose-photo-item-0-1 {
+    top: 18.7%;
+    left: 51.7%;
+}
+
+.choose-photo-item-1-0 {
+    top: 36%;
+    left: 29.8%;
+}
+
+.choose-photo-item-1-1 {
+    top: 36%;
+    left: 51.7%;
+}
+
+.choose-photo-item-2-0 {
+    top: 59%;
+    left: 29.8%;
+}
+
+.choose-photo-item-2-1 {
+    top: 59%;
+    left: 51.7%;
+}
+
+.choose-photo-item-3-0 {
+    top: 82%;
+    left: 29.8%;
+}
+
+.choose-photo-item-3-1 {
+    top: 82%;
+    left: 51.7%;
+} */
 /** Frame 8 cut end **/
 
 .choose-photo-item-alone {
