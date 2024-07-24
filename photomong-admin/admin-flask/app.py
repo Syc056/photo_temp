@@ -4,7 +4,6 @@ from flask_cors import CORS
 import random
 import string
 from datetime import datetime
-import json
 
 app = Flask(__name__, static_folder='../public', template_folder='../public')
 

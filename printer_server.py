@@ -139,7 +139,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 # Serial communication setup
-ser = serial.Serial('COM8', 9600, timeout=1)
+ser = serial.Serial('COM4', 9600, timeout=1)
 inserted_money = 0
 amount_to_pay = 0
 lock = threading.Lock()
@@ -178,6 +178,7 @@ def start_cash_payment():
     global inserted_money, amount_to_pay
     data = request.get_json()
     amount_to_pay = data.get('amount', 0)
+    ser.write(b'RESET\n')
     with lock:
         inserted_money = 0  # Reset the inserted money
     threading.Thread(target=read_bill_acceptor, daemon=True).start()
@@ -187,6 +188,10 @@ def start_cash_payment():
 def check_payment_status():
     ser.write(b'CHECK\n')
     response = ser.readline().decode('utf-8').strip()
+    try :
+        print(int(response))
+    except :
+        response = 0
     print(response)
     return jsonify({"total_money": response}), 200
 
