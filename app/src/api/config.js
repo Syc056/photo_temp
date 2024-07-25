@@ -62,17 +62,29 @@ export const checkPromotionCode=async(payload)=>{
   return [data,status]
 }
 
-
-//Photo.js
+// Photo.js
 export const getPhotos = async (uuid) => {
-
-  const { data, status } = await originAxiosInstance.get(`/get_photo/`,
-    {
-    params:{uuid:uuid}
+  try {
+    const { data, status } = await originAxiosInstance.get(`/get_photo/`, {
+      params: { uuid: uuid }
+    });
+    return data;
+  } catch (error) {
+    console.error("Error fetching photos:", error);
+    return false;
   }
-);
-  return data;
 };
+
+// //Photo.js
+// export const getPhotos = async (uuid) => {
+
+//   const { data, status } = await originAxiosInstance.get(`/get_photo/`,
+//     {
+//     params:{uuid:uuid}
+//   }
+// );
+//   return data;
+// };
 export const sendCaptureReq = async (uuid,photoNum) => {
   const { data } = await axiosInstance.post('/capture', { uuid:uuid,photoNum:photoNum });
   return data;

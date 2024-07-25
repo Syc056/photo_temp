@@ -379,6 +379,7 @@ function Photo() {
                 return newPhotos;
             });
         } else {
+            navigate(-1);
             console.log("No photos available.");
         }
     };
