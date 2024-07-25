@@ -813,8 +813,8 @@ def print_image_with_rundll32(image_path, frame_type):
         print("frame_type")
         print(frame_type)
         if frame_type == 'Stripx2':
-            # printer_name = 'DS-RX1 (Photostrips)'
-            printer_name = 'DSRX1CUT'
+            printer_name = 'DS-RX1 (Photostrips)'
+            # printer_name = 'DSRX1CUT'
         else:
             printer_name = 'DS-RX1'
         print(printer_name)

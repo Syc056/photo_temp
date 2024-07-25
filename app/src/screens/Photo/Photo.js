@@ -459,21 +459,61 @@ function Photo() {
     useEffect(() => {
         playAudio();
     }, []);
-
     const getLiveStyle = () => {
         const frame = JSON.parse(sessionStorage.getItem('selectedFrame')).frame;
+
+    
         if (frame === "6-cutx2") {
-            return { width: "714px", height: "700px", objectFit: "cover", position: "absolute", left: "12%", transform: "scaleX(-1)" };
+            const baseStyle = {
+                objectFit: "cover",
+                position: "absolute",
+                transform: "scaleX(-1)",
+                top: "15%", // Adjust this value to move the element down
+            };
+            return { ...baseStyle, width: "714px", height: "700px", left: "12%" };
         } else if (frame === "Stripx2") {
-            return { width: "882px", height: "600px", objectFit: "cover", position: "absolute", left: "2%", transform: "scaleX(-1)" };
+            const baseStyle = {
+                objectFit: "cover",
+                position: "absolute",
+                transform: "scaleX(-1)",
+                top: "20%", // Adjust this value to move the element down
+            };
+            return { ...baseStyle, width: "882px", height: "600px", left: "2%" };
         } else if (frame === "2cut-x2") {
-            return { width: "600px", height: "678px", objectFit: "cover", position: "absolute", left: "18%", transform: "scaleX(-1)" };
+            const baseStyle = {
+                objectFit: "cover",
+                position: "absolute",
+                transform: "scaleX(-1)",
+                top: "15%", // Adjust this value to move the element down
+            };
+            return { ...baseStyle, width: "600px", height: "678px", left: "18%" };
         } else if (frame === "4-cutx2") {
-            return { width: "798px", height: "600px", objectFit: "cover", position: "absolute", left: "6%", transform: "scaleX(-1)" };
+            const baseStyle = {
+                objectFit: "cover",
+                position: "absolute",
+                transform: "scaleX(-1)",
+                top: "20%", // Adjust this value to move the element down
+            };
+            return { ...baseStyle, width: "798px", height: "600px", left: "6%" };
         } else {
             return {};
         }
     };
+    
+    // const getLiveStyle = () => {
+    //     const frame = JSON.parse(sessionStorage.getItem('selectedFrame')).frame;
+    //     if (frame === "6-cutx2") {
+    //         return { width: "714px", height: "700px", objectFit: "cover", position: "absolute", left: "12%", transform: "scaleX(-1)" };
+    //     } else if (frame === "Stripx2") {
+    //         return { width: "882px", height: "600px", objectFit: "cover", position: "absolute", left: "2%", transform: "scaleX(-1)" };
+    //     } else if (frame === "2cut-x2") {
+    //         return { width: "600px", height: "678px", objectFit: "cover", position: "absolute", left: "18%", transform: "scaleX(-1)" };
+    //     } else if (frame === "4-cutx2") {
+    //         return { width: "798px", height: "600px", objectFit: "cover", position: "absolute", left: "6%", transform: "scaleX(-1)" };
+    //     } else {
+    //         return {};
+    //     }
+    // };
 
     useEffect(() => {
         if (countdown === 7) {
