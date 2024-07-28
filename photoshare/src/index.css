@@ -36,3 +36,8 @@ code {
   --padding-18xl: 37px;
   --padding-xl: 20px;
 }
+
+h1 {
+  font-size: var(--font-size-5xl);
+  font-family: var(--font-dela-gothic-one);
+}

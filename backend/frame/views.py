@@ -6,7 +6,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework import status
 from rest_framework import permissions
 from rest_framework.decorators import api_view
-from .models import Frame
+from .models import Frame, ImagePhotoDownload
 from .serializers import FrameSerializer, CloudPhotoSerializer
 from django.views import View
 from .forms import FrameForm
@@ -21,6 +21,9 @@ from revenue.models import Order
 from django.conf import settings
 from device.models import Device
 from django.urls import reverse_lazy
+import shutil
+from django.views.decorators.csrf import csrf_exempt
+import json, random, string
 
 import cloudinary.uploader
 
@@ -290,6 +293,14 @@ class UploadPhotoCloud(APIView):
         file = request.data.get('photo')
         
         upload_data = cloudinary.uploader.upload(file)     
+
+        # Save to ImagePhotoDownload
+        uuid = request.data.get('uuid')
+        if (uuid):
+            image_photo_download = ImagePhotoDownload.objects.filter(unique_id=uuid).first()
+            if image_photo_download:
+                image_photo_download.image_with_frame = upload_data.get('url')
+                image_photo_download.save()
         
         # Update order's photo_url_done
         order_code = request.data.get('order_code')
@@ -301,8 +312,101 @@ class UploadPhotoCloud(APIView):
            
         return Response({
             'photo_url': upload_data.get('url')
-        }, status=201)
+        }, status=201)     
 
+#
+# QR
+#
+class UploadPhotoImageDownload(APIView):
+    
+    @csrf_exempt
+    def post(self, request):
+        try:
+            # Pretend this should call in FilterView to update photo_urls for later use
+            # If need to use this, please check FilterView                        
+
+            uuid = request.data.get('uuid')
+            
+            # Find exist ImagePhotoDownload
+            image_photo_download = ImagePhotoDownload.objects.filter(unique_id=uuid).first()
+            if image_photo_download:
+                return JsonResponse({
+                    'status': 'success', 
+                    'uuid': image_photo_download.unique_id, 
+                    'photos_list': image_photo_download.images_list_url.split(','),
+                    'tracking_code': image_photo_download.tracking_code
+                    }, status=200)
+
+            target_folder = os.path.join(settings.MEDIA_ROOT, 'qr-images', uuid)
+            if not os.path.exists(target_folder):
+                os.makedirs(target_folder)
+
+            qr_image_urls = []
+            # Copy images
+            upload_dir = os.path.join(settings.BASE_DIR, 'uploads', uuid)            
+            for filename in os.listdir(upload_dir):
+                if filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff')):
+                    source_file = os.path.join(upload_dir, filename)
+                    target_file = os.path.join(target_folder, filename)
+                    shutil.copy2(source_file, target_file)
+                    qr_image_urls.append(f'/media/qr-images/{uuid}/{filename}')
+
+            # Create ImagePhotoDownload with uuid        
+            image_photo_download = ImagePhotoDownload.objects.create(
+                tracking_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8)),
+                unique_id=uuid,
+                images_list_url=', '.join(qr_image_urls),                
+                image_with_frame=qr_image_urls[0]
+            )
+
+            return JsonResponse({
+                'status': 'success', 
+                'uuid': image_photo_download.unique_id,
+                'photos_list': qr_image_urls,
+                'tracking_code': image_photo_download.tracking_code
+                }, 
+                status=200)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)   
+
+    def put(self, request):
+        try:
+            uuid = request.data.get('uuid')
+            image_photo_download = ImagePhotoDownload.objects.filter(unique_id=uuid).first()
+            if image_photo_download:
+                image_photo_download.count_view = image_photo_download.count_view + 1
+                
+                if request.data.get('image_with_frame'):
+                    image_photo_download.image_with_frame = request.data.get('image_with_frame')
+                
+                image_photo_download.save()         
+                return JsonResponse({'status': 'success', 'uuid': uuid, 'image_with_frame': image_photo_download.image_with_frame}, status=200)       
+            return JsonResponse({'status': 'error', 'message': 'ImagePhotoDownload not found'}, status=404)                 
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)     
+
+    def get(self, request):
+        try:
+            if request.GET.get('code'):
+                code = request.GET.get('code')
+                image_photo_download = ImagePhotoDownload.objects.filter(tracking_code=code).first()
+            elif request.GET.get('uuid'):
+                uuid = request.GET.get('uuid')
+                image_photo_download = ImagePhotoDownload.objects.filter(unique_id=uuid).first()
+            if image_photo_download:
+                return JsonResponse({
+                    'status': 'success', 
+                    'uuid': image_photo_download.unique_id, 
+                    'image_with_frame': image_photo_download.image_with_frame,
+                    'images_list': image_photo_download.images_list_url.split(','),
+                    'tracking_code': image_photo_download.tracking_code,
+                    'count_view': image_photo_download.count_view
+                    }, status=200)
+            
+            return JsonResponse({'status': 'error', 'message': 'ImagePhotoDownload not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)               
+        
 class FrameAPI(APIView):
     
     def get(self, request, *args, **kwargs):
@@ -431,3 +535,4 @@ class FrameDeleteView(LoginRequiredMixin, View):
         frame = Frame.objects.get(id=pk)
         frame.delete()
         return redirect("frames")        
+

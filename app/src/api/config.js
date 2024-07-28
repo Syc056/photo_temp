@@ -75,6 +75,30 @@ export const getPhotos = async (uuid) => {
   }
 };
 
+export const savePhotoForQrDownload = async (uuid) => {
+  try {
+    const { data, status } = await originAxiosInstance.post(`/frames/api/copy-image-qr-download`, {
+      params: { uuid: uuid }
+    });
+    return data;
+  } catch (error) {
+    console.error("Error saved photos for QR:", error);
+    return false;
+  }
+}
+
+export const getPhotoForQrDownload = async (uuid) => {
+  try {
+    const { data, status } = await originAxiosInstance.get(`/frames/api/copy-image-qr-download`, {
+      params: { uuid: uuid }
+    });
+    return data;
+  } catch (error) {
+    console.error("Error saved photos for QR:", error);
+    return false;
+  }
+}
+
 // //Photo.js
 // export const getPhotos = async (uuid) => {
 

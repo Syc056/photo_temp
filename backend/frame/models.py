@@ -16,5 +16,16 @@ class Frame(models.Model):
      def __str__(self):
           return f"Frame for {self.device.name}"          
      
+class ImagePhotoDownload(models.Model):          
+     unique_id = models.TextField()
+     images_list_url = models.TextField()
+     image_with_frame = models.TextField()
+     count_view = models.IntegerField(default=0)
+     tracking_code = models.TextField(default='')     
+     created_at = models.DateTimeField(auto_now_add=True)     
+
+     def __str__(self):
+          return self.unique_id
+     
 class CloudPhoto(models.Model):
      image = CloudinaryField('image')          
