@@ -393,9 +393,8 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         
         playPrintAudio()
         setClickPrint(true);
+        await uploadCloud();
 
-        callPrinter();
-       await uploadCloud();
 
         // setTimeout(() => {
         //     navigate("/print");
@@ -453,6 +452,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                                       sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
                                 sessionStorage.setItem('qr', qrVal);
                                 console.log("qr val>>>",qrVal)
+                                callPrinter();
                                 navigate("/print");
                             }
                           
