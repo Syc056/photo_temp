@@ -42,34 +42,34 @@
 
 .left-sticker {
      position: absolute;
-     top: 25%;
+     top: 240px;
      left: 0%;
      width: 50%;
-     height: 75%;
-     background-size: contain;
+     height: 720px;
+     background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
 }
 
 .right-sticker {
      position: absolute;
-     top: 13%;
+     top: 238px;
      right: 15%;
      width: 14%;
      background-size: contain;
      background-repeat: no-repeat;
      background-position: center;
-     height: 90%;
+     height: 636px;
 }
 
 .middle-sticker {
      cursor: pointer;;
      /* z-index: 999; */
      position: absolute;
-     top: 13%;
+     top: 238px;
      left: 47%;
      width: 24%;
-     height: 90%;
+     height: 636px;
      background-size: contain;
      background-repeat: no-repeat;
      background-position: center;
@@ -103,7 +103,7 @@
 }
 
 .sticker-line-1 {
-     margin-top: 35%;
+     margin-top: 8%;
      display: flex;
      gap: 10px;
      margin-left: 25px;
@@ -131,7 +131,7 @@
      gap: 10px;
      margin-left: 25px;
      margin-right: 25px;
-     margin-top: 50%;
+     margin-top: 30px;
      flex-direction: column;
      justify-content: space-between;
 }

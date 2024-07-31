@@ -387,6 +387,9 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     };
 
     const printFrameWithSticker = async (event,) => {
+        if (isSel) {
+            setIsSel(false)
+         }
         if (clickPrint === true) {
             return;
         }
@@ -1647,6 +1650,13 @@ const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) =>
 // )
 // return ()=>clearTimeout(timer)
 // },[])
+//off isSelected
+useEffect(()=>{
+    if (isSel) {
+       setTimeout(()=>{setIsSel(false)},1000) 
+    }
+
+},[isSel])
     return (
         <div className='sticker-container' style={{ backgroundImage: `url(${backgroundImage})` }}>
             <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/filter")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
