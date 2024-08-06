@@ -32,7 +32,7 @@ from upload import urls as upload_urls
 from get_photo import urls as get_photo_urls
 from django.conf import settings
 from django.conf.urls.static import static
-from get_photo.views import serve_photo
+from get_photo.views import serve_photo, download
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,6 +52,7 @@ urlpatterns = [
     path('upload/', include(upload_urls)),  # upload 앱의 URL을 include
     path('get_photo/', include(get_photo_urls)),  # upload 앱의 URL을 include
     path('get_photo/uploads/<path:file_path>', serve_photo, name='serve_photo'),
+    path('download/', download, name='download'),
 ]
 
 if settings.DEBUG:

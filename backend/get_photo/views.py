@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import os
+from django.conf import settings
+from django.shortcuts import redirect, render
 
 @csrf_exempt
 def get_photos(request):
@@ -33,6 +35,29 @@ def get_photos(request):
 
 from django.http import HttpResponse, Http404
 from urllib.parse import quote
+
+def download(request):
+    image_path = request.GET.get('image_path', '')
+    video_path = request.GET.get('video_path', '')
+    uuid = request.GET.get('uuid', '123')    
+
+    try:
+        upload_dir = os.path.join(settings.BASE_DIR, 'uploads', uuid)            
+        image_urls = [image_path]
+        for filename in os.listdir(upload_dir):
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                image_urls.append(f'/get_photo/uploads/{os.path.join(request.build_absolute_uri().split("?")[0].replace("\\","/"), upload_dir.replace("\\","/"), filename)}')
+
+        context = {        
+            'image_path': image_path,
+            'video_path': video_path,
+            'image_urls': image_urls
+        }        
+
+        return render(request, 'download.html', context)        
+    except FileNotFoundError:
+        return HttpResponse("File not found", status=404)
+
 
 @csrf_exempt    
 def serve_photo(request, file_path):
