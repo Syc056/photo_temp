@@ -38,6 +38,9 @@ import background_vn from '../../assets/Frame/Style/vn/BG.png';
 import background_mn from '../../assets/Frame/Style/mn/BG.png';
 import { originAxiosInstance } from '../../api/config';
 
+// Home button
+import HomeButton from '../HomeButton';
+
 function Background() {
      const { t } = useTranslation();
      const navigate = useNavigate();
@@ -82,69 +85,69 @@ function Background() {
 
      const fetchBackgrounds = async () => {
           try {
-              // const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/backgrounds/api`)
-              const response = await originAxiosInstance.get(`/backgrounds/api`);
-              const backgroundDatas = response.data;
-              const storedLanguage = sessionStorage.getItem('language');
-      
-              const newBackgrounds = backgroundDatas.map(item => {
-               let photo, photo_hover;
-               switch (storedLanguage) {
-                   case 'en':
-                       photo = process.env.REACT_APP_BACKEND + item.photo;
-                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
-                       break;
-                   case 'ko':
-                       photo = process.env.REACT_APP_BACKEND + item.photo_kr;
-                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_kr_hover;
-                       break;
-                   case 'vi':
-                       photo = process.env.REACT_APP_BACKEND + item.photo_vn;
-                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_vn_hover;
-                       break;
-                   case 'mn':
-                       switch (item.title) {
-                           case 'Season':
-                               photo = season_default_mn;
-                               photo_hover=season_pressed_mn;
-                               break;
-                           case 'Party':
-                               photo = party_default_mn;
-                               photo_hover=party_pressed_mn
-                               break;
-                           case 'Cartoon':
-                               photo = cartoon_default_mn;
-                               photo_hover=cartoon_pressed_mn
-                               break;
-                               case 'Minimalism':
-                                   photo = minimalism_default_mn;
-                                   photo_hover=minimalism_pressed_mn
-                                   break;
-                           default:
-                               photo = season_default_mn; // default value if title is not Season, Party, or Cartoon
-                               photo_hover=season_pressed_mn
-                               break;
-                       }
-                    //    photo_hover = process.env.REACT_APP_BACKEND + item.photo_mn_hover;
-                       break;
-                   default:
-                       photo = process.env.REACT_APP_BACKEND + item.photo;
-                       photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
-               }
-           
-               return {
-                   title: item.title,
-                   photo: photo,
-                   photo_hover: photo_hover
-               };
-           });
-           
-              setBackgrounds(backgrounds.concat(newBackgrounds));
+               // const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/backgrounds/api`)
+               const response = await originAxiosInstance.get(`/backgrounds/api`);
+               const backgroundDatas = response.data;
+               const storedLanguage = sessionStorage.getItem('language');
+
+               const newBackgrounds = backgroundDatas.map(item => {
+                    let photo, photo_hover;
+                    switch (storedLanguage) {
+                         case 'en':
+                              photo = process.env.REACT_APP_BACKEND + item.photo;
+                              photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
+                              break;
+                         case 'ko':
+                              photo = process.env.REACT_APP_BACKEND + item.photo_kr;
+                              photo_hover = process.env.REACT_APP_BACKEND + item.photo_kr_hover;
+                              break;
+                         case 'vi':
+                              photo = process.env.REACT_APP_BACKEND + item.photo_vn;
+                              photo_hover = process.env.REACT_APP_BACKEND + item.photo_vn_hover;
+                              break;
+                         case 'mn':
+                              switch (item.title) {
+                                   case 'Season':
+                                        photo = season_default_mn;
+                                        photo_hover = season_pressed_mn;
+                                        break;
+                                   case 'Party':
+                                        photo = party_default_mn;
+                                        photo_hover = party_pressed_mn
+                                        break;
+                                   case 'Cartoon':
+                                        photo = cartoon_default_mn;
+                                        photo_hover = cartoon_pressed_mn
+                                        break;
+                                   case 'Minimalism':
+                                        photo = minimalism_default_mn;
+                                        photo_hover = minimalism_pressed_mn
+                                        break;
+                                   default:
+                                        photo = season_default_mn; // default value if title is not Season, Party, or Cartoon
+                                        photo_hover = season_pressed_mn
+                                        break;
+                              }
+                              //    photo_hover = process.env.REACT_APP_BACKEND + item.photo_mn_hover;
+                              break;
+                         default:
+                              photo = process.env.REACT_APP_BACKEND + item.photo;
+                              photo_hover = process.env.REACT_APP_BACKEND + item.photo_hover;
+                    }
+
+                    return {
+                         title: item.title,
+                         photo: photo,
+                         photo_hover: photo_hover
+                    };
+               });
+
+               setBackgrounds(backgrounds.concat(newBackgrounds));
           } catch (error) {
-              console.error(error);
+               console.error(error);
           }
-      }
-      
+     }
+
 
      const handleMouseEnter = (image) => {
           setHoveredImage(image);
@@ -154,9 +157,14 @@ function Background() {
           setHoveredImage(null);
      }
 
-     const goToLayout = (title) => {
+     // const goToLayout = (title) => {
+     //      sessionStorage.setItem('styleBg', title);
+     //      navigate('/layout');
+     // }     
+
+     const goToFrame = (title) => {
           sessionStorage.setItem('styleBg', title);
-          navigate('/layout');
+          navigate('/frame');
      }
 
      const hoverGoBackBtn = (goBackBG) => {
@@ -169,20 +177,22 @@ function Background() {
                setGoBackBg(goBackBg === goback_mn ? goback_mn_hover : goback_mn);
           }
 
-           else {
+          else {
                setGoBackBg(goBackBg === goback_en ? goback_en_hover : goback_en);
           }
      }
      return (
           <div className='style-container' style={{ backgroundImage: `url(${backgroundContainer})` }}>
-               <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => navigate("/frame")} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
+               <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => navigate("/")} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
                <div className="style-section">
                     {backgrounds.map((item, index) => (
                          <div key={index} className="style-column">
-                              <div className="image-style-div" style={{ backgroundImage: `url(${hoveredImage === item.photo ? item.photo_hover : item.photo})` }} onMouseEnter={() => handleMouseEnter(item.photo)} onMouseLeave={handleMouseLeave} onClick={() => goToLayout(item.title)}></div>
+                              <div className="image-style-div" style={{ backgroundImage: `url(${hoveredImage === item.photo ? item.photo_hover : item.photo})` }} onMouseEnter={() => handleMouseEnter(item.photo)} onMouseLeave={handleMouseLeave} onClick={() => goToFrame(item.title)}></div>
                          </div>
                     ))}
                </div>
+
+               <HomeButton />
           </div>
      );
 }

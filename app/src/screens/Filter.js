@@ -101,6 +101,9 @@ import continue_mn_hover from '../assets/Common/mn/continue_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
 import { useEffect, useState } from 'react';
 
+// HomeButton
+import HomeButton from './HomeButton';
+
 function Filter() {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -128,13 +131,13 @@ function Filter() {
     const [goBackButton, setGoBackButton] = useState(goback_en);
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
-    const [clickedId,setClickedId]=useState(null)
-    const effectFloat=0.05;
+    const [clickedId, setClickedId] = useState(null)
+    const effectFloat = 0.05;
     const handlePhotoClick = (selectedIndex) => {
         if (selectedId.includes(selectedIndex)) {
             const filteredIds = selectedId.filter((id) => id !== selectedIndex);
             setSelectedId(filteredIds);
-    
+
             const { [selectedIndex]: _, ...rest } = filterEffect;
             setFilterEffect(rest);
         } else {
@@ -144,7 +147,7 @@ function Filter() {
     const selectedFilterEffects = [
         {
             id: 1,
-            name: 'personality', 
+            name: 'personality',
             effect: [
                 { property: 'brightness', value: '1.2', unit: '' },
                 { property: 'saturate', value: '1.1', unit: '' },
@@ -333,7 +336,7 @@ function Filter() {
         setSliderChange(true);
         if (percentage > 30) {
             setPercentage(percentage - 30);
-           
+
         }
 
         if (!selectedId.length || !filterEffect[selectedId[selectedId.length - 1]]) {
@@ -369,11 +372,11 @@ function Filter() {
         if (!filterEffect[index]) {
             return '';
         }
-             const filters = filterEffect[index].map((option) => {
+        const filters = filterEffect[index].map((option) => {
             return `${option.property}(${option.value}${option.unit})`;
         });
         return filters.join(' ');
-       
+
     };
 
     const storeImageCanvas = async () => {
@@ -403,7 +406,7 @@ function Filter() {
                         element.style.backgroundImage = oldBackgroundImage;
                         element.style.backgroundColor = '';
                         sessionStorage.setItem('downloaded-image', data.photo_url);
-                        navigate('/sticker'); 
+                        navigate('/sticker');
                     }
                 })
                 .catch((error) => {
@@ -495,9 +498,9 @@ function Filter() {
             }
         }
 
-    if (selectedId.length > 0 && selectedId[selectedId.length - 1] === selectedIndex) {
-        className += ' clicked';
-    }
+        if (selectedId.length > 0 && selectedId[selectedId.length - 1] === selectedIndex) {
+            className += ' clicked';
+        }
         return className;
     };
 
@@ -507,7 +510,7 @@ function Filter() {
                 <div className="choose-photo-row">
                     <div
                         className="choose-photo-item-3cut-top-line"
-                        style={{ backgroundImage: `url(${photos[selectedPhotos[0]].url})`,  transform:"scaleX(-1)",filter: getImageStyle(selectedPhotos[0]) }}
+                        style={{ backgroundImage: `url(${photos[selectedPhotos[0]].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedPhotos[0]) }}
                         onClick={() => handlePhotoClick(selectedPhotos[0])}
                     />
                 </div>
@@ -521,7 +524,7 @@ function Filter() {
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                style={{ backgroundImage: `url(${photos[selectedIndex].url})`,  transform:"scaleX(-1)",filter: getImageStyle(selectedIndex) }}
+                                style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                 onClick={() => handlePhotoClick(selectedIndex)}
                             />
                         ))}
@@ -534,7 +537,7 @@ function Filter() {
                     <div className="choose-photo-row">
                         <div
                             className="choose-photo-item-5cut-last-line"
-                            style={{ backgroundImage: `url(${photos[selectedPhotos[selectedPhotos.length - 1]].url})`, transform:"scaleX(-1)", filter: getImageStyle(selectedPhotos[selectedPhotos.length - 1]) }}
+                            style={{ backgroundImage: `url(${photos[selectedPhotos[selectedPhotos.length - 1]].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedPhotos[selectedPhotos.length - 1]) }}
                             onClick={() => handlePhotoClick(selectedPhotos.length - 1)}
                         />
                     </div>
@@ -547,7 +550,7 @@ function Filter() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform:"scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                     onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
@@ -564,7 +567,7 @@ function Filter() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform:"scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                     onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
@@ -581,7 +584,7 @@ function Filter() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
-                                backgroundImage: `url(${photos[selectedIndex].url})`, transform:"scaleX(-1)",
+                                backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)",
                                 filter: getImageStyle(selectedIndex),
                             }}
                             onClick={() => handlePhotoClick(selectedIndex)}
@@ -609,7 +612,7 @@ function Filter() {
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                 onClick={() => handlePhotoClick(selectedIndex)}
-                              
+
                             />
                         ))}
                     </div>
@@ -621,7 +624,7 @@ function Filter() {
                     <div className="choose-photo-row">
                         <div
                             className="choose-photo-item-5cut-last-line"
-                      
+
                         />
                     </div>
                 );
@@ -634,7 +637,7 @@ function Filter() {
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     onClick={() => handlePhotoClick(selectedIndex)}
-                               
+
                                 />
                             ))}
                         </div>
@@ -651,7 +654,7 @@ function Filter() {
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     onClick={() => handlePhotoClick(selectedIndex)}
-                                 
+
                                 />
                             ))}
                         </div>
@@ -667,7 +670,7 @@ function Filter() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             onClick={() => handlePhotoClick(selectedIndex)}
-                           
+
                         />
                     ))}
                 </div>
@@ -698,7 +701,7 @@ function Filter() {
                 setPersonality(personality === personal_vn ? personal_vn_click : personal_vn);
             } else if (language === 'ko') {
                 setPersonality(personality === personal_kr ? personal_kr_click : personal_kr);
-            }else if (language === 'mn') {
+            } else if (language === 'mn') {
                 setPersonality(personality === personal_mn ? personal_mn_click : personal_mn);
             }
         } else if (effect === 'natural') {
@@ -708,7 +711,7 @@ function Filter() {
                 setNatural(natural === natural_vn ? natural_vn_click : natural_vn);
             } else if (language === 'ko') {
                 setNatural(natural === natural_kr ? natural_kr_click : natural_kr);
-            }else if (language === 'mn') {
+            } else if (language === 'mn') {
                 setNatural(natural === natural_mn ? natural_mn_click : natural_mn);
             }
         } else if (effect === 'pink') {
@@ -718,7 +721,7 @@ function Filter() {
                 setPink(pink === pink_vn ? pink_vn_click : pink_vn);
             } else if (language === 'ko') {
                 setPink(pink === pink_kr ? pink_kr_click : pink_kr);
-            }else if (language === 'mn') {
+            } else if (language === 'mn') {
                 setPink(pink === pink_mn ? pink_mn_click : pink_mn);
             }
         } else if (effect === 'classic') {
@@ -748,7 +751,7 @@ function Filter() {
                 setSmooth(smooth === skin_vn ? skin_vn_click : skin_vn);
             } else if (language === 'ko') {
                 setSmooth(smooth === skin_kr ? skin_kr_click : skin_kr);
-            }else if (language === 'mn') {
+            } else if (language === 'mn') {
                 setSmooth(smooth === skin_mn ? skin_mn_click : skin_mn);
             }
         }
@@ -761,7 +764,7 @@ function Filter() {
             setGoBackButton(goBackButton === goback_vn_hover ? goback_vn : goback_vn_hover);
         } else if (language === 'ko') {
             setGoBackButton(goBackButton === goback_kr_hover ? goback_kr : goback_kr_hover);
-        }else if (language === 'mn') {
+        } else if (language === 'mn') {
             setGoBackButton(goBackButton === goback_mn_hover ? goback_mn : goback_mn_hover);
         }
     };
@@ -773,22 +776,22 @@ function Filter() {
             setContinueButton(continueButton === continue_vn_hover ? continue_vn : continue_vn_hover);
         } else if (language === 'ko') {
             setContinueButton(continueButton === continue_kr_hover ? continue_kr : continue_kr_hover);
-        }else if (language === 'mn') {
+        } else if (language === 'mn') {
             setContinueButton(continueButton === continue_mn_hover ? continue_mn : continue_mn_hover);
         }
     };
-    const playAudio = async() => {
-        const res=await getAudio({file_name:"choose_filter.wav"})
-          }
-useEffect(()=>{
-    playAudio()
-},[])
+    const playAudio = async () => {
+        const res = await getAudio({ file_name: "choose_filter.wav" })
+    }
+    useEffect(() => {
+        playAudio()
+    }, [])
     return (
         <div className='filter-container' style={{ backgroundImage: `url(${background})` }}>
-            <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/photo-choose")} onMouseEnter={() => hoverGoBackButton()} onMouseLeave={() => hoverGoBackButton()}></div>
+            <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/photo")} onMouseEnter={() => hoverGoBackButton()} onMouseLeave={() => hoverGoBackButton()}></div>
             <div className="left-big-frame">
                 <div className={displayClassNameForBackground()} style={{ backgroundImage: `url(${myBackground})` }}>
-                    {photos&&showSelectedPhotos()}
+                    {photos && showSelectedPhotos()}
                 </div>
                 <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
                 {showClickArea()}
@@ -812,6 +815,8 @@ useEffect(()=>{
                 </div>
             </div>
             <div className="bottom-filter" style={{ backgroundImage: `url(${continueButton})` }} onMouseEnter={() => hoverContinueButton()} onMouseLeave={() => hoverContinueButton()} onClick={() => goToSticker()}></div>
+
+            <HomeButton />
         </div>
     );
 }

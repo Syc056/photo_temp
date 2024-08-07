@@ -1,2 +1,5 @@
 __pycache__
 /app/node_modules
+backend/db.sqlite3
+run_local.bat
+app/yarn.lock
