@@ -55,7 +55,8 @@ def download(request):
             image_urls = [image_path]
             for filename in os.listdir(upload_dir):
                 if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-                    image_urls.append(f'/get_photo/uploads/{os.path.join(request.build_absolute_uri().split("?")[0].replace("\\","/"), upload_dir.replace("\\","/"), filename)}')
+                    image_file = os.path.join(request.build_absolute_uri().split("?")[0].replace("\\","/"), upload_dir.replace("\\","/"), filename)
+                    image_urls.append(f'/get_photo/uploads/{image_file}')
             
             context = {        
                 'image_path': image_path,
