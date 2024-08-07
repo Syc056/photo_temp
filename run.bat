@@ -1,16 +1,16 @@
 @echo off
 
 REM 기존 명령어들을 새 창에서 실행
-start cmd /k "cd C:\Users\Mongta\Desktop\photomong\photo_temp && pip install -r requirements.txt && python printer_server.py runserver 0.0.0.0:8001"
+start cmd /k "cd C:\Users\photomong\Desktop\photomong\photo_temp && pip install -r requirements.txt && python printer_server.py runserver 0.0.0.0:8001"
 
-start cmd /k "cd C:\Users\Mongta\Desktop\photomong\photo_temp\app && npm install && npm start"
+start cmd /k "cd C:\Users\photomong\Desktop\photomong\photo_temp\app && npm install && npm start"
 
-start cmd /k "cd C:\Users\Mongta\Desktop\photomong\photo_temp\photomong-admin && npm install && npm start"
+start cmd /k "cd C:\Users\photomong\Desktop\photomong\photo_temp\photomong-admin && npm install && npm start"
 
 
 REM WSL 내부의 app.py를 sudo로 실행 (새 창에서)
 echo Starting app.py in WSL with sudo...
-start wsl -e bash -c "sudo python3 /home/user/photomong/app.py; exec bash"
+start wsl -e bash -c "sudo python3 /root/camera/app.py; exec bash"
 
 
 @echo off
