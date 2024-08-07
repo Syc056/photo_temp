@@ -39,7 +39,7 @@ from urllib.parse import quote
 def download(request):
     image_path = request.GET.get('image_path', '')
     video_path = request.GET.get('video_path', '')
-    uuid = request.GET.get('uuid', '123')    
+    uuid = request.GET.get('uuid', '')    
 
     try:
         upload_dir = os.path.join(settings.BASE_DIR, 'uploads', uuid)            

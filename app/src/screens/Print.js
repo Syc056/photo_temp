@@ -18,6 +18,7 @@ function Print() {
      const { t } = useTranslation();
      const navigate = useNavigate();
      const [hoveredImage, setHoveredImage] = useState(null);
+     const uuid=sessionStorage.getItem("uuid")
 
      const [background, setBackground] = useState(background_en);
     
@@ -64,7 +65,7 @@ function Print() {
           console.log(myImage);
           
           console.log(myVideo);
-          const downloadUrl=`http://3.26.21.10:8000/download?image_path=${encodedImage}&video_path=${encodedVideo}` 
+          const downloadUrl=`http://3.26.21.10:8000/download?uuid=${uuid}&image_path=${encodedImage}&video_path=${encodedVideo}` 
           // myImage = myImage.replace("get_photo","download_photo")
           return (
                <QRCode
