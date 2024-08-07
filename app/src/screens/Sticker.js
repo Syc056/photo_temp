@@ -81,7 +81,7 @@ import print_mn_click from '../assets/Sticker/mn/print-pressed.png';
 import frame_box from '../assets/Sticker/frame_box.png';
 import CustomCarousel from '../components/CustomCarousel';
 import VerticalCustomCarousel from '../components/VerticalCustomCarousel';
-import { getAudio, getClickAudio, getPhotos, originAxiosInstance } from '../api/config';
+import { getAudio, getClickAudio, getPhotos, savePhotoForQrDownload, originAxiosInstance } from '../api/config';
 let playAddEmojiSound=false;
 function Sticker() {
     const { t } = useTranslation();
@@ -148,7 +148,16 @@ function getPrintRatio() {
   }
 const chunkArray = (arr, size) => {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
-    };
+    };    
+
+    const savePhotoBackendQr = async () => {
+        const response = await savePhotoForQrDownload(uuid);
+        console.log(response);
+    }
+
+    useEffect(() => {
+        savePhotoBackendQr();
+    });
 
     useEffect(() => {
         const photos = JSON.parse(sessionStorage.getItem('photos'));
@@ -437,6 +446,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             rotateImageDataURL(originalDataURL, 90)
                 .then(rotatedDataURL => {
                     const formData = new FormData();
+                    formData.append("uuid", sessionStorage.getItem('uuid'));
                     formData.append("photo", originalDataURL);
                     formData.append("order_code", sessionStorage.getItem('orderCodeNum'));
 
