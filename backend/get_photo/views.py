@@ -42,19 +42,28 @@ def download(request):
     uuid = request.GET.get('uuid', '')    
 
     try:
-        upload_dir = os.path.join(settings.BASE_DIR, 'uploads', uuid)            
-        image_urls = [image_path]
-        for filename in os.listdir(upload_dir):
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-                image_urls.append(f'/get_photo/uploads/{os.path.join(request.build_absolute_uri().split("?")[0].replace("\\","/"), upload_dir.replace("\\","/"), filename)}')
+        if uuid == '':
+            html_file_path = os.path.join(settings.BASE_DIR, 'get_photo', 'templates', 'download.html')
+            with open(html_file_path, 'r', encoding='utf-8') as file:
+                html_content = file.read()
+                # {{ image_path }}와 {{ video_path }}를 실제 값으로 대체
+                html_content = html_content.replace('{{ image_path }}', image_path)
+                html_content = html_content.replace('{{ video_path }}', video_path)
+            return HttpResponse(html_content)
+        else:        
+            upload_dir = os.path.join(settings.BASE_DIR, 'uploads', uuid)            
+            image_urls = [image_path]
+            for filename in os.listdir(upload_dir):
+                if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    image_urls.append(f'/get_photo/uploads/{os.path.join(request.build_absolute_uri().split("?")[0].replace("\\","/"), upload_dir.replace("\\","/"), filename)}')
+            
+            context = {        
+                'image_path': image_path,
+                'video_path': video_path,
+                'image_urls': image_urls
+            }        
 
-        context = {        
-            'image_path': image_path,
-            'video_path': video_path,
-            'image_urls': image_urls
-        }        
-
-        return render(request, 'download.html', context)        
+            return render(request, 'download2.html', context)        
     except FileNotFoundError:
         return HttpResponse("File not found", status=404)
 
