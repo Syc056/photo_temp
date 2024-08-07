@@ -50,55 +50,39 @@ function Choose() {
     const [clickedButton, setClickedButton] = useState(false);
 
     const [formattedPhotos, setFormattedPhotos] = useState([]);
-    const uuid=sessionStorage.getItem("uuid")
+    const uuid = sessionStorage.getItem("uuid")
 
-//     const testGetPhotos = async () => {
-//         const photos = await getPhotos(uuid);
-//         if (photos && photos.images) {
-//             const formattedImages = photos.images.map(img => ({
-//                 ...img,
-//                 url: img.url.replace(/\/\//g, '/')
-//             }));
-//             // const formattedImage = {
-//             //     ...img,
-//             //     url: `${process.env.REACT_APP_BACKEND}/serve_photo/${imageName}`
-//             // };
-// console.log("img urls>>>",formattedImages)
-//             setFormattedPhotos(formattedImages);
-//             sessionStorage.setItem('photos', JSON.stringify({ status: photos.status, images: formattedImages }));
-//         }
-//     };
-const testGetPhotos = async () => {
-    const photos = await getPhotos(uuid); // UUID를 이용하여 사진 목록을 가져옵니다.
-    
-    if (photos && photos.images) { // photos 객체와 그 안의 images 배열이 존재하는지 확인합니다.
-        const formattedImages = photos.images.map(img => {
-            const imageName = img.url.split('/').pop(); // URL에서 이미지 이름을 추출합니다.
-            return {
+    const testGetPhotos = async () => {
+        const photos = await getPhotos(uuid); // UUID를 이용하여 사진 목록을 가져옵니다.
+
+        if (photos && photos.images) { // photos 객체와 그 안의 images 배열이 존재하는지 확인합니다.
+            const formattedImages = photos.images.map(img => {
+                const imageName = img.url.split('/').pop(); // URL에서 이미지 이름을 추출합니다.
+                return {
+                    ...img,
+                    url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}` // 백엔드 URL 형식으로 변환합니다.
+                };
+            });
+
+            // 변환된 이미지 URL을 다시 형식화하여 '/'를 기준으로 잘못된 부분을 수정합니다.
+            const finalFormattedImages = formattedImages.map(img => ({
                 ...img,
-                url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}` // 백엔드 URL 형식으로 변환합니다.
-            };
-        });
-        
-        // 변환된 이미지 URL을 다시 형식화하여 '/'를 기준으로 잘못된 부분을 수정합니다.
-        const finalFormattedImages = formattedImages.map(img => ({
-            ...img,
-            url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
-        }));
-        
-        console.log("Formatted image URLs:", finalFormattedImages);
+                url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
+            }));
 
-        setFormattedPhotos(finalFormattedImages); // 상태에 변환된 이미지를 저장합니다.
-        
-        // 세션 스토리지에 사진 목록을 JSON 문자열 형태로 저장합니다.
-        sessionStorage.setItem('photos', JSON.stringify({ 
-            status: photos.status, 
-            images: finalFormattedImages 
-        }));
-    } else {
-        console.log("No photos available."); // 이미지가 존재하지 않는 경우 메시지를 출력합니다.
-    }
-};
+            console.log("Formatted image URLs:", finalFormattedImages);
+
+            setFormattedPhotos(finalFormattedImages); // 상태에 변환된 이미지를 저장합니다.
+
+            // 세션 스토리지에 사진 목록을 JSON 문자열 형태로 저장합니다.
+            sessionStorage.setItem('photos', JSON.stringify({
+                status: photos.status,
+                images: finalFormattedImages
+            }));
+        } else {
+            console.log("No photos available."); // 이미지가 존재하지 않는 경우 메시지를 출력합니다.
+        }
+    };
 
     useEffect(() => {
         //사진 제대로 들어오는지 보기위한 테스트 코드
@@ -132,10 +116,10 @@ const testGetPhotos = async () => {
         }
 
         const sessionSelectedLayout = sessionStorage.getItem('selectedLayout');
-    
+
         if (sessionSelectedLayout) {
             const parsedSelectedLayout = JSON.parse(sessionSelectedLayout);
-            console.log("photo choose urls>>>",parsedSelectedLayout[0])
+            console.log("photo choose urls>>>", parsedSelectedLayout[0])
             setMyBackground(parsedSelectedLayout[0].photo);
             setSelectedLayout(parsedSelectedLayout[0].photo_cover);
         }
@@ -173,11 +157,11 @@ const testGetPhotos = async () => {
         const selectedIndex = selectedPhotos.indexOf(index);
         if (selectedIndex === -1 && selectedPhotos.length < totalMeetsPhotos) {
             if (selectedFrame == 'Stripx2') {
-                         setSelectedPhotos([...selectedPhotos, index,index]);
+                setSelectedPhotos([...selectedPhotos, index, index]);
             } else {
                 setSelectedPhotos([...selectedPhotos, index]);
             }
-   
+
         } else {
             setSelectedPhotos(selectedPhotos.filter((item) => item !== index));
         }
@@ -257,7 +241,7 @@ const testGetPhotos = async () => {
             hoverContinueButton();
             setClickedButton(true);
             const result = await copyImageApi();
-                navigate("/filter");
+            navigate("/filter");
         }
     }
 
@@ -286,7 +270,7 @@ const testGetPhotos = async () => {
     }
 
     const displayClassNameForPhoto = (rowIndex, photoIndex) => {
-       console.log("six cuts>>>",selectedFrame)
+        console.log("six cuts>>>", selectedFrame)
         if (selectedFrame === 'Stripx2') {
             if (rowIndex === 0 && photoIndex === 0) {
                 return 'choose-photo-item-0-0';
@@ -372,20 +356,20 @@ const testGetPhotos = async () => {
             setGoBackButton(goBackButton == goback_mn_hover ? goback_mn : goback_mn_hover);
         }
     }
-    const playAudio = async() => {
-        const res=await getAudio({file_name:"choose_photos.wav"})
-          }
-   useEffect(()=>{
-    playAudio()
-   },[])
+    const playAudio = async () => {
+        const res = await getAudio({ file_name: "choose_photos.wav" })
+    }
+    useEffect(() => {
+        playAudio()
+    }, [])
     const showSelectedPhotos = () => {
-console.log("in frame photos>>>",selectedFrame)
+        console.log("in frame photos>>>", selectedFrame)
         if (selectedFrame == '3-cutx2' && selectedPhotos.length > 0) {
             const firstPhotoTpl = (
                 <div className="choose-photo-row">
                     <div
                         className="choose-photo-item-3cut-top-line"
-                        style={{ backgroundImage: `url(${formattedPhotos[selectedPhotos[0]].url})`, transform:"scaleX(-1)" }}
+                        style={{ backgroundImage: `url(${formattedPhotos[selectedPhotos[0]].url})`, transform: "scaleX(-1)" }}
                     />
                 </div>
             )
@@ -397,7 +381,7 @@ console.log("in frame photos>>>",selectedFrame)
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform:"scaleX(-1)" }}
+                                style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
                             />
                         ))}
                     </div>
@@ -409,7 +393,7 @@ console.log("in frame photos>>>",selectedFrame)
                     <div className="choose-photo-row">
                         <div
                             className="choose-photo-item-5cut-last-line"
-                            style={{ backgroundImage: `url(${formattedPhotos[selectedPhotos[selectedPhotos.length - 1]].url})`, transform:"scaleX(-1)" }}
+                            style={{ backgroundImage: `url(${formattedPhotos[selectedPhotos[selectedPhotos.length - 1]].url})`, transform: "scaleX(-1)" }}
                         />
                     </div>
                 )
@@ -421,7 +405,7 @@ console.log("in frame photos>>>",selectedFrame)
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                    style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})` , transform:"scaleX(-1)"}}
+                                    style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
                                 />
                             ))}
                         </div>
@@ -436,7 +420,7 @@ console.log("in frame photos>>>",selectedFrame)
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                    style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform:"scaleX(-1)" }}
+                                    style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
                                 />
                             ))}
                         </div>
@@ -445,8 +429,8 @@ console.log("in frame photos>>>",selectedFrame)
             }
 
         }
-      
-        else if(selectedFrame==="6-cutx2") { 
+
+        else if (selectedFrame === "6-cutx2") {
             const selectedPhotoRows = chunkArray(selectedPhotos, 2);
             return (
                 selectedPhotoRows.map((row, rowIndex) => (
@@ -455,7 +439,7 @@ console.log("in frame photos>>>",selectedFrame)
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform:"scaleX(-1)" }}
+                                style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
                             />
                         ))}
                     </div>
@@ -463,7 +447,7 @@ console.log("in frame photos>>>",selectedFrame)
             );
         }
         else {
-            
+
             const selectedPhotoRows = chunkArray(selectedPhotos, 2);
             return (
                 selectedPhotoRows.map((row, rowIndex) => (
@@ -472,7 +456,7 @@ console.log("in frame photos>>>",selectedFrame)
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex)}
-                                style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform:"scaleX(-1)" }}
+                                style={{ backgroundImage: `url(${formattedPhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
                             />
                         ))}
                     </div>
@@ -489,7 +473,7 @@ console.log("in frame photos>>>",selectedFrame)
             setContinueButton(continueButton == continue_kr ? continue_kr_hover : continue_kr);
         } else if (storedLanguage === 'vi') {
             setContinueButton(continueButton == continue_vn ? continue_vn_hover : continue_vn);
-        }else if (storedLanguage === 'mn') {
+        } else if (storedLanguage === 'mn') {
             setContinueButton(continueButton == continue_mn ? continue_mn_hover : continue_mn);
         }
     }
@@ -502,7 +486,7 @@ console.log("in frame photos>>>",selectedFrame)
                 <div ref={parentRef} className={displayClassNameForBackground()} style={{ backgroundImage: `url(${myBackground})` }}>
                     {showSelectedPhotos()}
                 </div>
-                <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})`}}></div>
+                <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
             </div>
             <div className="right-choose-container">
                 {chunkArray(formattedPhotos.slice(-8), 4).map((group, index) => (
@@ -510,8 +494,8 @@ console.log("in frame photos>>>",selectedFrame)
                         {group.map((photo, photoIndex) => (
                             <div
                                 key={photoIndex}
-                                className={`choose-image ${selectedPhotos.includes(photo.id)?"clicked":""}`}
-                                style={{ backgroundImage: `url(${photo.url})`, transform:"scaleX(-1)" }}
+                                className={`choose-image ${selectedPhotos.includes(photo.id) ? "clicked" : ""}`}
+                                style={{ backgroundImage: `url(${photo.url})`, transform: "scaleX(-1)" }}
                                 onClick={() => toggleSelection(photo.id)}
                             />
                         ))}
@@ -520,7 +504,7 @@ console.log("in frame photos>>>",selectedFrame)
             </div>
             <div
                 className="bottom_choose_container"
-                style={{ backgroundImage: `url(${continueButton})` }}                    
+                style={{ backgroundImage: `url(${continueButton})` }}
                 onClick={goToFilter}
             ></div>
         </div>

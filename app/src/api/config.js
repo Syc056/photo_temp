@@ -8,12 +8,6 @@ import axios from "axios";
 // export const startCashUrl="http://127.0.0.1:8002/api/start/"
 // export const BaseURL = "http://127.0.0.1:5000"
 // export const videoFeedUrl=`http://127.0.0.1:5000/video_feed`//Photo.js live view url
-// const audioBaseURL="http://118.33.212.138:8001"
-// const checkBaseUrl="http://118.33.212.138:9000"
-// const OriginBaseURL="http://118.33.212.138:8000"
-// export const startCashUrl="http://118.33.212.138:8002/api/start/"
-// export const BaseURL = "http://118.33.212.138:5000"
-// export const videoFeedUrl=`http://118.33.212.138:5000/video_feed`//Photo.js live view url
 const audioBaseURL="http://127.0.0.1:8001"
 const checkBaseUrl="http://3.26.21.10:9000"
 const OriginBaseURL="http://3.26.21.10:8000"
@@ -75,16 +69,16 @@ export const getPhotos = async (uuid) => {
   }
 };
 
-// //Photo.js
-// export const getPhotos = async (uuid) => {
+export const deletePhoto = async (uuid, photoName) => {
+  try {
+    const { data, status } = await originAxiosInstance.get(`/get_photo/delete/${uuid}/${photoName}`);
+    return data;
+  } catch (error) {
+    console.error("Error deleting photo:", error);
+    return false;
+  }
+};
 
-//   const { data, status } = await originAxiosInstance.get(`/get_photo/`,
-//     {
-//     params:{uuid:uuid}
-//   }
-// );
-//   return data;
-// };
 export const sendCaptureReq = async (uuid,photoNum) => {
   const { data } = await axiosInstance.post('/capture', { uuid:uuid,photoNum:photoNum });
   return data;

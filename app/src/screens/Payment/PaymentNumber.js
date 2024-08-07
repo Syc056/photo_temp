@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import background_en from '../../assets/PaymentNum/Common/BG.png';
 import background_vn from '../../assets/PaymentNum/Common/vn/BG.png';
 import backgrond_kr from '../../assets/PaymentNum/Common/kr/BG.png';
@@ -34,171 +34,205 @@ import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
 import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getClickAudio, sendDongNum } from '../../api/config';
 
-function PaymentNumber(props) {
-    const [background, setBackground] = useState(background_en);
-    const [minusBtn,setMinusBtn]=useState(minusDefault)
-    const [plusBtn,setPlusBtn]=useState(plusDefault)
-    const [photoNum,setPhotoNum]=useState(1)
-    const [goBackBg, setGoBackBg] = useState([]);
-    const [language, setLanguage] = useState(null);
-    const [check,setCheck]=useState(false)
-    const [confirmButton, setConfirmButton] = useState(confirm_en);
-    const [confirmHoverButton, setConfirmHoverButton] = useState(confirm_en_hover);
-    const [confirmClick, setConfirmClick] = useState(false);
-    const [confirmUrl,setConfirmUrl]=useState(confirmDefault)
-    const navigate=useNavigate()
-    const hoverGoBackBtn = (goBackBG) => {
-        if (goBackBG === 'ko') {
-          setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
-        } else if (goBackBG === 'vi') {
-          setGoBackBg(goBackBg === goback_vn ? goback_vn_hover : goback_vn);
-        } 
-        else if (goBackBG === 'mn') {
-          setGoBackBg(goBackBg === goback_mn ? goback_mn_hover : goback_mn);
-        }
-        else {
-          setGoBackBg(goBackBg === goback_en ? goback_en_hover : goback_en);
-        }
-      }
-      useEffect(()=>{
-        const lang=sessionStorage.getItem("language")
-        setLanguage(lang)
-        if (lang==="ko") {
-          setBackground(backgrond_kr)
-          setGoBackBg(goback_kr);
-          setConfirmButton(confirm_kr)
-        }
-        else if(lang==="vi"){
-          setBackground(background_vn)
-          setGoBackBg(goback_vn);
-          setConfirmButton(confirm_vn)
-        }
-        else if(lang==="mn"){
-          setBackground(backgrond_mn)
-          setGoBackBg(goback_mn);
-          setConfirmButton(confirm_mn)
-        }
-        setMinusBtn(minusDefault)
-      },[])
-      const onCheck=()=>{
-        setCheck(p=>!p)
-      }
-      const onAdd = () => {
-        getClickAudio()
-        setPhotoNum(p => (p < 10 ? p + 1 : p));
-    };
+import HomeButton from '../HomeButton';
 
-    const onMinus = () => {
-      getClickAudio()
-        setPhotoNum(p => (p > 1 ? p - 1 : p));
-    };
-      const goToPayment = async(dongNum,checkCoupon) => {  
+function PaymentNumber(props) {
+  const [background, setBackground] = useState(background_en);
+  const [minusBtn, setMinusBtn] = useState(minusDefault)
+  const [plusBtn, setPlusBtn] = useState(plusDefault)
+  const [photoNum, setPhotoNum] = useState(1)
+  const [goBackBg, setGoBackBg] = useState([]);
+  const [language, setLanguage] = useState(null);
+  const [check, setCheck] = useState(false)
+  const [confirmButton, setConfirmButton] = useState(confirm_en);
+  const [confirmHoverButton, setConfirmHoverButton] = useState(confirm_en_hover);
+  const [confirmClick, setConfirmClick] = useState(false);
+  const [confirmUrl, setConfirmUrl] = useState(confirmDefault)
+  const navigate = useNavigate()
+  const timerRef = useRef(null);
+  const [countdown, setCountdown] = useState(20);
+  const uuid = sessionStorage.getItem("uuid")
+
+  const hoverGoBackBtn = (goBackBG) => {
+    if (goBackBG === 'ko') {
+      setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
+    } else if (goBackBG === 'vi') {
+      setGoBackBg(goBackBg === goback_vn ? goback_vn_hover : goback_vn);
+    }
+    else if (goBackBG === 'mn') {
+      setGoBackBg(goBackBg === goback_mn ? goback_mn_hover : goback_mn);
+    }
+    else {
+      setGoBackBg(goBackBg === goback_en ? goback_en_hover : goback_en);
+    }
+  }
+  useEffect(() => {
+    const lang = sessionStorage.getItem("language")
+    setLanguage(lang)
+    if (lang === "ko") {
+      setBackground(backgrond_kr)
+      setGoBackBg(goback_kr);
+      setConfirmButton(confirm_kr)
+    }
+    else if (lang === "vi") {
+      setBackground(background_vn)
+      setGoBackBg(goback_vn);
+      setConfirmButton(confirm_vn)
+    }
+    else if (lang === "mn") {
+      setBackground(backgrond_mn)
+      setGoBackBg(goback_mn);
+      setConfirmButton(confirm_mn)
+    }
+    setMinusBtn(minusDefault)
+  }, [])
+
+  useEffect(() => {
+    if (uuid) {
+      startTimer();
+    }
+  }, [uuid]);
+
+  const onCheck = () => {
+    setCheck(p => !p)
+  }
+  const onAdd = () => {
     getClickAudio()
-  sessionStorage.setItem("photoNum",dongNum);
-  const res=await sendDongNum(dongNum,checkCoupon===true?1:0)
-             navigate('/payment');
-   }
-const onMouseConfirmEnter=(lang)=>{
-  if (lang==="kr") {
-    setConfirmButton(confirm_kr_hover)
+    setPhotoNum(p => (p < 10 ? p + 1 : p));
+  };
+
+  const onMinus = () => {
+    getClickAudio()
+    setPhotoNum(p => (p > 1 ? p - 1 : p));
+  };
+  const goToPayment = async (dongNum, checkCoupon) => {
+    getClickAudio()
+    sessionStorage.setItem("photoNum", dongNum);
+    const res = await sendDongNum(dongNum, checkCoupon === true ? 1 : 0)
+    navigate('/payment-total');
   }
-}
-const onMouseConfirmLeave=(lang)=>{
-  if (lang==="kr") {
-    setConfirmButton(confirm_kr)
+  const onMouseConfirmEnter = (lang) => {
+    if (lang === "kr") {
+      setConfirmButton(confirm_kr_hover)
+    }
   }
-}
-const onMouseMinusEnter=()=>{
-  setMinusBtn(minusPressed)
-}
-const onMouseMinusLeave=()=>{
-  setMinusBtn(minusDefault)
-}
-const onMousePlusEnter=()=>{
-  setPlusBtn(plusPressed)
-}
-const onMousePlusLeave=()=>{
-  setPlusBtn(plusDefault)
-}
-const getDong=()=>{
-  const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
-  let amount=0;
-  if (storedSelectedFrame.frame==="Stripx2") {
-    amount=70000
+  const onMouseConfirmLeave = (lang) => {
+    if (lang === "kr") {
+      setConfirmButton(confirm_kr)
+    }
   }
-  else {
-amount=100000
+  const onMouseMinusEnter = () => {
+    setMinusBtn(minusPressed)
   }
-  const sales = sessionStorage.setItem("sales",amount+50000*(photoNum-1));
-  const test = sessionStorage.getItem('sales')
-  console.log(test)
-  console.log(photoNum)
- 
-return amount+50000*(photoNum-1)
-}
-    return (
-        <div
-        className='payment-number-container'
-        style={{ backgroundImage: `url(${background})` }}
-        >
-           <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => {
-            getClickAudio()
-            navigate("/layout")}} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>  
-        
-        <div
+  const onMouseMinusLeave = () => {
+    setMinusBtn(minusDefault)
+  }
+  const onMousePlusEnter = () => {
+    setPlusBtn(plusPressed)
+  }
+  const onMousePlusLeave = () => {
+    setPlusBtn(plusDefault)
+  }
+  const getDong = () => {
+    const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
+    let amount = 0;
+    if (storedSelectedFrame.frame === "Stripx2") {
+      amount = 70000
+    }
+    else {
+      amount = 100000
+    }
+    const sales = sessionStorage.setItem("sales", amount + 50000 * (photoNum - 1));
+    const test = sessionStorage.getItem('sales')
+    console.log(test)
+    console.log(photoNum)
+
+    sessionStorage.setItem("totalPayMoney", amount + 50000 * (photoNum - 1));
+
+    return amount + 50000 * (photoNum - 1)
+  }
+
+  const startTimer = () => {
+    timerRef.current = setInterval(async () => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          navigate("/payment-total");
+        }
+      });
+    }, 1000);
+  };
+
+  return (
+    <div
+      className='payment-number-container'
+      style={{ backgroundImage: `url(${background})` }}
+    >
+      <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => {
+        getClickAudio()
+        navigate("/sticker")
+      }} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
+
+      <div
         className='payment-number-center'
 
+      >
+        <div className="minus-default" style={{ backgroundImage: `url(${minusBtn})` }}
+          onClick={onMinus}
+          onMouseEnter={onMouseMinusEnter}
+          onMouseLeave={onMouseMinusLeave}
+        />
+
+        <div className="plus-default" onClick={onAdd} style={{ backgroundImage: `url(${plusBtn})` }}
+
+          onMouseEnter={onMousePlusEnter}
+          onMouseLeave={onMousePlusLeave}
+        />
+        <div className="num-field" style={{ backgroundImage: `url(${numField})` }} >
+          <div
+            className='num'
+          >{photoNum}</div>
+
+        </div>
+        <div className="price-field" style={{ backgroundImage: `url(${priceField})` }} >
+
+          <div
+            className='price'
+          >{getDong()}đ</div>
+        </div>
+        <div className="check-box" style={{
+          // top: "106%",
+          // left: "5%",
+          // width:"20%",
+          // height:"14%",
+        }}
+
+          onClick={onCheck}
         >
- <div className="minus-default"  style={{ backgroundImage: `url(${minusBtn})` }} 
- onClick={onMinus}
- onMouseEnter={onMouseMinusEnter}
-                    onMouseLeave={onMouseMinusLeave}
- />
+          {check && <div
+            className='check'
 
- <div className="plus-default"  onClick={onAdd} style={{ backgroundImage: `url(${plusBtn})` }}
-
- onMouseEnter={onMousePlusEnter} 
- onMouseLeave={onMousePlusLeave}
- />
- <div className="num-field"  style={{ backgroundImage: `url(${numField})` }} >
-    <div
-    className='num'
-    >{photoNum}</div>
-    
- </div>
- <div className="price-field"  style={{ backgroundImage: `url(${priceField})` }} >
-
- <div
-    className='price'
-    >{getDong()}đ</div>
- </div>
- <div className="check-box"  style={{
-  // top: "106%",
-  // left: "5%",
-  // width:"20%",
-  // height:"14%",
- }} 
- 
- onClick={onCheck}
- >
-   {check&& <div
-    className='check'
-  
-    />}
- </div>
+          />}
         </div>
-        <div
-                    className="payment-number-confirm-layout-button"
-                    style={{ backgroundImage: `url(${confirmButton})`,
-                  }}
-                    onClick={(e)=>{goToPayment(photoNum,check)}}
-                  
-                    onMouseEnter={()=>{
-                      onMouseConfirmEnter(language)}}
-                    onMouseLeave={()=>{onMouseConfirmLeave(language)}}
-               ></div>
-        </div>
-    );
+      </div>
+      <div className='payment-countdown'>{countdown}s</div>
+      <div
+        className="payment-number-confirm-layout-button"
+        style={{
+          backgroundImage: `url(${confirmButton})`,
+        }}
+        onClick={(e) => { goToPayment(photoNum, check) }}
+
+        onMouseEnter={() => {
+          onMouseConfirmEnter(language)
+        }}
+        onMouseLeave={() => { onMouseConfirmLeave(language) }}
+      ></div>
+
+      <HomeButton />
+    </div>
+  );
 }
 
 export default PaymentNumber;

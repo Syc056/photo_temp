@@ -8,7 +8,7 @@ from .models import Layout
 from .serializers import LayoutSerializer
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from .forms import LayoutForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -48,11 +48,11 @@ class LayoutAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        serializer = LayoutSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        form = LayoutForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"message": "Layout created successfully"}, status=201)
+        return JsonResponse({"message": "Failed to create layout"}, status=400)
     
 class LayoutDetailAPI(APIView):
     
@@ -65,11 +65,13 @@ class LayoutDetailAPI(APIView):
     
         def put(self, request, pk, *args, **kwargs):
             layout = Layout.objects.get(id=pk)
-            serializer = LayoutSerializer(instance=layout, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            form = LayoutForm(request.POST, request.FILES, instance=layout)
+            backgrounds = Background.objects.all()
+            frames = Frame.objects.all()
+            if form.is_valid():
+                form.save()
+                return JsonResponse({"message": "Layout updated successfully"}, status=201)
+            return JsonResponse({"message": "Failed to update layout"}, status=400)
     
         def delete(self, request, pk, *args, **kwargs):
             layout = Layout.objects.get(id=pk)
@@ -82,6 +84,17 @@ class LayoutByBackgroundAPI(APIView):
         background = Background.objects.get(title=background)
         frame = Frame.objects.get(title=frame)
         layouts = Layout.objects.filter(background=background.id, frame=frame.id)
+        serializer = LayoutSerializer(layouts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class LayoutGroupByBackgroundAPI(APIView):
+    def get(self, request, id, frame, *args, **kwargs):
+        frame = Frame.objects.get(pk=frame)
+        background = Background.objects.get(pk=id)
+        if frame:
+            layouts = Layout.objects.filter(background=background.id, frame=frame.id)
+        else:
+            layouts = Layout.objects.filter(background=background.id)        
         serializer = LayoutSerializer(layouts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         

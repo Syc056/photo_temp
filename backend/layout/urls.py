@@ -3,6 +3,7 @@ from .views import (
       LayoutAPI,
       LayoutDetailAPI,
       LayoutByBackgroundAPI,
+      LayoutGroupByBackgroundAPI,
       LayoutList,
       LayoutCreateView,
       LayoutEditView,
@@ -14,6 +15,7 @@ urlpatterns = [
       path('api', LayoutAPI.as_view()),
       path('api/<int:pk>', LayoutDetailAPI.as_view()),
       path('api/by-background/<str:background>/frame/<str:frame>', LayoutByBackgroundAPI.as_view(), name='layouts-by-background'),
+      path('api/group-by-background/<int:id>/frame/<int:frame>', LayoutGroupByBackgroundAPI.as_view(), name='layouts-group-by-background'),
 
       # WEB
       path('', LayoutList.as_view(), name='layouts'),

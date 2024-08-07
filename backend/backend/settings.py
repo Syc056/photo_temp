@@ -88,7 +88,8 @@ INSTALLED_APPS = [
     'sticker',
     'account',
     'zalopay',    
-    'redeem'
+    'redeem',
+    'get_photo',
 ]
 
 MIDDLEWARE = [

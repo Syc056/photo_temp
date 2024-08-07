@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import i18n from '../translations/i18n';
 import "../css/Print.css";
+import HomeButton from './HomeButton';
 
 // Background
 import background_en from '../assets/Prints/BG.png';
@@ -78,10 +79,9 @@ function Print() {
 
      return (
           <div className='print-container' style={{ backgroundImage: `url(${background})` }} onClick={clearSessionStorageAndLeaveOut}>
-               <div className="qr-code-container">
-                    <QRCodeComponent />
+               <div className="qr-code-container">                    
                </div>
-           
+               <HomeButton />          
           </div>
      );
 }
