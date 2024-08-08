@@ -81,7 +81,8 @@ class PhotoListView(LoginRequiredMixin, View):
         subfolders = []
         for f in os.scandir(uploads_dir):
             if f.is_dir():
-                date_created = datetime.fromtimestamp(f.stat().st_ctime)
+                folder_path = os.path.join(uploads_dir, f.name)
+                date_created = datetime.fromtimestamp(os.path.getctime(folder_path))
                 subfolders.append({'name': f.name, 'date_created': date_created})
         
         subfolders = sorted(subfolders, key=lambda x: x['date_created'], reverse=True)

@@ -22,7 +22,7 @@
                             {% for folder in subfolders %}
                             <tr>                                
                                 <td>{{ folder.name }}</td>                                
-                                <td>{{ folder.date_created }}</td>
+                                <td>{{ folder.date_created|date:"d/m/Y H:i:s" }}</td>
                                 <td>
                                     <div class="row">
                                         <div class="col-sm-6 text-end">
@@ -47,6 +47,6 @@
 </div>
 
 <script>
-    let table = new DataTable('#frames-table')
+    let table = new DataTable('#frames-table', {ordering: false});    
   </script>
 {% endblock %}
