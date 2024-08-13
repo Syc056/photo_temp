@@ -11,7 +11,8 @@ from .views import start_cash_pay, stop_cash_pay, create_cash_order, webhook_cas
 
 urlpatterns = [
     # API
-    path('api/list', PaymentAPI.as_view()),     
+    path('api', PaymentAPI.as_view()),    
+    path('api/<int:pk>', PaymentDetailAPI.as_view()), 
 
     # Cash
     path('api/cash/start', start_cash_pay, name='start_cash_pay'),
