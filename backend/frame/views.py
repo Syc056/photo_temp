@@ -358,11 +358,11 @@ class FrameDetailAPI(APIView):
 
     def put(self, request, pk, *args, **kwargs):
         frame = Frame.objects.get(id=pk)
-        serializer = FrameSerializer(instance=frame, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        form = FrameForm(request.POST, request.FILES, instance=frame)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'message': 'OK'}, status=status.HTTP_200_OK)
+        return JsonResponse(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, *args, **kwargs):
         frame = Frame.objects.get(id=pk)
@@ -405,11 +405,29 @@ class FrameList(LoginRequiredMixin, View):
     template_name = "frames/list.html"
 
     def get(self, request, *args, **kwargs):
-        devices = Device.objects.all()
-        frames = Frame.objects.all()
+        devices = Device.objects.all()        
         return render(
-            request, self.template_name, {"devices": devices, "frames": frames}
+            request, self.template_name, {"devices": devices, "positions": POSITION_FRAMES}
         )
+    
+    def post(self, request, *args, **kwargs):
+        devices = Device.objects.all()
+        form = FrameForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"message": "Frame created successfully"}, status=201)
+        else:
+            messages.error(request, form.errors)
+        return JsonResponse({"message": "Failed to create frame"}, status=400)
+    
+    def put(self, request, *args, **kwargs):
+        frame_id = request.POST.get('frame_id')
+        frame = Frame.objects.get(id=frame_id)        
+        form = FrameForm(request.POST, request.FILES, instance=frame)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"message": "Frame updated successfully"}, status=201)
+        return JsonResponse({"message": "Failed to update frame"}, status=400)
 
 
 class FrameCreateView(LoginRequiredMixin, View):
