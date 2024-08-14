@@ -63,24 +63,22 @@ from django.core.files.uploadedfile import TemporaryUploadedFile
 def print_photo(request):
     if request.method == 'POST':
         try:
-#        if 1 == 1 :
             print("print_photo")
-            folder_path = r"../../print_files"
-            folder_path = r"C:\\Users\\USER\\Desktop\\DeepSoft\\Project\\포토키오스크\\photomong\\photomong\\print_files"
+            folder_path = os.path.join(settings.BASE_DIR, 'print_files')
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
-
+            
             image_file = request.data.get('photo')
             frame = request.data.get('frame')
             uuid = request.data.get('uuid')
-            photoNum = request.data.get('photoNum')
-
-
-            if not image_file or not frame:
+            photo_num = request.data.get('photoNum')
+            
+            if not image_file or not frame or not uuid:
                 return JsonResponse({'error': 'Invalid input'}, status=status.HTTP_400_BAD_REQUEST)
             
             print_url = settings.API_PRINTER_2
             print_file_name = ''
+            
             if frame == 'Stripx2':
                 print_file_name = 'stripx2.png'
                 print_url = settings.API_PRINTER_CUT
@@ -93,80 +91,200 @@ def print_photo(request):
             elif frame == '4-cutx2':
                 print_file_name = 'cutx4.png'
                 print_url = settings.API_PRINTER_4
-            elif frame == '5-cutx2':    
-                print_file_name = 'cutx5.png'
-                print_url = settings.API_PRINTER_5
             elif frame == '6-cutx2':
                 print_file_name = 'cutx6.png'
                 print_url = settings.API_PRINTER_6
             
             file_path = os.path.join(folder_path, print_file_name)
-
-            print(111)
-            print("file_path")
-            print(file_path)
-            print(111)
-
+            
+            print(f"File path: {file_path}")
             print(f"Type of image_file: {type(image_file)}")
-            print(f"Content of image_file: {image_file[:100] if isinstance(image_file, str) else 'Not a string'}")
-
+            
             if isinstance(image_file, TemporaryUploadedFile):
                 image_content = image_file.read()
             else:
                 image_content = base64.b64decode(image_file)
-
+            
             with open(file_path, 'wb') as destination:
                 destination.write(image_content)
-
-            # 파일이 제대로 저장되었는지 확인
-            if not os.path.exists(file_path):
-                return JsonResponse({'error': 'Failed to save the file'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            # 파일 크기 확인
-            file_size = os.path.getsize(file_path)
-            if file_size == 0:
-                return JsonResponse({'error': 'Saved file is empty'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-            #return print_url,{
-            #                     'print_data':image_content}
-                                 
+            if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
+                return JsonResponse({'error': 'Failed to save the file or file is empty'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-#            const printUrl = response.data.print_url;
-#            const printData = response.data.print_data;
-#            const uploadsDataPath = response.data.print_data.file_path;
+            # 파일 URL 생성 (실제 환경에 맞게 수정 필요)
+            file_url = f"{request.build_absolute_uri('/')[:-1]}/media/print_files/{print_file_name}"
 
-#            # Call POST method to printer                
-#            with open(file_path, 'rb') as f:
-#                response = requests.post(print_url, files={'file': f})
-
-            #print(response.status_code)
-            #print(response.text)
-            print("printurl"+str(print_url))
-            print("file_path"+str(file_path))
-#            print("file_url"+str(file_url))
+            # React 클라이언트에 필요한 정보 반환
             return JsonResponse({
                 'message': 'File saved successfully.',
                 'print_url': print_url,
                 'print_data': {
                     'frame': frame,
-                    'file_path': file_path
-#                    'file_url': file_url
+                    'file_path': file_path,
+                    'file_url': file_url
                 }
             }, status=status.HTTP_200_OK)
-
-
-            if response.status_code == 200:
-#                return JsonResponse({
-                return JsonResponse({'message': 'Print job started successfully.'}, status=status.HTTP_200_OK)
-            else:
-                return JsonResponse({'error': 'Failed to send print request'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         except Exception as e:
-#            else:
             print(f"Error in print_photo: {str(e)}")
             print(f"Error type: {type(e)}")
             return JsonResponse({'error': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # @api_view(['POST'])
 # def print_photo(request):
@@ -406,7 +524,7 @@ class FrameList(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         devices = Device.objects.all()
-        frames = Frame.objects.all()
+        frames = Frame.objects.exclude(title='3-cutx2').exclude(title='5-cutx2')
         return render(
             request, self.template_name, {"devices": devices, "frames": frames}
         )
@@ -425,27 +543,10 @@ class FrameCreateView(LoginRequiredMixin, View):
         form = FrameForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect(f'{reverse_lazy("frames")}')
+            return redirect(f'{reverse_lazy("frames")}?device={form.instance.device.id}')
         else:
             messages.error(request, form.errors)
         return render(request, self.template_name, {"form": form, "devices": devices, "positions": POSITION_FRAMES})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class FrameEditView(LoginRequiredMixin, View):

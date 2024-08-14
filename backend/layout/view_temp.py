@@ -25,7 +25,7 @@ BACKGROUND_API_URL = settings.DEV_URL + "backgrounds/api"
 
 FRAME_API_URL = settings.DEV_URL + "frames/api"
 
-POSITION_LIST = ['row-1-1', 'row-1-2', 'row-1-3', 'row-1-4','row-1-5', 'row-1-6', 'row-1-7', 'row-1-8', 'row-1-9', 'row-1-10']
+POSITION_LIST = ['row-1-1', 'row-1-2', 'row-1-3', 'row-1-4', 'row-1-5', 'row-1-6', 'row-1-7', 'row-1-8', 'row-1-9', 'row-1-10']
 
 
 def get_background_list():
@@ -41,7 +41,7 @@ def get_frame_list():
     return []
 
 class LayoutAPI(APIView):
-
+    
     def get(self, request, *args, **kwargs):
         layouts = Layout.objects.all()
         serializer = LayoutSerializer(layouts, many=True)
@@ -53,16 +53,16 @@ class LayoutAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class LayoutDetailAPI(APIView):
-
+    
         permission_classes = [permissions.IsAuthenticated]
-
+    
         def get(self, request, pk, *args, **kwargs):
             layout = Layout.objects.get(id=pk)
             serializer = LayoutSerializer(layout)
             return Response(serializer.data, status=status.HTTP_200_OK)
-
+    
         def put(self, request, pk, *args, **kwargs):
             layout = Layout.objects.get(id=pk)
             serializer = LayoutSerializer(instance=layout, data=request.data)
@@ -70,7 +70,7 @@ class LayoutDetailAPI(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
         def delete(self, request, pk, *args, **kwargs):
             layout = Layout.objects.get(id=pk)
             layout.delete()
@@ -84,17 +84,17 @@ class LayoutByBackgroundAPI(APIView):
         layouts = Layout.objects.filter(background=background.id, frame=frame.id)
         serializer = LayoutSerializer(layouts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+        
 class LayoutList(LoginRequiredMixin, ListView):
     def get(self, request):                
         page_number = request.GET.get('page')
         background_query = request.GET.get('background')
-
+        
         all_data = Layout.objects.all().order_by('-id')
         if background_query:
             background = Background.objects.get(id=background_query)
             all_data = Layout.objects.filter(background=background.id).order_by('-id')        
-
+        
         backgrounds = Background.objects.all()
         frames = Frame.objects.all()
         return render(request, 'layouts/list.html', {'layouts': all_data, 'backgrounds': backgrounds, 'frames': frames, 'position_list': POSITION_LIST})
@@ -133,10 +133,10 @@ class LayoutEditView(LoginRequiredMixin, View):
             form.save()
             return redirect(reverse_lazy('layouts'))
         return render(request, 'layouts/edit.html', {'form': form, 'backgrounds': backgrounds, 'frames': frames, 'layout': layout, 'position_list': POSITION_LIST})
-
+    
 class LayoutDeleteView(LoginRequiredMixin, View):
-
+    
     def get(self, request, pk):
         layout = Layout.objects.get(id=pk)
         layout.delete()
-        return redirect(reverse_lazy('layouts')) 
+        return redirect(reverse_lazy('layouts'))    
