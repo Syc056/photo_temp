@@ -90,7 +90,7 @@ function Photo() {
             const imageName = latestImage.url.split('/').pop();
             const formattedImage = {
                 ...latestImage,
-                url: `${process.env.REACT_APP_BACKEND}/serve_photo/${imageName}`
+                url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
             };
 
 

@@ -5,6 +5,7 @@ import random
 import string
 from datetime import datetime
 import json
+import pytz
 
 app = Flask(__name__, static_folder='../public', template_folder='../public')
 
@@ -13,8 +14,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost/pho
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # CORS 설정 추가
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": ["http://localhost:3001", "http://localhost:3000"]}})
 
+#CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "http://localhost:3001","http://localhost:3000"}})
+#CORS(app, supports_credentials=True)
+#CORS(app, resources={r"/api/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 
 class Device(db.Model):
@@ -27,10 +31,62 @@ class Device(db.Model):
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
     promotion_code = db.Column(db.JSON)
     ip = db.Column(db.String(50))
+# 예제 모델 설정
+
+class PaymentLog(db.Model):
+    __tablename__ = 'payment_logs' 
+    id = db.Column(db.Integer, primary_key=True)
+    payment_time = db.Column(db.DateTime, nullable=False)
+    device = db.Column(db.String(80))
+    device_code = db.Column(db.String(80))
+    payment_amount = db.Column(db.Float)
+    payment_method = db.Column(db.String(80))
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.String(80), primary_key=True)
+    ip = db.Column(db.String(45))
+    password = db.Column(db.String(255))
+
 
 @app.route('/')
 def index():
     return send_from_directory(app.template_folder, 'index.html')
+
+def get_hanoi_time():
+    tz = pytz.timezone('Asia/Ho_Chi_Minh')  # 베트남 하노이 시간대
+    now = datetime.now(tz)
+    return now.strftime('%Y.%m.%d %H:%M:%S')
+
+
+@app.route('/api/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    new_user = User(id=data['id'],ip=data['ip'], password=data['password'])
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User created successfully'}), 201
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    users_list = [{
+        'id': user.id,
+        'ip': user.ip,
+        'password': user.password
+    } for user in users]
+    return jsonify(users_list)
+
+
+@app.route('/api/delete_user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message': 'User deleted successfully'})
+
 
 @app.route('/api/devices', methods=['GET'])
 def get_devices():
@@ -46,6 +102,16 @@ def get_devices():
         'ip': device.ip
     } for device in devices]
     return jsonify(devices_list)
+
+
+@app.route('/api/update_sales/<int:id>', methods=['PUT'])
+def update_sales(id):
+    data = request.get_json()
+    device = Device.query.get_or_404(id)
+    device.sales = data['Sales']
+    db.session.commit()
+    return jsonify({'message': 'Sales updated successfully'}), 200
+
 
 @app.route('/api/add_device', methods=['POST'])
 def add_device():
@@ -141,5 +207,38 @@ def check_promotion_code():
         return jsonify({'message': 'Promotion code is valid'}), 200
     else:
         return jsonify({'message': 'Promotion code is invalid'}), 404
+
+
+@app.route('/api/log_payment', methods=['POST'])
+def log_payment():
+    data = request.get_json()
+    new_log = PaymentLog(
+        payment_time=get_hanoi_time(),  # 현재 하노이 시간 설정
+        device=data['device'],
+        device_code=data['device_code'],
+        payment_amount=data['payment_amount'],
+        payment_method=data['payment_method']
+    )
+    db.session.add(new_log)
+    db.session.commit()
+    return jsonify({'message': 'Payment log added successfully'}), 201
+
+
+@app.route('/api/logs', methods=['GET'])
+def get_logs():
+    logs = PaymentLog.query.all()
+    print(logs)
+    logs_list = [{
+        'id': log.id,
+        'payment_time': log.payment_time,
+        'device': log.device,
+        'device_code': log.device_code,
+        'payment_amount': log.payment_amount,
+        'payment_method': log.payment_method
+    } for log in logs]
+    return jsonify(logs_list)
+
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9000, threaded=True, debug=True)
