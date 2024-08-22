@@ -88,7 +88,7 @@ function App() {
       </div>
       <div className="start-button" style={{ backgroundImage: `url(${buttonBackground})` }} onMouseEnter={() => changeButtonBackground('Enter', language)} onMouseLeave={() => changeButtonBackground('Leave', language)} onClick={() => {
         getClickAudio()
-        navigate('/frame')
+        navigate('/background')
       }}></div>
     </div>
   );

@@ -270,6 +270,22 @@ $('body').on('change', '.edit-photo-input', function (e) {
     }
 });
 
+/** Delete background */
+$('body').on('click', '.delete-layout', function () {
+    if (confirm('Are you sure you want to delete this layout?') == true) {
+        var layoutId = $(this).data('layout-id');        
+        $.ajax({
+            url: '/layouts/api/' + layoutId,
+            type: 'DELETE',
+            headers: {'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()},
+            success: function (response) {
+                // reload layouts
+                loadLayouts(selectedBackground, selectedBackgroundTitle);
+            }
+        })
+    }
+});
+
 /******************** Layout ******************************************************/
 
 // Load backgrounds

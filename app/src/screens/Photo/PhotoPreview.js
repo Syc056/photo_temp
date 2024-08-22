@@ -14,13 +14,13 @@ import load_en from '../../assets/Photo/Load/BG.png';
 import load_kr from '../../assets/Photo/Load/kr/BG.png';
 import load_vn from '../../assets/Photo/Load/vn/BG.png';
 import load_mn from '../../assets/Photo/Load/mn/BG.png';
-import ok_button from '../../assets/Photo/Snap/OkInactive.png';
-import take_again_button from '../../assets/Photo/Snap/TakeAgainInactive.png';
+import ok_button from '../../assets/Photo/Snap/OK.png';
+import take_again_button from '../../assets/Photo/Snap/TakeAgain.png';
 import offline_wc from '../../assets/Photo/OFFLINE.jpg';
-import { getAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
+import { getAudio, getClickAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 import Uid from "react-uuid"
 
-function Photo() {
+function PhotoPreview() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [countdown, setCountdown] = useState(8);
@@ -31,26 +31,25 @@ function Photo() {
     const [capturing, setCapturing] = useState(false);
     const [capturePhotos, setCapturePhotos] = useState([]);
 
-    const [showFirstSet, setShowFirstSet] = useState(true);
-    const [uuid, setUuid] = useState(sessionStorage.getItem("uuid") || null);
+    const [showFirstSet, setShowFirstSet] = useState(true);    
     const [selectedFrame, setSelectedFrame] = useState(null);
     const [myBackground, setMyBackground] = useState(null);
     const [selectedLayout, setSelectedLayout] = useState(null);
-    const [totalSnapshotPhoto, setTotalSnapshotPhoto] = useState(0);
+    const [totalSnapshotPhoto, setTotalSnapshotPhoto] = useState(0);       
+    const [selectedPhotos, setSelectedPhotos] = useState([]); 
+
+    const uuid = sessionStorage.getItem("uuid")
 
     const timerRef = useRef(null);
 
-    useEffect(() => {
-        const newUuid = Uid().toString();
-        setUuid(newUuid);
-
+    useEffect(() => {        
         const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
-        if (storedSelectedFrame) {
-            setSelectedFrame(storedSelectedFrame.frame);
+        if (storedSelectedFrame) {            
+            setSelectedFrame(storedSelectedFrame.frame);            
         }
-
+        
         if (storedSelectedFrame.frame === 'Stripx2') {
-            setTotalSnapshotPhoto(8);
+            setTotalSnapshotPhoto(4);
         } else if (storedSelectedFrame.frame === '2cut-x2') {
             setTotalSnapshotPhoto(2);
         } else if (storedSelectedFrame.frame === '4-cutx2') {
@@ -64,7 +63,6 @@ function Photo() {
         const sessionSelectedLayout = sessionStorage.getItem('selectedLayout');
         const parsedSelectedLayout = JSON.parse(sessionSelectedLayout);
         const layoutData = parsedSelectedLayout[0];
-        console.log(parsedSelectedLayout);
         if (layoutData) {
             setSelectedLayout(layoutData.photo_cover);
         }
@@ -76,8 +74,12 @@ function Photo() {
         const layoutData = parsedSelectedLayout[0];
         if (layoutData) {
             setMyBackground(layoutData.photo);
-        }
+        }        
     }, []);
+
+    useEffect(() => {
+        asyncGetPhotos();
+    }, [uuid]);
 
     const sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -87,7 +89,41 @@ function Photo() {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
     };
 
-    const displayClassNameForPhoto = (rowIndex, photoIndex, selectedIndex) => {
+    const asyncGetPhotos = async () => {      
+        if (uuid === null) {
+            return;
+        }          
+        const photos = await getPhotos(uuid);        
+
+        if (photos && photos.images) {
+            const formattedImages = photos.images.map(img => {
+                const imageName = img.url.split('/').pop();
+                return {
+                    ...img,
+                    url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
+                };
+            });
+
+            const finalFormattedImages = formattedImages.map(img => ({
+                ...img,
+                url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
+            }));            
+
+            setCapturePhotos(finalFormattedImages);
+
+            sessionStorage.setItem('photos', JSON.stringify({
+                status: photos.status,
+                images: finalFormattedImages
+            }));
+
+            // loop photos.images and setSelectedPhotos with array photo id
+            setSelectedPhotos(finalFormattedImages.map(photo => photo.id));
+        } else {
+            console.log("No photos available."); 
+        }
+    };
+
+    const displayClassNameForPhoto = (rowIndex, photoIndex, selectedIndex) => {        
         let className = 'choose-photo-item';
 
         if (selectedFrame === 'Stripx2') {
@@ -110,17 +146,17 @@ function Photo() {
             }
         } else if (selectedFrame === '6-cutx2') {
             if (rowIndex === 0 && photoIndex === 0) {
-                className = 'choose-photo-item6-0-0-right';
+                className = 'choose-photo-item6-0-0';
             } else if (rowIndex === 0 && photoIndex === 1) {
-                className = 'choose-photo-item6-0-1-right';
+                className = 'choose-photo-item6-0-1';
             } else if (rowIndex === 1 && photoIndex === 0) {
-                className = 'choose-photo-item6-1-0-right';
+                className = 'choose-photo-item6-1-0';
             } else if (rowIndex === 1 && photoIndex === 1) {
-                className = 'choose-photo-item6-1-1-right';
+                className = 'choose-photo-item6-1-1';
             } else if (rowIndex === 2 && photoIndex === 0) {
-                className = 'choose-photo-item6-2-0-right';
+                className = 'choose-photo-item6-2-0';
             } else if (rowIndex === 2 && photoIndex === 1) {
-                className = 'choose-photo-item6-2-1-right';
+                className = 'choose-photo-item6-2-1';
             }
         } else if (selectedFrame === '2cut-x2') {
             if (rowIndex === 0 && photoIndex === 0) {
@@ -156,64 +192,42 @@ function Photo() {
             } else if (rowIndex === 1 && photoIndex === 1) {
                 className = 'choose-photo-item-5cut-1-1';
             }
-        }
+        }        
         return className;
     };
 
     const takeSnapshot = async () => {
-        // setFlash(true);
-        //TODO        
+        // setFlash(true);        
         await sleep(100);
         setCapturing(true);
         try {
             await sendCaptureReq(uuid);
             setPhotoCount((prevCount) => prevCount + 1);
-        } catch (error) {
+        } catch (error) {                        
             console.error('Failed to capture image:', error);
         }
         // setFlash(false);
         setCapturing(false);
-    };
-
-    const startTimer = () => {
-        timerRef.current = setInterval(async () => {
-            setCountdown((prevCountdown) => {
-                if (prevCountdown > 0) {
-                    return prevCountdown - 1;
-                } else {
-                    clearInterval(timerRef.current);
-                    takeSnapshot().then(() => {
-                        setCountdown(8);
-                        if (photoCount < totalSnapshotPhoto) {
-                            startTimer();
-                        }
-                    });
-                    return 8;
-                }
-            });
-        }, 1000);
-    };
+    };    
 
     const getLatestPhoto = async (currentPhotoCount) => {
-        const photos = await getPhotos(uuid);
+        const photos = await getPhotos(selectedFrame);
         sessionStorage.setItem("getphotos", photos);
         if (photos && photos.images && photos.images.length > 0) {
-            const latestImage = photos.images[photos.images.length - 1];
-            console.log(photos)
+            const latestImage = photos.images[photos.images.length - 1];                        
             const imageName = latestImage.url.split('/').pop();
             const formattedImage = {
                 ...latestImage,
                 url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
-            };
-            if (photos.videos!=undefined) {
-                if (photos.videos.length!=0) {
-                          const videoUrl=photos.videos[0].url.replace("get_photo","download_photo")
-            console.log('videoUrl>>>',videoUrl)
-            sessionStorage.setItem("videoUrl",videoUrl)
+            };                        
+            if (photos.videos != undefined) {
+                if (photos.videos.length != 0) {
+                    const videoUrl = photos.videos[0].url.replace("get_photo", "download_photo")
+                    // console.log('videoUrl>>>', videoUrl)
+                    sessionStorage.setItem("videoUrl", videoUrl)
                 }
-           
             }
-           
+
             setCapturePhotos((prevPhotos) => {
                 const newPhotos = [...prevPhotos];
                 newPhotos[currentPhotoCount] = {
@@ -221,20 +235,20 @@ function Photo() {
                     url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
                 };
                 return newPhotos;
-            });
+            });            
         } else {
             navigate(-1);
             console.log("No photos available.");
         }
     };
 
-    const showSelectedPhotos = () => {
+    const showSelectedPhotos = () => {    
         if (selectedFrame === '3-cutx2' && capturePhotos.length > 0) {
             const firstPhotoTpl = (
                 <div className="choose-photo-row">
                     <div
                         className="choose-photo-item-3cut-top-line"
-                        style={{ backgroundImage: `url(${capturePhotos[0].url})`, transform: "scaleX(-1)" }}
+                        style={{ backgroundImage: `url(${capturePhotos[0].url})`,  transform:"scaleX(-1)" }}                        
                     />
                 </div>
             );
@@ -247,7 +261,7 @@ function Photo() {
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`,  transform:"scaleX(-1)" }}                                
                             />
                         ))}
                     </div>
@@ -259,7 +273,7 @@ function Photo() {
                     <div className="choose-photo-row">
                         <div
                             className="choose-photo-item-5cut-last-line"
-                            style={{ backgroundImage: `url(${capturePhotos[capturePhotos.length - 1].url})`, transform: "scaleX(-1)" }}
+                            style={{ backgroundImage: `url(${capturePhotos[capturePhotos.length - 1].url})`, transform:"scaleX(-1)" }}                            
                         />
                     </div>
                 );
@@ -271,7 +285,7 @@ function Photo() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform:"scaleX(-1)" }}                                    
                                 />
                             ))}
                         </div>
@@ -287,7 +301,7 @@ function Photo() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform:"scaleX(-1)" }}                                    
                                 />
                             ))}
                         </div>
@@ -295,7 +309,7 @@ function Photo() {
                 ];
             }
         } else {
-            const selectedPhotoRows = chunkArray(capturePhotos, 2);
+            const selectedPhotoRows = chunkArray(capturePhotos, 2);            
             return selectedPhotoRows.map((row, rowIndex) => (
                 <div key={rowIndex} className="choose-photo-row">
                     {row.map((selectedIndex, photoIndex) => (
@@ -303,8 +317,8 @@ function Photo() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
-                                backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform: "scaleX(-1)"
-                            }}
+                                backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform:"scaleX(-1)"                                
+                            }}                            
                         />
                     ))}
                 </div>
@@ -328,10 +342,12 @@ function Photo() {
         }
     }, [photoCount, uuid]);
 
-    useEffect(() => {
+    useEffect(() => {        
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
-            navigate('/photo-preview');
+            // navigate('/photo-choose');
+            // Stop recording    
+            console.log("capturePhotos", capturePhotos);                               
         }
     }, [capturePhotos, navigate]);
 
@@ -354,7 +370,7 @@ function Photo() {
 
     const togglePreviewSet = () => {
         setShowFirstSet((prevShowFirstSet) => !prevShowFirstSet);
-    };
+    };    
 
     const displayClassNameForBackground = () => {
         if (selectedFrame === '2cut-x2') {
@@ -385,8 +401,7 @@ function Photo() {
             const initializeLiveView = async () => {
                 await startLiveView();
             };
-            initializeLiveView();
-            startTimer();
+            initializeLiveView();                        
         }
         return () => {
             clearInterval(timerRef.current);
@@ -399,7 +414,7 @@ function Photo() {
 
     const playAudio = async () => {
         await getAudio({ file_name: "look_up_smile.wav" });
-    };
+    };    
 
     useEffect(() => {
         playAudio();
@@ -452,25 +467,71 @@ function Photo() {
         }
     }, [countdown]);
 
+    const goToFilter = async () => {
+        getClickAudio()        
+        const result = await copyImageApi();
+        sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
+        console.log(selectedPhotos);
+        navigate("/filter");
+    };
+
+    const goToPhotoAgain = () => {
+        getClickAudio()        
+        navigate("/photo");
+    };
+
+    const copyImageApi = async () => {
+        const sessionSelectedLayout = sessionStorage.getItem('selectedLayout');
+        if (!sessionSelectedLayout) {
+            return;
+        }
+
+        const parsedSelectedLayout = JSON.parse(sessionSelectedLayout);
+        const layoutData = parsedSelectedLayout[0];
+
+        const copyImageUrl = `${process.env.REACT_APP_BACKEND}/frames/api/copy-image`;
+        const copyImageData = {
+            photo_url: layoutData.photo,
+            photo_cover: layoutData.photo_cover
+        };
+
+        try {
+            const response = await fetch(copyImageUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(copyImageData)
+            });
+            const data = await response.json();
+            sessionStorage.setItem('copiedPhoto', data.photo_path);
+            sessionStorage.setItem('copiedPhotoCover', data.photo_cover_path);
+            return true;
+        } catch (error) {
+            console.error(`Failed to copy image: ${error}`);
+            return false;
+        }
+    };
+
     return (
         flash ? (
             <div className={`photo-container`} style={{ backgroundImage: `url(${loadBgImage})` }} />
         ) : (
             <div className={`photo-container`} style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className="left-photo-div" style={{ backgroundImage: `url(${countdownImg})` }}>
-                    <div className="photo-countdown">{countdown}s</div>
+                    <div className="photo-countdown">{countdown}</div>
                 </div>
                 <div className="right-photo-div" style={{ backgroundImage: `url(${photocountImg})` }}>
-                    <div className="photo-count">{photoCount}/{totalSnapshotPhoto}</div>
+                    <div className="photo-count">{totalSnapshotPhoto}/{totalSnapshotPhoto}</div>
                 </div>
                 <div className="right-big-frame-11">
                     <div className={displayClassNameForBackground()} style={{ backgroundImage: `url(${myBackground})` }}>
                         {capturePhotos && showSelectedPhotos()}
                     </div>
-                    <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
-                    <div className='ok-photo-button' style={{ backgroundImage: `url(${ok_button})` }}></div>
-                    <div className='take-again-button' style={{ backgroundImage: `url(${take_again_button})` }}></div>
-                </div>
+                    <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>                           
+                    <div className='ok-photo-button' style={{ backgroundImage: `url(${ok_button})` }} onClick={goToFilter}></div>             
+                    <div className='take-again-button' style={{ backgroundImage: `url(${take_again_button})` }} onClick={goToPhotoAgain}></div>
+                </div>                
                 <div className="middle-photo-div">
                     {!capturing && (
                         <img
@@ -486,4 +547,4 @@ function Photo() {
     );
 }
 
-export default Photo;
+export default PhotoPreview;

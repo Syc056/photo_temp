@@ -71,7 +71,7 @@ class BackgroundList(LoginRequiredMixin, ListView):
         frameId = request.GET.get('frame') or 0
         frame = Frame.objects.get(id=frameId)
         backgrounds = Background.objects.all()
-        frames = Frame.objects.all()
+        frames = Frame.objects.exclude(title='3-cutx2').exclude(title='5-cutx2')
         return render(request, 'backgrounds/list.html', {'positions': BACKGROUND_POSITIONS, 'backgrounds': backgrounds, 'frames': frames, 'frame': frame, 'frameId': int(frameId), 'position_list': POSITION_LIST})
     
     def post(self, request):

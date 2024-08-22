@@ -2,16 +2,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './FrameCarousel.css';
 
-const FrameCarousel = ({ images, handleClick, clickedTitles, width=0 }) => {
+const LayoutCarousel = ({ images, handleClick, clickedTitles, width=0 }) => {
     const carouselRef = useRef(null);
     const [isDown, setIsDown] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const [mouseDownTime, setMouseDownTime] = useState(0);
     const threshold = 500; 
-    const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame')) || { frame: 'Strip' };
-
-    const [hoveredImage, setHoveredImage] = useState(null);
+    const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame')) || { frame: 'Strip' };    
 
     useEffect(() => {
         const carousel = carouselRef.current;
@@ -75,15 +73,7 @@ const FrameCarousel = ({ images, handleClick, clickedTitles, width=0 }) => {
     if (width !== 0) {
         style.height = "auto";
         style.width = 'calc(100% / 3 - 30px)';
-    }
-
-    const handleMouseEnter = (image) => {
-        setHoveredImage(image);
-    }
-
-    const handleMouseLeave = () => {
-        setHoveredImage(null);
-    }
+    }   
 
     return (
         <div
@@ -98,13 +88,11 @@ const FrameCarousel = ({ images, handleClick, clickedTitles, width=0 }) => {
                 {images.map((img, index) => (
                     <img
                         style={style}
-                        className={`frame-carousel-img ${clickedTitles.includes(img.title) ? "clicked" : ""}`}
+                        className={`layout-carousel-img ${clickedTitles.includes(img.title) ? "clicked" : ""}`}
                         onClick={() => handleClick(index, img.title)}
                         key={index}
-                        src={hoveredImage === img.photo_full ? img.photo_hover : img.photo_full}
-                        alt={`Image ${index + 1}`}
-                        onMouseEnter={() => handleMouseEnter(img.photo_full)}
-                        onMouseLeave={handleMouseLeave}
+                        src={img.photo_full}
+                        alt={`Image ${index + 1}`}                        
                     />
                 ))}
             </div>
@@ -112,4 +100,4 @@ const FrameCarousel = ({ images, handleClick, clickedTitles, width=0 }) => {
     );
 };
 
-export default FrameCarousel;
+export default LayoutCarousel;
