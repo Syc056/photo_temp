@@ -1892,8 +1892,8 @@ function Sticker() {
                     <div className="sticker-category-item" style={{ backgroundImage: `url(${y2k})` }} onClick={() => filterStickerByCategory('Y2K')} onMouseEnter={() => hoverStickerButton('y2k')} onMouseLeave={() => hoverStickerButton('y2k')}></div>
                 </div>
                 <div className="sticker-print-btn" style={{ backgroundImage: `url(${printButton})` }} onClick={printFrameWithSticker} onMouseEnter={hoverPrintButton} onMouseLeave={hoverPrintButton}></div>
-            </div>
-            <div className='sticker-countdown'>{countdown}s</div>
+                <div className='sticker-countdown'>{countdown}s</div>
+            </div>            
         </div>
     );
 }

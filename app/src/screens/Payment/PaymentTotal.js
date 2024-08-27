@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import background_en from '../../assets/PaymentNum/Common/BG.png';
+import background_en from '../../assets/PaymentTotal/BG.png';
 import background_vn from '../../assets/PaymentNum/Common/vn/BG.png';
 import backgrond_kr from '../../assets/PaymentNum/Common/kr/BG.png';
 import backgrond_mn from '../../assets/PaymentNum/Common/mn/BG.png';
@@ -92,7 +92,7 @@ function PaymentTotal(props) {
     getClickAudio()
     setPhotoNum(p => (p > 1 ? p - 1 : p));
   };
-  const goToPayment = async (dongNum, checkCoupon) => {
+  const goToPayment = async () => {
     getClickAudio()    
     navigate('/payment');
   }
@@ -136,28 +136,14 @@ function PaymentTotal(props) {
           <div
             className='price'
           >{getDong()}đ</div>
-        </div>
-        <div className="check-box" style={{
-          // top: "106%",
-          // left: "5%",
-          // width:"20%",
-          // height:"14%",
-        }}
-
-          onClick={onCheck}
-        >
-          {check && <div
-            className='check'
-
-          />}
-        </div>
+        </div>        
       </div>
       <div
         className="payment-number-confirm-layout-button"
         style={{
           backgroundImage: `url(${confirmButton})`,
         }}
-        onClick={(e) => { goToPayment(photoNum, check) }}
+        onClick={(e) => { goToPayment() }}
 
         onMouseEnter={() => {
           onMouseConfirmEnter(language)
