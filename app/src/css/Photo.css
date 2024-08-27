@@ -281,6 +281,16 @@
      color: #ffffff;
 }
 
+.filter-countdown {
+     text-align: center;
+     right: -200px;
+     top: 22%;
+     position: relative;
+     font-size: 88px;
+     font-family: fantasy;
+     color: #ffffff;
+}
+
 .live-view {
      position: absolute;
      top: 100px;

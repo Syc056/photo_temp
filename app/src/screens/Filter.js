@@ -99,7 +99,7 @@ import continue_vn_hover from '../assets/Common/vn/continue_click.png';
 import continue_mn from '../assets/Common/mn/continue.png';
 import continue_mn_hover from '../assets/Common/mn/continue_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Uid from "react-uuid"
 
 function Filter() {
@@ -129,9 +129,12 @@ function Filter() {
     const [goBackButton, setGoBackButton] = useState(goback_en);
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
-    const [clickedId, setClickedId] = useState(null)
-    const [uuid, setUuid] = useState(sessionStorage.getItem("uuid") || null);
+    const [clickedId, setClickedId] = useState(null);
+    const [countdown, setCountdown] = useState(20);    
     const effectFloat = 0.05;
+    const uuid = sessionStorage.getItem("uuid");
+
+    const timerRef = useRef(null);
 
     const handlePhotoClick = (selectedIndex) => {
         if (selectedId.includes(selectedIndex)) {
@@ -287,6 +290,12 @@ function Filter() {
             setSelectedLayout(layoutData.photo_cover);
         }
     });    
+
+    useEffect(() => {
+        if (uuid) {
+            startTimer();
+        }
+    }, [uuid]);
 
     const handleMouseEnter = (image) => {
         setHoveredImage(image);
@@ -784,6 +793,19 @@ function Filter() {
     const playAudio = async () => {
         const res = await getAudio({ file_name: "choose_filter.wav" })
     }
+
+    const startTimer = () => {
+        timerRef.current = setInterval(async () => {
+            setCountdown((prevCountdown) => {
+                if (prevCountdown > 0) {
+                    return prevCountdown - 1;
+                } else {
+                    // navigate to next screen
+                    navigate("/sticker");
+                }
+            });
+        }, 1000);
+    };
     
     useEffect(() => {
         playAudio()
@@ -817,6 +839,7 @@ function Filter() {
                     <div className="filter-image" style={{ backgroundImage: `url(${smooth})` }} onClick={() => handleFilter(5)} onMouseEnter={() => hoverFilterEffect('smooth')} onMouseLeave={() => hoverFilterEffect('smooth')}></div>
                 </div>
             </div>
+            <div className='filter-countdown'>{countdown}s</div>
             <div className="bottom-filter" style={{ backgroundImage: `url(${continueButton})` }} onMouseEnter={() => hoverContinueButton()} onMouseLeave={() => hoverContinueButton()} onClick={() => goToSticker()}></div>
         </div>
     );
