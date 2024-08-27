@@ -407,24 +407,29 @@ function Sticker() {
         setClickPrint(true);
         // await uploadCloud();
 
-        saveImageCanvas();                              
+        saveImageCanvas();
     };
 
     const saveImageCanvas = () => {
         const stageRef = printRefs[bgIdx];
         const originalDataURL = stageRef.current.toDataURL();
-        
+
         try {
+            const formData = new FormData();
+            formData.append("image", originalDataURL);
+            formData.append("uuid", uuid);
             originAxiosInstance.post(
                 `${process.env.REACT_APP_BACKEND}/frames/api/save-image-uuid`,
+                formData,
                 {
-                    image: originalDataURL,
-                    uuid: uuid
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }
             ).then(response => {
                 console.log('Canvas saved with UUID:', uuid);
-                navigate("/payment-number");    
-            });            
+                navigate("/payment-number");
+            });
         } catch (error) {
             console.error(error);
         }
@@ -500,7 +505,7 @@ function Sticker() {
     };
     const convertUrl = (url) => {
         let newUrl = url
-    
+
         return newUrl;
     };
 
@@ -540,7 +545,7 @@ function Sticker() {
 
         const printUrl = response.data.print_url;
         const printData = response.data.print_data;
-        
+
         const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
 
         for (let i = 0; i < newPhotoNum; i++) {
@@ -1116,12 +1121,12 @@ function Sticker() {
         };
 
         loadImages();
-    }, [selectedPhotos]);    
+    }, [selectedPhotos]);
 
     useEffect(() => {
         if (frameSize.width === "" || frameSize.height === "") return;
 
-        const loadImages = () => {            
+        const loadImages = () => {
             const element = document.querySelector('.image');
             if (element) {
                 const targetWidth = frameSize.width;
