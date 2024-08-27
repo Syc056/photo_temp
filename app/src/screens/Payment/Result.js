@@ -49,12 +49,12 @@ function QR() {
      }, []);
 
      useEffect(() => {
-          const printRefs = JSON.parse(sessionStorage.getItem('printRefs'));
+          const printRefs = sessionStorage.getItem('printRefs');
           if (printRefs) {
                setPrintRefs(printRefs);
           }
 
-          const bgIdx = JSON.parse(sessionStorage.getItem('bgIdx'));
+          const bgIdx = sessionStorage.getItem('bgIdx');
           if (bgIdx) {
                setBgIdx(bgIdx);
           }
@@ -104,6 +104,7 @@ function QR() {
                if (!printRefs || !printRefs[bgIdx]) {
                     return;
                }
+               console.log("printRefs[bgIdx]>>>", printRefs[bgIdx])
                const stageRef = printRefs[bgIdx];
                const originalDataURL = stageRef.current.toDataURL();
                let rotated = null;

@@ -408,9 +408,9 @@ function Sticker() {
         // await uploadCloud();
 
         // store session printRefs[bgIdx]
-        sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
+        sessionStorage.setItem('printRefs', printRefs);
         // store session bgIdx
-        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
+        sessionStorage.setItem('bgIdx', bgIdx);
 
         navigate("/payment-number");
 
@@ -1099,9 +1099,9 @@ function Sticker() {
                     return prevCountdown - 1;
                 } else {                    
                     // store session printRefs[bgIdx]
-                    sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
+                    sessionStorage.setItem('printRefs', printRefs);
                     // store session bgIdx
-                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
+                    sessionStorage.setItem('bgIdx', bgIdx);
 
                     navigate("/payment-number");
                 }
