@@ -60,7 +60,7 @@ function QR() {
                setBgIdx(bgIdx);
           }
 
-          const originalDataURL = sessionStorage.getItem('originalDataURL');
+          const originalDataURL = localStorage.getItem('originalDataURL');
           if (originalDataURL) {
                setOriginalDataURL(originalDataURL);
           }

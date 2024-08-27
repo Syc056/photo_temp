@@ -410,7 +410,11 @@ function Sticker() {
         // store session printRefs[bgIdx]
         sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
         // store session bgIdx
-        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));        
+        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));      
+        // store toDataURL in local storage
+        const stageRefTmp = printRefs[bgIdx];
+        localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL());
+
 
         navigate("/payment-number");        
     };
@@ -1060,7 +1064,9 @@ function Sticker() {
                     // store session printRefs[bgIdx]
                     sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
                     // store session bgIdx
-                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));                    
+                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx)); 
+                    const stageRefTmp = printRefs[bgIdx];
+                    localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL());
 
                     navigate("/payment-number");
                 }
@@ -1099,7 +1105,7 @@ function Sticker() {
 
         loadImages();
     }, [selectedPhotos]);    
-    
+
     useEffect(() => {
         if (frameSize.width === "" || frameSize.height === "") return;
 
