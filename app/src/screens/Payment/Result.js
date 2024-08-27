@@ -100,8 +100,8 @@ function QR() {
 
      const uploadCloud = () => {
           try {
-               // if empty printRefs or bgIdx return
-               if (!printRefs || !bgIdx) {
+               // if empty printRefs or printRefs[bgIdx] is null
+               if (!printRefs || !printRefs[bgIdx]) {
                     return;
                }
                const stageRef = printRefs[bgIdx];
