@@ -410,18 +410,9 @@ function Sticker() {
         // store session printRefs[bgIdx]
         sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
         // store session bgIdx
-        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
-        // store session originalDataURL
-        const stageRefTemp = printRefs[bgIdx];
-        sessionStorage.setItem('originalDataURL', stageRefTemp.current.toDataURL());
+        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));        
 
-
-        navigate("/payment-number");
-
-
-        // setTimeout(() => {
-        //     navigate("/print");
-        // }, 3000);
+        navigate("/payment-number");        
     };
 
     function rotateImageDataURL(dataURL, degrees) {
@@ -493,25 +484,8 @@ function Sticker() {
         }
     };
     const convertUrl = (url) => {
-        // 'uploads'를 'get_photos/uploads'로 변경
-        // let newUrl = url.replace('uploads', 'get_photo/uploads');
         let newUrl = url
-
-        // // URL을 슬래시('/')로 분리
-        // const urlParts = newUrl.split('/');
-
-        // // UUID를 제거하고 슬래시를 하나로 유지
-        // const newUrlParts = urlParts.filter((part, index) => {
-        //     // UUID의 형태를 가지는 부분을 제거
-        //     if (index === 4 && /^[0-9a-fA-F-]{36}$/.test(part)) {
-        //         return false;
-        //     }
-        //     return true;
-        // });
-
-        // // URL 다시 합치기
-        // newUrl = newUrlParts.join('/');
-
+    
         return newUrl;
     };
 
@@ -551,26 +525,7 @@ function Sticker() {
 
         const printUrl = response.data.print_url;
         const printData = response.data.print_data;
-        // const uploadsDataPath = response.data.print_data.file_path;
-
-        // // console.log(uploadsDataPath)
-        // // console.log(uploadsDataPath)
-        // // console.log(uploadsDataPath)
-        // // console.log(uploadsDataPath)
-
-        // // const res = await getPhotos(uuid);
-        // // console.log(res)
-        // // // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
-
-        // // let newUrl = convertUrl(res.images.url);
-        // // const fileResponse = await fetch(newUrl);
-        // // const fileBlob = await fileResponse.blob();
-
-        // // const formDataToFlask = new FormData();
-        // // formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
-        // // formDataToFlask.append('frame', printData.frame);
-        // // console.log("photoNum")
-        // // console.log(newPhotoNum)
+        
         const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
 
         for (let i = 0; i < newPhotoNum; i++) {
@@ -1105,10 +1060,7 @@ function Sticker() {
                     // store session printRefs[bgIdx]
                     sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
                     // store session bgIdx
-                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
-                    // store session originalDataURL
-                    const stageRefTemp = printRefs[bgIdx];
-                    sessionStorage.setItem('originalDataURL', stageRefTemp.current.toDataURL());
+                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));                    
 
                     navigate("/payment-number");
                 }
@@ -1146,53 +1098,12 @@ function Sticker() {
         };
 
         loadImages();
-    }, [selectedPhotos]);
-    // useEffect(() => {
-    //     const loadImages = () => {
-    //         const imagePromises = selectedPhotos.map(index => {
-    //             return new Promise((resolve, reject) => {
-    //                 const photo = photos[index];
-    //                 const tempImg = new Image();
-    //                 tempImg.crossOrigin = 'Anonymous';
-    //                 tempImg.src = photo.url;
-
-    //                 tempImg.onload = () => {
-    //                     // 필터 적용
-    //                     // const filteredImg = applyFilters(tempImg, photo.filter);
-    //                     // resolve(filteredImg);
-    //                 };
-
-    //                 tempImg.onerror = (err) => reject(err);
-    //             });
-    //         });
-
-    //         Promise.all(imagePromises)
-    //             .then((tempImgs) => {
-    //                 setTempImage(tempImgs);
-    //                 console.log("이미지 로딩 끝", tempImgs);
-    //             })
-    //             .catch((error) => {
-    //                 console.error("Error loading images:", error);
-    //             });
-    //     };
-
-    //     loadImages();
-    // }, [selectedPhotos]);
+    }, [selectedPhotos]);    
+    
     useEffect(() => {
         if (frameSize.width === "" || frameSize.height === "") return;
 
-        const loadImages = () => {
-            // const tempImgs = selectedPhotos.map(index => {
-            //     const photo = photos[index];
-            //     const tempImg = new Image();
-            //     tempImg.crossOrigin = 'Anonymous';
-            //     tempImg.src = photo.url;
-            //     applyStyles(tempImg, { width: 800, height: 800, filter: photo.filter });
-            //     return tempImg;
-            // });
-
-            // setTempImage(tempImgs);
-
+        const loadImages = () => {            
             const element = document.querySelector('.image');
             if (element) {
                 const targetWidth = frameSize.width;
