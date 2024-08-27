@@ -18,6 +18,7 @@ import Print from './screens/Print';
 import Landing from './screens/Landing';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PaymentNumber from './screens/Payment/PaymentNumber';
+import PaymentTotal from './screens/Payment/PaymentTotal';
 import QrDownload from './screens/QrDownload';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/background" element={<Background />} />
         <Route path="/layout" element={<Layout />} />
         <Route path="/payment-number" element={<PaymentNumber />} />
+        <Route path="/payment-total" element={<PaymentTotal />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment-result" element={<Result />} />
         <Route path="/payment-cash" element={<Cash />} />

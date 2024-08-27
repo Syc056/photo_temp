@@ -291,6 +291,16 @@
      font-family: fantasy;     
 }
 
+.filter-countdown {
+     text-align: center;
+     right: -250px;
+     top: 22%;
+     position: relative;
+     font-size: 40px;
+     color: #606060;
+     font-family: fantasy;     
+}
+
 .live-view {
      position: absolute;
      top: 100px;

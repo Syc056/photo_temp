@@ -132,6 +132,9 @@ function Sticker() {
         width: "",
         height: ""
     });
+    const [countdown, setCountdown] = useState(20);
+
+    const timerRef = useRef(null);
     // const printRatio=JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="2cut-x2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="4-cutx2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="6-cutx2"?8:7;
 
     function getPrintRatio() {
@@ -155,6 +158,12 @@ function Sticker() {
         if (photos === null) return;
         setPhotos(photos);
     }, []);
+
+    useEffect(() => {
+        if (uuid) {
+            startTimer();
+        }
+    }, [uuid]);
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
@@ -396,7 +405,14 @@ function Sticker() {
 
         playPrintAudio()
         setClickPrint(true);
-        await uploadCloud();
+        // await uploadCloud();
+
+        // store session printRefs[bgIdx]
+        sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
+        // store session bgIdx
+        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
+
+        navigate("/payment-number");
 
 
         // setTimeout(() => {
@@ -1075,6 +1091,24 @@ function Sticker() {
 
         return { x: newStickerX, y: newStickerY, width: newStickerWidth, height: newStickerHeight };
     }
+
+    const startTimer = () => {
+        timerRef.current = setInterval(async () => {
+            setCountdown((prevCountdown) => {
+                if (prevCountdown > 0) {
+                    return prevCountdown - 1;
+                } else {                    
+                    // store session printRefs[bgIdx]
+                    sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
+                    // store session bgIdx
+                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
+
+                    navigate("/payment-number");
+                }
+            });
+        }, 1000);
+    };
+
     useEffect(() => {
         const loadImages = () => {
             const imagePromises = selectedPhotos.map(index => {
@@ -1859,6 +1893,7 @@ function Sticker() {
                 </div>
                 <div className="sticker-print-btn" style={{ backgroundImage: `url(${printButton})` }} onClick={printFrameWithSticker} onMouseEnter={hoverPrintButton} onMouseLeave={hoverPrintButton}></div>
             </div>
+            <div className='sticker-countdown'>{countdown}s</div>
         </div>
     );
 }

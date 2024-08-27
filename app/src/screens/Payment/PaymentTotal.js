@@ -34,7 +34,7 @@ import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
 import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getClickAudio, sendDongNum } from '../../api/config';
 
-function PaymentNumber(props) {
+function PaymentTotal(props) {
   const [background, setBackground] = useState(background_en);
   const [minusBtn, setMinusBtn] = useState(minusDefault)
   const [plusBtn, setPlusBtn] = useState(plusDefault)
@@ -93,10 +93,8 @@ function PaymentNumber(props) {
     setPhotoNum(p => (p > 1 ? p - 1 : p));
   };
   const goToPayment = async (dongNum, checkCoupon) => {
-    getClickAudio()
-    sessionStorage.setItem("photoNum", dongNum);
-    const res = await sendDongNum(dongNum, checkCoupon === true ? 1 : 0)
-    navigate('/payment-total');
+    getClickAudio()    
+    navigate('/payment');
   }
   const onMouseConfirmEnter = (lang) => {
     if (lang === "kr") {
@@ -121,54 +119,18 @@ function PaymentNumber(props) {
     setPlusBtn(plusDefault)
   }
   const getDong = () => {
-    const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
-    let amount = 0;
-    if (storedSelectedFrame.frame === "Stripx2") {
-      amount = 70000
-    }
-    else {
-      amount = 100000
-    }
-    const sales = sessionStorage.setItem("sales", amount + 50000 * (photoNum - 1));
-    const test = sessionStorage.getItem('sales')
-    console.log(test)
-    console.log(photoNum)
-
-    sessionStorage.setItem("totalPayMoney", amount + 50000 * (photoNum - 1));
-
-    return amount + 50000 * (photoNum - 1)
+    const totalPayMoney = sessionStorage.getItem("totalPayMoney");
+    return totalPayMoney;
   }
   return (
     <div
       className='payment-number-container'
       style={{ backgroundImage: `url(${background})` }}
     >
-      <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => {
-        getClickAudio()
-        navigate("/sticker")
-      }} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
-
       <div
         className='payment-number-center'
 
-      >
-        <div className="minus-default" style={{ backgroundImage: `url(${minusBtn})` }}
-          onClick={onMinus}
-          onMouseEnter={onMouseMinusEnter}
-          onMouseLeave={onMouseMinusLeave}
-        />
-
-        <div className="plus-default" onClick={onAdd} style={{ backgroundImage: `url(${plusBtn})` }}
-
-          onMouseEnter={onMousePlusEnter}
-          onMouseLeave={onMousePlusLeave}
-        />
-        <div className="num-field" style={{ backgroundImage: `url(${numField})` }} >
-          <div
-            className='num'
-          >{photoNum}</div>
-
-        </div>
+      >        
         <div className="price-field" style={{ backgroundImage: `url(${priceField})` }} >
 
           <div
@@ -206,4 +168,4 @@ function PaymentNumber(props) {
   );
 }
 
-export default PaymentNumber;
+export default PaymentTotal;
