@@ -49,6 +49,7 @@ function PaymentNumber(props) {
   const navigate = useNavigate()
   const timerRef = useRef(null);
   const [countdown, setCountdown] = useState(20);
+  const uuid = sessionStorage.getItem("uuid")
 
   const hoverGoBackBtn = (goBackBG) => {
     if (goBackBG === 'ko') {
@@ -83,6 +84,13 @@ function PaymentNumber(props) {
     }
     setMinusBtn(minusDefault)
   }, [])
+
+  useEffect(() => {
+    if (uuid) {
+      startTimer();
+    }
+  }, [uuid]);
+
   const onCheck = () => {
     setCheck(p => !p)
   }
