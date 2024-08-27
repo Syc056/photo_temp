@@ -82,12 +82,12 @@ import frame_box from '../assets/Sticker/frame_box.png';
 import CustomCarousel from '../components/CustomCarousel';
 import VerticalCustomCarousel from '../components/VerticalCustomCarousel';
 import { getAudio, getClickAudio, getPhotos, originAxiosInstance } from '../api/config';
-let playAddEmojiSound=false;
+let playAddEmojiSound = false;
 function Sticker() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const uuid=sessionStorage.getItem("uuid")
-    const photoNum=sessionStorage.getItem("photoNum")
+    const uuid = sessionStorage.getItem("uuid")
+    const photoNum = sessionStorage.getItem("photoNum")
     const [src, setSrc] = useState(null);
     const [hoveredImage, setHoveredImage] = useState(null);
     const [selectedLayout, setSelectedLayout] = useState(null);
@@ -127,26 +127,26 @@ function Sticker() {
     const [backgroundList, setBackgroundList] = useState([]);
     const [tempImage, setTempImage] = useState();
     const [stageRefs, setStageRefs] = useState([]);
-    const [playFirst,setPlayFirst]=useState(0)
+    const [playFirst, setPlayFirst] = useState(0)
     const [frameSize, setFrameSize] = useState({
         width: "",
         height: ""
     });
-// const printRatio=JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="2cut-x2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="4-cutx2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="6-cutx2"?8:7;
-    
-function getPrintRatio() {
-    return 5;
-    // const selectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame')).frame;
-    // if (selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2") {
-    //     return 8
-    // }
-    // else if(selectedFrame === "6-cutx2"){
-    //     return 7.2
-    // }else{
-    //     return 7;
-    // }
-  }
-const chunkArray = (arr, size) => {
+    // const printRatio=JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="2cut-x2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="4-cutx2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="6-cutx2"?8:7;
+
+    function getPrintRatio() {
+        return 5;
+        // const selectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame')).frame;
+        // if (selectedFrame === "2cut-x2" || selectedFrame === "4-cutx2") {
+        //     return 8
+        // }
+        // else if(selectedFrame === "6-cutx2"){
+        //     return 7.2
+        // }else{
+        //     return 7;
+        // }
+    }
+    const chunkArray = (arr, size) => {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
     };
 
@@ -255,24 +255,24 @@ const chunkArray = (arr, size) => {
         Object.assign(img, styles);
     };
 
-   
+
     const applyFilters = (img, filters) => {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         canvas.width = img.width;
         canvas.height = img.height;
-    // canvas.style.objectFit="cover"
-   
+        // canvas.style.objectFit="cover"
+
         // 필터를 적용
-        context.filter= filters;
-        context.scale(-1,1)
+        context.filter = filters;
+        context.scale(-1, 1)
         context.drawImage(img, 0, 0, -img.width, img.height);
-    
+
         const newImage = new window.Image();
         newImage.src = canvas.toDataURL();
         return newImage;
     };
-    
+
 
     const applyGrayscaleFilter = (data, value) => {
         for (let i = 0; i < data.length; i += 4) {
@@ -311,48 +311,48 @@ const chunkArray = (arr, size) => {
             data[i + 2] = gray * (1 - value) + b * value;
         }
     };
-const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
-    const uiRatio = 1; // UI용 스티커 배율
-    const printRatio = getPrintRatio(); // 프린트용 스티커 배율
+    const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
+        const uiRatio = 1; // UI용 스티커 배율
+        const printRatio = getPrintRatio(); // 프린트용 스티커 배율
 
-    const item = {
-        width: width,
-        x: x,
-        y: y,
-        src,
-        resetButtonRef: createRef()
-    };
+        const item = {
+            width: width,
+            x: x,
+            y: y,
+            src,
+            resetButtonRef: createRef()
+        };
 
-    const printItem = {
-        width: width * printRatio,
-        x: x * printRatio,
-        y: y * printRatio,
-        src,
-        resetButtonRef: createRef()
-    };
+        const printItem = {
+            width: width * printRatio,
+            x: x * printRatio,
+            y: y * printRatio,
+            src,
+            resetButtonRef: createRef()
+        };
 
-    setImages((currentImages) => {
-        const newImages = currentImages.map((subList, index) => {
-            if (index === bgIdx) {
-                return [...subList, item];
-            }
-            return subList;
+        setImages((currentImages) => {
+            const newImages = currentImages.map((subList, index) => {
+                if (index === bgIdx) {
+                    return [...subList, item];
+                }
+                return subList;
+            });
+
+            return newImages;
         });
 
-        return newImages;
-    });
+        setStickerImgs((currentImages) => {
+            const newImages = currentImages.map((subList, index) => {
+                if (index === bgIdx) {
+                    return [...subList, printItem];
+                }
+                return subList;
+            });
 
-    setStickerImgs((currentImages) => {
-        const newImages = currentImages.map((subList, index) => {
-            if (index === bgIdx) {
-                return [...subList, printItem];
-            }
-            return subList;
+            return newImages;
         });
-
-        return newImages;
-    });
-};
+    };
 
 
     const resetAllButtons = useCallback(() => {
@@ -389,11 +389,11 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     const printFrameWithSticker = async (event,) => {
         if (isSel) {
             setIsSel(false)
-         }
+        }
         if (clickPrint === true) {
             return;
         }
-        
+
         playPrintAudio()
         setClickPrint(true);
         await uploadCloud();
@@ -452,13 +452,13 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                             const data = response.data;
                             const qrVal = data.photo_url;
                             if (qrVal) {
-                                      sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
+                                sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
                                 sessionStorage.setItem('qr', qrVal);
-                                console.log("qr val>>>",qrVal)
+                                console.log("qr val>>>", qrVal)
                                 callPrinter();
                                 navigate("/print");
                             }
-                          
+
                         })
                         .catch(error => {
                             console.log(error);
@@ -476,10 +476,10 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         // 'uploads'를 'get_photos/uploads'로 변경
         // let newUrl = url.replace('uploads', 'get_photo/uploads');
         let newUrl = url
-    
+
         // // URL을 슬래시('/')로 분리
         // const urlParts = newUrl.split('/');
-    
+
         // // UUID를 제거하고 슬래시를 하나로 유지
         // const newUrlParts = urlParts.filter((part, index) => {
         //     // UUID의 형태를 가지는 부분을 제거
@@ -488,10 +488,10 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         //     }
         //     return true;
         // });
-    
+
         // // URL 다시 합치기
         // newUrl = newUrlParts.join('/');
-    
+
         return newUrl;
     };
 
@@ -500,7 +500,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         if (!stageRef.current) {
             return;
         }
-    
+
         const originalDataURL = stageRef.current.toDataURL();
         const blobBin = atob(originalDataURL.split(',')[1]);
         const array = [];
@@ -508,117 +508,117 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             array.push(blobBin.charCodeAt(i));
         }
         const newFile = new Blob([new Uint8Array(array)], { type: 'image/png' });
-    
+
         const formData = new FormData();
         formData.append("photo", newFile);
         let newPhotoNum = selectedFrame === "Stripx2" ? photoNum : (parseInt(photoNum) + 1).toString();
         formData.append("uuid", uuid);
         formData.append("frame", selectedFrame);
         // formData.append("photoNum", newPhotoNum);
-    
+
         // try {
-            const response = await originAxiosInstance.post(
-                `${process.env.REACT_APP_BACKEND}/frames/api/print`,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-            );
-    
-            console.log('Print response:', response.data);
-    
-            const printUrl = response.data.print_url;
-            const printData = response.data.print_data;
-            // const uploadsDataPath = response.data.print_data.file_path;
-    
-            // // console.log(uploadsDataPath)
-            // // console.log(uploadsDataPath)
-            // // console.log(uploadsDataPath)
-            // // console.log(uploadsDataPath)
-
-            // // const res = await getPhotos(uuid);
-            // // console.log(res)
-            // // // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
-    
-            // // let newUrl = convertUrl(res.images.url);
-            // // const fileResponse = await fetch(newUrl);
-            // // const fileBlob = await fileResponse.blob();
-    
-            // // const formDataToFlask = new FormData();
-            // // formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
-            // // formDataToFlask.append('frame', printData.frame);
-            // // console.log("photoNum")
-            // // console.log(newPhotoNum)
-            const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
-    
-            for (let i = 0; i < newPhotoNum; i++) {
-                // const fileResponse = await fetch(res.images[i].url.replace('uploads', 'get_photo/uploads'));
-                // const fileResponse = await fetch(res.images[i].url);
-                const fileResponse = await fetch(myImage);
-                const fileBlob = await fileResponse.blob();
-    
-                const formDataToFlask = new FormData();
-                formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
-                formDataToFlask.append('frame', printData.frame);
-
-                console.log(`${i} : `+ String(formDataToFlask))
-    
-
-
-                const localPrintResponse = await fetch(printUrl, {
-                    method: 'POST',
-                    body: formDataToFlask,
-                });
-    
-                if (localPrintResponse.ok) {
-                    console.log(`Print job ${i + 1} started successfully.`);
-                } else {
-                    console.log(`Failed to start print job ${i + 1}.`);
+        const response = await originAxiosInstance.post(
+            `${process.env.REACT_APP_BACKEND}/frames/api/print`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
                 }
             }
+        );
+
+        console.log('Print response:', response.data);
+
+        const printUrl = response.data.print_url;
+        const printData = response.data.print_data;
+        // const uploadsDataPath = response.data.print_data.file_path;
+
+        // // console.log(uploadsDataPath)
+        // // console.log(uploadsDataPath)
+        // // console.log(uploadsDataPath)
+        // // console.log(uploadsDataPath)
+
+        // // const res = await getPhotos(uuid);
+        // // console.log(res)
+        // // // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
+
+        // // let newUrl = convertUrl(res.images.url);
+        // // const fileResponse = await fetch(newUrl);
+        // // const fileBlob = await fileResponse.blob();
+
+        // // const formDataToFlask = new FormData();
+        // // formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
+        // // formDataToFlask.append('frame', printData.frame);
+        // // console.log("photoNum")
+        // // console.log(newPhotoNum)
+        const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
+
+        for (let i = 0; i < newPhotoNum; i++) {
+            // const fileResponse = await fetch(res.images[i].url.replace('uploads', 'get_photo/uploads'));
+            // const fileResponse = await fetch(res.images[i].url);
+            const fileResponse = await fetch(myImage);
+            const fileBlob = await fileResponse.blob();
+
+            const formDataToFlask = new FormData();
+            formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
+            formDataToFlask.append('frame', printData.frame);
+
+            console.log(`${i} : ` + String(formDataToFlask))
 
 
-            const ipResponse = await fetch("https://api.ipify.org?format=json");
-            const ipData = await ipResponse.json();
-            const userIp = ipData.ip;
-    
-            // Step 2: Fetch all devices
-            const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
-            const allDevices = await allDevicesResponse.json();
-    
-            // Step 3: Find the device with the matching IP address
-            const device = allDevices.find(device => device.ip === userIp);
-            
-            if (!device) {
-                console.error(`No device found with IP address: ${userIp}`);
-                return;
+
+            const localPrintResponse = await fetch(printUrl, {
+                method: 'POST',
+                body: formDataToFlask,
+            });
+
+            if (localPrintResponse.ok) {
+                console.log(`Print job ${i + 1} started successfully.`);
+            } else {
+                console.log(`Failed to start print job ${i + 1}.`);
             }
-    
-            const deviceId = device.id;
-            const sales = sessionStorage.getItem('sales')
-    
-            const testformData = {
-                "Sales": sales // 예제 변경값
-            };
-            
-            const updateSalesResponse = await fetch(`http://3.26.21.10:9000/api/update_sales/${deviceId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(testformData)
-            });
-    
-            const printAmountResponse = await fetch(`http://3.26.21.10:9000/api/update_print_amount/${deviceId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ remaining_amount: device.remaining_amount - newPhotoNum }) // 예제 변경값
-            });
-    
+        }
+
+
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const userIp = ipData.ip;
+
+        // Step 2: Fetch all devices
+        const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
+        const allDevices = await allDevicesResponse.json();
+
+        // Step 3: Find the device with the matching IP address
+        const device = allDevices.find(device => device.ip === userIp);
+
+        if (!device) {
+            console.error(`No device found with IP address: ${userIp}`);
+            return;
+        }
+
+        const deviceId = device.id;
+        const sales = sessionStorage.getItem('sales')
+
+        const testformData = {
+            "Sales": sales // 예제 변경값
+        };
+
+        const updateSalesResponse = await fetch(`http://3.26.21.10:9000/api/update_sales/${deviceId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testformData)
+        });
+
+        const printAmountResponse = await fetch(`http://3.26.21.10:9000/api/update_print_amount/${deviceId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ remaining_amount: device.remaining_amount - newPhotoNum }) // 예제 변경값
+        });
+
         const paymentMethod = sessionStorage.getItem("payMethod")
         // Step 6: Log the payment
         const logPaymentData = {
@@ -627,7 +627,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             payment_amount: sales, // 예제 변경값
             payment_method: paymentMethod, // 실제 결제 방식으로 변경 필요
         };
-        
+
         const logPaymentResponse = await fetch(`http://3.26.21.10:9000/api/log_payment`, {
             method: 'POST',
             headers: {
@@ -635,41 +635,41 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             },
             body: JSON.stringify(logPaymentData)
         });
-        
+
         const logPaymentResult = await logPaymentResponse.json();
-            const updateSalesResult = await updateSalesResponse.json();
-            const printAmountResult = await printAmountResponse.json();
-    
+        const updateSalesResult = await updateSalesResponse.json();
+        const printAmountResult = await printAmountResponse.json();
+
         // Handle the responses as needed
         console.log('Update Sales Result:', updateSalesResult);
         console.log('Update Print Amount Result:', printAmountResult);
         console.log('Log Payment Result:', logPaymentResult);
 
-            // const ip_response = await fetch("https://api.ipify.org?format=json")
-            // const data = await ip_response.json()
-            
-            // const all_device = await fetch(`${process.env.REACT_APP_BACKEND}/api/devices`, {
-            //     method: 'POST',
-            //     body: formDataToFlask,
-            // });
+        // const ip_response = await fetch("https://api.ipify.org?format=json")
+        // const data = await ip_response.json()
 
-            // const sales_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/edit_device/${data.ip}`, {
-            //     method: 'POST',
-            //     body: formDataToFlask,
-            // });
-            // const print_amount_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/update_print_amount/${data.ip}`, {
-            //     method: 'POST',
-            //     body: formDataToFlask,
-            // });
+        // const all_device = await fetch(`${process.env.REACT_APP_BACKEND}/api/devices`, {
+        //     method: 'POST',
+        //     body: formDataToFlask,
+        // });
 
-            
-            // @app.route('/api/update_print_amount/<int:id>', methods=['PUT'])
-            // def update_print_amount(id):
-            //     data = request.get_json()
-            //     device = Device.query.get_or_404(id)
-            //     device.remaining_amount = data['remaining_amount']
-            //     db.session.commit()
-            //     return jsonify({'message': 'Print amount updated successfully'}), 200
+        // const sales_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/edit_device/${data.ip}`, {
+        //     method: 'POST',
+        //     body: formDataToFlask,
+        // });
+        // const print_amount_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/update_print_amount/${data.ip}`, {
+        //     method: 'POST',
+        //     body: formDataToFlask,
+        // });
+
+
+        // @app.route('/api/update_print_amount/<int:id>', methods=['PUT'])
+        // def update_print_amount(id):
+        //     data = request.get_json()
+        //     device = Device.query.get_or_404(id)
+        //     device.remaining_amount = data['remaining_amount']
+        //     db.session.commit()
+        //     return jsonify({'message': 'Print amount updated successfully'}), 200
 
         // } catch (error) {
         //     console.error('Error during printing process:', error);
@@ -682,7 +682,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     //     if (!stageRef.current) {
     //         return;
     //     }
-    
+
     //     const originalDataURL = stageRef.current.toDataURL();
     //     const blobBin = atob(originalDataURL.split(',')[1]);
     //     const array = [];
@@ -690,7 +690,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     //         array.push(blobBin.charCodeAt(i));
     //     }
     //     const newFile = new Blob([new Uint8Array(array)], { type: 'image/png' });
-        
+
     //     const formData = new FormData();
     //     formData.append("photo", newFile);
     //     let newPhotoNum=parseInt(photoNum)
@@ -702,7 +702,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     //             formData.append("uuid",uuid ); // uuid 
     //     formData.append("frame", selectedFrame); // frame 개별 필드로 추가
     //     // formData.append("photoNum",newPhotoNum ); // photoNum 
-    
+
     //     // try {
     //         const response = await originAxiosInstance.post(
     //             `${process.env.REACT_APP_BACKEND}/frames/api/print`,
@@ -720,53 +720,53 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
 
     //         const res = await getPhotos(uuid);
     //         // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
-           
+
     //         // let newUrl=convertUrl(filtered[0].url) 
     //         let newUrl=convertUrl(res[0].url) 
     //         const fileResponse = await fetch(newUrl);
     //         const fileBlob = await fileResponse.blob();
-    
+
     //         const formDataToFlask = new FormData();
     //         formDataToFlask.append('file', new Fisle([fileBlob], "print_image.png", { type: fileBlob.type }));
     //         formDataToFlask.append('frame', printData.frame);
-    
-    
+
+
     //         for (let i = 0; i < photoNum; i++) {
     //             const fileResponse = await fetch(filtered[0].url.replace('uploads', 'get_photo/uploads'));
     //             const fileBlob = await fileResponse.blob();
-    
+
     //             const formDataToFlask = new FormData();
     //             formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
     //             formDataToFlask.append('frame', printData.frame);
-    
+
     //             const localPrintResponse = await fetch(printUrl, {
     //                 method: 'POST',
     //                 body: formDataToFlask,
     //             });
-    
+
     //             if (localPrintResponse.ok) {
     //                 console.log(`Print job ${i + 1} started successfully.`);
     //             } else {
     //                 console.log(`Failed to start print job ${i + 1}.`);
     //             }
     //         }
-        // } catch (error) {
-        //     console.error('Error during printing process:', error);
-        // }
-            
-        //     const localPrintResponse = await fetch(printUrl, {
-        //         method: 'POST',
-        //         body: formDataToFlask,
-        //     });
-    
-        //     if (localPrintResponse.ok) {
-        //         console.log('Print job started successfully.');
-        //     } else {
-        //         console.log('Failed to start print job.');
-        //     }
-        // } catch (error) {
-        //     console.error('Error during printing process:', error);
-        // }
+    // } catch (error) {
+    //     console.error('Error during printing process:', error);
+    // }
+
+    //     const localPrintResponse = await fetch(printUrl, {
+    //         method: 'POST',
+    //         body: formDataToFlask,
+    //     });
+
+    //     if (localPrintResponse.ok) {
+    //         console.log('Print job started successfully.');
+    //     } else {
+    //         console.log('Failed to start print job.');
+    //     }
+    // } catch (error) {
+    //     console.error('Error during printing process:', error);
+    // }
     // };
 
     const hoverGoBackButton = () => {
@@ -819,7 +819,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                 setY2k(y2k === y2k_vn_click ? y2k_vn : y2k_vn_click);
             } else if (language === 'ko') {
                 setY2k(y2k === y2k_kr_click ? y2k_kr : y2k_kr_click);
-            }else if (language === 'mn') {
+            } else if (language === 'mn') {
                 setY2k(y2k === y2k_mn_click ? y2k_mn : y2k_mn_click);
             }
         }
@@ -832,7 +832,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             setPrintButton(printButton === print_vn_click ? print_vn : print_vn_click);
         } else if (language === 'ko') {
             setPrintButton(printButton === print_kr_click ? print_kr : print_kr_click);
-        }else if (language === 'mn') {
+        } else if (language === 'mn') {
             setPrintButton(printButton === print_mn_click ? print_mn : print_mn_click);
         }
     };
@@ -1083,27 +1083,27 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                     const tempImg = new Image();
                     tempImg.crossOrigin = 'Anonymous';
                     tempImg.src = photo.url;
-    
+
                     tempImg.onload = () => {
                         applyStyles(tempImg, { width: 2400, height: 1600, filter: photo.filter });
                         // tempImg.style.filter= photo.filter
                         resolve(tempImg);
                     };
-    
+
                     tempImg.onerror = (err) => reject(err);
                 });
             });
-    
+
             Promise.all(imagePromises)
                 .then((tempImgs) => {
-                    const filterapply=tempImgs.map(img=>applyFilters(img,img.filter))
+                    const filterapply = tempImgs.map(img => applyFilters(img, img.filter))
                     setTempImage(filterapply);
                 })
                 .catch((error) => {
                     console.error("Error loading images:", error);
                 });
         };
-    
+
         loadImages();
     }, [selectedPhotos]);
     // useEffect(() => {
@@ -1114,17 +1114,17 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     //                 const tempImg = new Image();
     //                 tempImg.crossOrigin = 'Anonymous';
     //                 tempImg.src = photo.url;
-    
+
     //                 tempImg.onload = () => {
     //                     // 필터 적용
     //                     // const filteredImg = applyFilters(tempImg, photo.filter);
     //                     // resolve(filteredImg);
     //                 };
-    
+
     //                 tempImg.onerror = (err) => reject(err);
     //             });
     //         });
-    
+
     //         Promise.all(imagePromises)
     //             .then((tempImgs) => {
     //                 setTempImage(tempImgs);
@@ -1134,7 +1134,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
     //                 console.error("Error loading images:", error);
     //             });
     //     };
-    
+
     //     loadImages();
     // }, [selectedPhotos]);
     useEffect(() => {
@@ -1254,32 +1254,32 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
         loadImages();
     }, [selectedLayout]);
     const getCrop = (image, newSize) => {
-            const aspectRatio = newSize.width / newSize.height;
-            const imageRatio = image.width / image.height;
+        const aspectRatio = newSize.width / newSize.height;
+        const imageRatio = image.width / image.height;
 
-            let newWidth = image.width;
-            let newHeight = image.height;
-            let x = 0;
-            let y = 0;
+        let newWidth = image.width;
+        let newHeight = image.height;
+        let x = 0;
+        let y = 0;
 
-            if (imageRatio > aspectRatio) {
-                newWidth = image.height * aspectRatio;
-                x = (image.width - newWidth) / 2;
-            } else {
-                newHeight = image.width / aspectRatio;
-                y = (image.height - newHeight) / 2;
-            }
+        if (imageRatio > aspectRatio) {
+            newWidth = image.height * aspectRatio;
+            x = (image.width - newWidth) / 2;
+        } else {
+            newHeight = image.width / aspectRatio;
+            y = (image.height - newHeight) / 2;
+        }
 
-            return {
-                x: x,
-                y: y,
-                width: newWidth,
-                height: newHeight
-            };
+        return {
+            x: x,
+            y: y,
+            width: newWidth,
+            height: newHeight
         };
+    };
 
-    const showKonvaImgLayout =useCallback( (selectedFrame, width, height, imgTag, ratio) => {
-    
+    const showKonvaImgLayout = useCallback((selectedFrame, width, height, imgTag, ratio) => {
+
         if (selectedFrame === "3-cutx2") {
             const calcedHeight = height / 5.3;
             const calcedWidth = calcedHeight * 1.02;
@@ -1299,7 +1299,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                             width: crop1.width - crop1.x,
                             height: crop1.height
                         }}
-                        
+
                         width={calcedWidth * 2 + 10}
                         height={calcedHeight}
                         x={x11}
@@ -1413,7 +1413,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             const x12 = calcedWidth + x11 + 10;
             const y1 = 28;
 
-            return imgTag.length === 0 ? <></> :(
+            return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
@@ -1428,7 +1428,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                                     crop={{
                                         x: crop.x,
                                         y: crop.y,
-                                        width: crop.width - 0.1*crop.x,
+                                        width: crop.width - 0.1 * crop.x,
                                         height: crop.height
                                     }}
                                     width={calcedWidth * ratio}
@@ -1462,12 +1462,12 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                             );
                             return (
                                 <KonvaImage
-                                crop={{
-                                    x: crop.x,
-                                    y: crop.y,
-                                    width: crop.width - 0.2*crop.x,
-                                    height: crop.height
-                                }}
+                                    crop={{
+                                        x: crop.x,
+                                        y: crop.y,
+                                        width: crop.width - 0.2 * crop.x,
+                                        height: crop.height
+                                    }}
                                     width={calcedWidth * ratio}
                                     height={calcedHeight * ratio}
                                     x={x * ratio}
@@ -1500,12 +1500,12 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                             );
                             return (
                                 <KonvaImage
-                                crop={{
-                                    x: crop.x,
-                                    y: crop.y,
-                                    width: crop.width -0.3* crop.x,
-                                    height: crop.height- crop.y
-                                }}
+                                    crop={{
+                                        x: crop.x,
+                                        y: crop.y,
+                                        width: crop.width - 0.3 * crop.x,
+                                        height: crop.height - crop.y
+                                    }}
                                     width={calcedWidth * ratio}
                                     height={calcedHeight * ratio}
                                     x={x * ratio}
@@ -1518,7 +1518,7 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
                 </>
             );
         }
-    },[selectedFrame,frameSize,tempImage]);
+    }, [selectedFrame, frameSize, tempImage]);
 
     useEffect(() => {
         const smallRatio = 0.8;
@@ -1565,98 +1565,101 @@ const addStickerToPanel = ({ bgIdx, src, width, x, y }) => {
             )
         );
     };
-// 670번째 줄
-const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) => {
-    const printRatio=getPrintRatio()
-    setImages((currentImages) => {
-        const newImages = [...currentImages];
-        newImages[bgIdx][index] = {
-            ...newImages[bgIdx][index],
-            x: newX,
-            y: newY,
-            width: newWidth,
-            height: newHeight,
-        };
-        return newImages;
-    });
+    // 670번째 줄
+    const updateStickerPositionAndSize = (index, newX, newY, newWidth, newHeight) => {
+        const printRatio = getPrintRatio()
+        setImages((currentImages) => {
+            const newImages = [...currentImages];
+            newImages[bgIdx][index] = {
+                ...newImages[bgIdx][index],
+                x: newX,
+                y: newY,
+                width: newWidth,
+                height: newHeight,
+            };
+            return newImages;
+        });
 
-    setStickerImgs((currentImages) => {
-        const newImages = [...currentImages];
-        newImages[bgIdx][index] = {
-            ...newImages[bgIdx][index],
-            x: newX * printRatio,
-            y: newY * printRatio,
-            width: newWidth * printRatio,
-            height: newHeight * printRatio,
-        };
-        return newImages;
-    });
-};
+        setStickerImgs((currentImages) => {
+            const newImages = [...currentImages];
+            newImages[bgIdx][index] = {
+                ...newImages[bgIdx][index],
+                x: newX * printRatio,
+                y: newY * printRatio,
+                width: newWidth * printRatio,
+                height: newHeight * printRatio,
+            };
+            return newImages;
+        });
+    };
 
-    const getCarouselStyle=(selFrame)=>{
+    const getCarouselStyle = (selFrame) => {
         //  return "77%"
-        if (selFrame==="Stripx2") {
-            return {height:"74%",bottom:"16%",right:"12%"}
+        if (selFrame === "Stripx2") {
+            return { height: "74%", bottom: "16%", right: "12%" }
         }
-        else if(selFrame==="6-cutx2")
-            {
-                return {
-                     transform:"scale(1.1)",
-                     height:"70%",bottom:"18%",right:"8%"}
+        else if (selFrame === "6-cutx2") {
+            return {
+                transform: "scale(1.1)",
+                height: "70%", bottom: "18%", right: "8%"
             }
-            else if(selFrame==="2cut-x2"){
-                return {
-                    transform:"scale(1.4)",
-                    width:"48%",
-                    height:"65%",bottom:"18%",right:"20%"}
+        }
+        else if (selFrame === "2cut-x2") {
+            return {
+                transform: "scale(1.4)",
+                width: "48%",
+                height: "65%", bottom: "18%", right: "20%"
             }
-            else if(selFrame === "4-cutx2"){
-                return { transform:"scale(1.4)",
-                width:"48%",
-                height:"65%",bottom:"18%",right:"20%"}
+        }
+        else if (selFrame === "4-cutx2") {
+            return {
+                transform: "scale(1.4)",
+                width: "48%",
+                height: "65%", bottom: "18%", right: "20%"
             }
-          
-    }
-    const playPrintAudio = async() => {
-        const res=await getAudio({file_name:"print.wav"})
-          }
+        }
 
-    const playAudio = async() => {
-        const res=await getAudio({file_name:"add_emoji.wav"})
-          }
-     
-    useEffect(()=>{
+    }
+    const playPrintAudio = async () => {
+        const res = await getAudio({ file_name: "print.wav" })
+    }
+
+    const playAudio = async () => {
+        const res = await getAudio({ file_name: "add_emoji.wav" })
+    }
+
+    useEffect(() => {
         playAudio()
-    },[])
+    }, [])
 
-// useEffect(()=>{
-//     if (!playAddEmojiSound) {
-//         playAudio()
-//         playAddEmojiSound=true;
-//     }
-//     console.log("play audio in useEffect",playAddEmojiSound)
-// },[])
-// useLayoutEffect(()=>{
-//     if (!playAddEmojiSound) {
-//         playAudio()
-//         playAddEmojiSound=true;
-//     }
-//     console.log("play audio in useEffect",playAddEmojiSound)
-// },[])
-// useEffect(()=>{
-//     const timer=setTimeout(()=>{
-//         playAudio()
-//     },100
-// )
-// return ()=>clearTimeout(timer)
-// },[])
-//off isSelected
-useEffect(()=>{
-    if (isSel) {
-       setTimeout(()=>{setIsSel(false)},1000) 
-    }
+    // useEffect(()=>{
+    //     if (!playAddEmojiSound) {
+    //         playAudio()
+    //         playAddEmojiSound=true;
+    //     }
+    //     console.log("play audio in useEffect",playAddEmojiSound)
+    // },[])
+    // useLayoutEffect(()=>{
+    //     if (!playAddEmojiSound) {
+    //         playAudio()
+    //         playAddEmojiSound=true;
+    //     }
+    //     console.log("play audio in useEffect",playAddEmojiSound)
+    // },[])
+    // useEffect(()=>{
+    //     const timer=setTimeout(()=>{
+    //         playAudio()
+    //     },100
+    // )
+    // return ()=>clearTimeout(timer)
+    // },[])
+    //off isSelected
+    useEffect(() => {
+        if (isSel) {
+            setTimeout(() => { setIsSel(false) }, 1000)
+        }
 
-},[isSel])
+    }, [isSel])
     return (
         <div className='sticker-container' style={{ backgroundImage: `url(${backgroundImage})` }}>
             <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/filter")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
@@ -1678,7 +1681,7 @@ useEffect(()=>{
                     <Layer>
                         {backgroundList[bgIdx] && (
                             <KonvaImage
-                         
+
                                 image={backgroundList[bgIdx].img}
                                 width={frameSize.width * getPrintRatio()}
                                 height={frameSize.height * getPrintRatio() - 20}
@@ -1731,10 +1734,10 @@ useEffect(()=>{
             <div className="left-sticker">
                 <div className='frame-box' style={{ backgroundImage: `url(${frame_box})` }} />
                 <div className='v-carousel-container' ref={carouselRef}
-                
-                style={
-                    getCarouselStyle(selectedFrame)
-                }
+
+                    style={
+                        getCarouselStyle(selectedFrame)
+                    }
                 >
                     <div className='v-carousel-images'>
                         {myBackgrounds.map((src, index) => (
@@ -1776,34 +1779,34 @@ useEffect(()=>{
                                     <Layer>
                                         {images[bgIdx] && images[bgIdx].map((image, i) => (
                                             // 1627번째 줄
-<StickerItem
-    isStickerDrag={stickerDrag}
-    isSelected={isSel}
-    setStickerDrag={setStickerDrag}
-    onTransform={(x, y, width, height) => {
-        updateStickerPositionAndSize(i, x, y, width, height);
-    }}
-    onSelect={() => {
-        setIsSel(p => !p);
-    }}
-    onDelete={() => {
-        const newPrintImages = [...stickerImgs];
-        newPrintImages[bgIdx].splice(i, 1);
-        setStickerImgs(newPrintImages);
+                                            <StickerItem
+                                                isStickerDrag={stickerDrag}
+                                                isSelected={isSel}
+                                                setStickerDrag={setStickerDrag}
+                                                onTransform={(x, y, width, height) => {
+                                                    updateStickerPositionAndSize(i, x, y, width, height);
+                                                }}
+                                                onSelect={() => {
+                                                    setIsSel(p => !p);
+                                                }}
+                                                onDelete={() => {
+                                                    const newPrintImages = [...stickerImgs];
+                                                    newPrintImages[bgIdx].splice(i, 1);
+                                                    setStickerImgs(newPrintImages);
 
-        const newUiImages = [...images];
-        newUiImages[bgIdx].splice(i, 1);
-        setImages(newUiImages);
-    }}
-    onDragEnd={(event) => {
-        const newX = event.target.x();
-        const newY = event.target.y();
-        updateStickerPositionAndSize(i, newX, newY, image.width, image.height);
-    }}
-    key={i}
-    image={image}
-    shapeProps={image}
-/>
+                                                    const newUiImages = [...images];
+                                                    newUiImages[bgIdx].splice(i, 1);
+                                                    setImages(newUiImages);
+                                                }}
+                                                onDragEnd={(event) => {
+                                                    const newX = event.target.x();
+                                                    const newY = event.target.y();
+                                                    updateStickerPositionAndSize(i, newX, newY, image.width, image.height);
+                                                }}
+                                                key={i}
+                                                image={image}
+                                                shapeProps={image}
+                                            />
 
                                         ))}
                                     </Layer>

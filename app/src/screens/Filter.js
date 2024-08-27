@@ -130,7 +130,7 @@ function Filter() {
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
     const [clickedId, setClickedId] = useState(null);
-    const [countdown, setCountdown] = useState(20);    
+    const [countdown, setCountdown] = useState(20);
     const effectFloat = 0.05;
     const uuid = sessionStorage.getItem("uuid");
 
@@ -262,10 +262,10 @@ function Filter() {
             }
         }
 
-        const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));        
+        const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));
         if (storedSelectedPhotos) {
             setSelectedPhotos(storedSelectedPhotos);
-        }        
+        }
 
         const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
         if (storedSelectedFrame) {
@@ -289,7 +289,7 @@ function Filter() {
         if (layoutData) {
             setSelectedLayout(layoutData.photo_cover);
         }
-    });    
+    });
 
     useEffect(() => {
         if (uuid) {
@@ -519,7 +519,7 @@ function Filter() {
                 <div className="choose-photo-row">
                     <div
                         className="choose-photo-item-3cut-top-line"
-                        style={{ backgroundImage: `url(${photos[selectedPhotos[0]].url})`,  transform:"scaleX(-1)",filter: getImageStyle(selectedPhotos[0]) }}
+                        style={{ backgroundImage: `url(${photos[selectedPhotos[0]].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedPhotos[0]) }}
                         onClick={() => handlePhotoClick(selectedPhotos[0])}
                     />
                 </div>
@@ -533,7 +533,7 @@ function Filter() {
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                style={{ backgroundImage: `url(${photos[selectedIndex].url})`,  transform:"scaleX(-1)",filter: getImageStyle(selectedIndex) }}
+                                style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                 onClick={() => handlePhotoClick(selectedIndex)}
                             />
                         ))}
@@ -546,7 +546,7 @@ function Filter() {
                     <div className="choose-photo-row">
                         <div
                             className="choose-photo-item-5cut-last-line"
-                            style={{ backgroundImage: `url(${photos[selectedPhotos[selectedPhotos.length - 1]].url})`, transform:"scaleX(-1)", filter: getImageStyle(selectedPhotos[selectedPhotos.length - 1]) }}
+                            style={{ backgroundImage: `url(${photos[selectedPhotos[selectedPhotos.length - 1]].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedPhotos[selectedPhotos.length - 1]) }}
                             onClick={() => handlePhotoClick(selectedPhotos.length - 1)}
                         />
                     </div>
@@ -559,7 +559,7 @@ function Filter() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform:"scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                     onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
@@ -576,7 +576,7 @@ function Filter() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform:"scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                     onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
@@ -593,7 +593,7 @@ function Filter() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
-                                backgroundImage: `url(${photos[selectedIndex].url})`, transform:"scaleX(-1)",
+                                backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)",
                                 filter: getImageStyle(selectedIndex),
                             }}
                             onClick={() => handlePhotoClick(selectedIndex)}
@@ -621,7 +621,7 @@ function Filter() {
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                 onClick={() => handlePhotoClick(selectedIndex)}
-                              
+
                             />
                         ))}
                     </div>
@@ -633,7 +633,7 @@ function Filter() {
                     <div className="choose-photo-row">
                         <div
                             className="choose-photo-item-5cut-last-line"
-                      
+
                         />
                     </div>
                 );
@@ -646,7 +646,7 @@ function Filter() {
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     onClick={() => handlePhotoClick(selectedIndex)}
-                               
+
                                 />
                             ))}
                         </div>
@@ -663,7 +663,7 @@ function Filter() {
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     onClick={() => handlePhotoClick(selectedIndex)}
-                                 
+
                                 />
                             ))}
                         </div>
@@ -679,7 +679,7 @@ function Filter() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             onClick={() => handlePhotoClick(selectedIndex)}
-                           
+
                         />
                     ))}
                 </div>
@@ -789,7 +789,7 @@ function Filter() {
             setContinueButton(continueButton === continue_mn_hover ? continue_mn : continue_mn_hover);
         }
     };
-    
+
     const playAudio = async () => {
         const res = await getAudio({ file_name: "choose_filter.wav" })
     }
@@ -801,12 +801,19 @@ function Filter() {
                     return prevCountdown - 1;
                 } else {
                     // navigate to next screen
-                    navigate("/sticker");
+                    setClickedButton(true);
+                    const withFilterPhotos = photos.map((p) => ({
+                        ...p,
+                        filter: getImageStyle(p.id),
+                    }));
+                    sessionStorage.setItem('photos', JSON.stringify(withFilterPhotos));
+                    sessionStorage.setItem('filter', JSON.stringify(filterEffect));
+                    storeImageCanvas();
                 }
             });
         }, 1000);
     };
-    
+
     useEffect(() => {
         playAudio()
     }, [])
