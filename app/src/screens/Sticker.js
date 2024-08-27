@@ -159,11 +159,11 @@ function Sticker() {
         setPhotos(photos);
     }, []);
 
-    useEffect(() => {
-        if (uuid) {
-            startTimer();
-        }
-    }, [uuid]);
+    // useEffect(() => {
+    //     if (uuid) {
+    //         startTimer();
+    //     }
+    // }, [uuid]);
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
@@ -413,7 +413,7 @@ function Sticker() {
         sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));      
         // store toDataURL in local storage
         const stageRefTmp = printRefs[bgIdx];
-        sessionStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL('image/jpeg', 0.7));
+        sessionStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL("image/png", 0.5));
 
 
         navigate("/payment-number");        
@@ -1055,17 +1055,25 @@ function Sticker() {
         return { x: newStickerX, y: newStickerY, width: newStickerWidth, height: newStickerHeight };
     }
 
-    const startTimer = () => {
-        timerRef.current = setInterval(async () => {
-            setCountdown((prevCountdown) => {
-                if (prevCountdown > 0) {
-                    return prevCountdown - 1;
-                } else {
-                    printFrameWithSticker();
-                }
-            });
-        }, 1000);
-    };
+    // const startTimer = () => {
+    //     timerRef.current = setInterval(async () => {
+    //         setCountdown((prevCountdown) => {
+    //             if (prevCountdown > 0) {
+    //                 return prevCountdown - 1;
+    //             } else {
+    //                 // store session printRefs[bgIdx]
+    //                 sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
+    //                 // store session bgIdx
+    //                 setBgIdx(0);
+    //                 sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));                     
+    //                 const stageRefTmp = printRefs[bgIdx];
+    //                 localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL('image/jpeg', 0.7));
+
+    //                 navigate("/payment-number");
+    //             }
+    //         });
+    //     }, 1000);
+    // };
 
     useEffect(() => {
         const loadImages = () => {
@@ -1809,7 +1817,7 @@ function Sticker() {
                     <div className="sticker-category-item" style={{ backgroundImage: `url(${y2k})` }} onClick={() => filterStickerByCategory('Y2K')} onMouseEnter={() => hoverStickerButton('y2k')} onMouseLeave={() => hoverStickerButton('y2k')}></div>
                 </div>
                 <div className="sticker-print-btn" style={{ backgroundImage: `url(${printButton})` }} onClick={printFrameWithSticker} onMouseEnter={hoverPrintButton} onMouseLeave={hoverPrintButton}></div>
-                <div className='sticker-countdown'>{countdown}s</div>
+                {/* <div className='sticker-countdown'>{countdown}s</div> */}
             </div>
         </div>
     );
