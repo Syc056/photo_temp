@@ -396,12 +396,12 @@ function Sticker() {
     };
 
     const printFrameWithSticker = async (event,) => {
-        if (isSel) {
-            setIsSel(false)
-        }
-        if (clickPrint === true) {
-            return;
-        }
+        // if (isSel) {
+        //     setIsSel(false)
+        // }
+        // if (clickPrint === true) {
+        //     return;
+        // }
 
         playPrintAudio()
         setClickPrint(true);
@@ -1061,14 +1061,7 @@ function Sticker() {
                 if (prevCountdown > 0) {
                     return prevCountdown - 1;
                 } else {
-                    // store session printRefs[bgIdx]
-                    sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
-                    // store session bgIdx
-                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));                     
-                    const stageRefTmp = printRefs[bgIdx ?? 0];
-                    localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL('image/jpeg', 0.7));
-
-                    navigate("/payment-number");
+                    printFrameWithSticker();
                 }
             });
         }, 1000);
