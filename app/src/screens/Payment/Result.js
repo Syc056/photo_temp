@@ -23,9 +23,7 @@ function QR() {
      const navigate = useNavigate();
      const [hoveredImage, setHoveredImage] = useState(null);
      const [backround, setBackround] = useState(background_en);
-     const [continueButton, setContinueButton] = useState(continue_en);
-     const [printRefs, setPrintRefs] = useState([]);
-     const [bgIdx, setBgIdx] = useState(0);
+     const [continueButton, setContinueButton] = useState(continue_en);     
      const [originalDataURL, setOriginalDataURL] = useState(null);
      const [selectedFrame, setSelectedFrame] = useState(null);     
      const [clickPrint, setClickPrint] = useState(false);
@@ -50,27 +48,24 @@ function QR() {
      }, []);
 
      useEffect(() => {
-          const printRefs = JSON.parse(sessionStorage.getItem('printRefs'));
-          if (printRefs) {
-               setPrintRefs(printRefs);
+          const fetchImageUuid = async () => {
+               try {
+                    const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/frames/apiget-image-uuid/` + uuid + "/");                    
+                    const {data_url} = response.data
+                    setOriginalDataURL(data_url)
+               } catch (error) {
+                    console.error(error);
+               }          
           }
 
-          const bgIdx = JSON.parse(sessionStorage.getItem('bgIdx'));
-          if (bgIdx) {
-               setBgIdx(bgIdx);
-          }
-
-          const originalDataURL = localStorage.getItem('originalDataURL');
-          if (originalDataURL) {
-               setOriginalDataURL(originalDataURL);
-          }
+          fetchImageUuid();
 
           // Retrieve selected frame from session storage
           const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
           if (storedSelectedFrame) {
                setSelectedFrame(storedSelectedFrame.frame);
           }
-     }, []);
+     }, []);     
 
      const playAudio = async () => {
           const res = await getAudio({ file_name: "pay_success.wav" })
@@ -107,7 +102,7 @@ function QR() {
      const uploadCloud = () => {
           try {
                // if empty printRefs or printRefs[bgIdx] is null
-               if (!printRefs || !printRefs[bgIdx] || !originalDataURL) {
+               if (!originalDataURL) {
                     return;
                }
                console.log("originalDataURL>>>", originalDataURL)
@@ -153,17 +148,10 @@ function QR() {
      };
 
      const callPrinter = async () => {
-          // if empty printRefs or bgIdx return
-          if (!printRefs || !bgIdx) {
+          if (!originalDataURL) {
                return;
           }
 
-          const stageRef = printRefs[bgIdx];
-          if (!stageRef.current) {
-               return;
-          }
-
-          const originalDataURL = stageRef.current.toDataURL();
           const blobBin = atob(originalDataURL.split(',')[1]);
           const array = [];
           for (let i = 0; i < blobBin.length; i++) {

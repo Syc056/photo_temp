@@ -407,17 +407,28 @@ function Sticker() {
         setClickPrint(true);
         // await uploadCloud();
 
-        // store session printRefs[bgIdx]
-        sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
-        // store session bgIdx
-        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));      
-        // store toDataURL in local storage
-        const stageRefTmp = printRefs[bgIdx];
-        sessionStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL("image/png", 0.5));
-
-
-        navigate("/payment-number");        
+        saveImageCanvas();                              
     };
+
+    const saveImageCanvas = () => {
+        const stageRef = printRefs[bgIdx];
+        const originalDataURL = stageRef.current.toDataURL();
+        
+        try {
+            originAxiosInstance.post(
+                `${process.env.REACT_APP_BACKEND}/frames/api/save-image-uuid`,
+                {
+                    image: originalDataURL,
+                    uuid: uuid
+                }
+            ).then(response => {
+                console.log('Canvas saved with UUID:', uuid);
+                navigate("/payment-number");    
+            });            
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     function rotateImageDataURL(dataURL, degrees) {
         return new Promise((resolve, reject) => {
