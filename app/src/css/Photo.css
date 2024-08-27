@@ -283,8 +283,8 @@
 
 .filter-countdown {
      text-align: center;
-     right: -100px;
-     top: 50%;
+     right: -250px;
+     top: 35%;
      position: relative;
      font-size: 40px;
      color: #606060;
@@ -604,7 +604,7 @@
      margin: 1%;
      position: absolute;
      top: 24.8%;
-     left: 30.6%;
+     left: 33.6%;
 }
 
 .choose-photo-item-4cut-0-1 {
@@ -652,7 +652,7 @@
      margin: 1%;
      position: absolute;
      top: 40.8%;
-     left: 30.6%;
+     left: 33.6%;
 }
 
 .choose-photo-item-4cut-1-1 {
@@ -741,7 +741,7 @@
      margin: 1%;
      position: absolute;
      top: 30%;
-     left: 33%;
+     left: 37%;
 }
 
 .choose-photo-item-2cut-0-1 {
@@ -765,7 +765,7 @@
      margin: 1%;
      position: absolute;
      top: 30%;
-     left: 60%;
+     left: 67%;
 }
 
 /** Frame 6 cut **/
