@@ -5,7 +5,9 @@ from .views import (
     FrameList,    
     FrameImageCopyAPI,
     UploadPhotoCloud  ,
-    ClearImagesAPIView  
+    ClearImagesAPIView,
+    save_image_uuid,
+    get_image_uuid,
 )
 from .views import upload_full, print_photo
 
@@ -24,4 +26,8 @@ urlpatterns = [
     
     # WEB
     path('', FrameList.as_view(), name='frames')    
+
+    # Store dataURL
+    path('api/save-image-uuid', save_image_uuid, name='save_image_uuid'),
+    path('api/get-image-uuid/<str:uuid>/', get_image_uuid, name='get_image_uuid'),
 ]

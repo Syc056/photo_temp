@@ -14,13 +14,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import os
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse, Http404
 import base64
 from .forms import PhotoForm
 from revenue.models import Order
 from django.conf import settings
 from device.models import Device
 from django.urls import reverse_lazy
+from django.core.files.base import ContentFile
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 import cloudinary.uploader
 
@@ -494,3 +497,34 @@ class FrameDeleteView(LoginRequiredMixin, View):
         frame = Frame.objects.get(id=pk)
         frame.delete()
         return redirect("frames")        
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def save_image_uuid(request):
+    if request.method == 'POST':
+        data_url = request.POST.get('image')
+        file_uuid = request.POST.get('uuid')
+        
+        # Decode the base64 content
+        _, base64_data = data_url.split(',')
+        decoded_data = base64.b64decode(base64_data)
+
+        # Store the content in a text file
+        with open(f'media/canvas/{file_uuid}.txt', 'wb') as file:
+            file.write(decoded_data)
+
+        return JsonResponse({'uuid': file_uuid})
+
+    return JsonResponse({'status': 'fail'}, status=400)
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_image_uuid(request, uuid):
+    try:
+        with open(f'media/canvas/{uuid}.txt', 'rb') as file:
+            content = file.read()
+            base64_content = base64.b64encode(content).decode('utf-8')
+            data_url = f"data:image/png;base64,{base64_content}"
+            return JsonResponse({'data_url': data_url})
+    except FileNotFoundError:
+        return JsonResponse({'error': 'File not found'}, status=404)
