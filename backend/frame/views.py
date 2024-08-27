@@ -509,8 +509,14 @@ def save_image_uuid(request):
         _, base64_data = data_url.split(',')
         decoded_data = base64.b64decode(base64_data)
 
+        # Ensure the directory exists
+        directory = 'media/canvas/'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
         # Store the content in a text file
-        with open(f'media/canvas/{file_uuid}.txt', 'wb') as file:
+        file_path = os.path.join(directory, f'{file_uuid}.txt')
+        with open(file_path, 'wb') as file:
             file.write(decoded_data)
 
         return JsonResponse({'uuid': file_uuid})
