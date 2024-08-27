@@ -50,7 +50,7 @@ function QR() {
      useEffect(() => {
           const fetchImageUuid = async () => {
                try {
-                    const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/frames/apiget-image-uuid/` + uuid + "/");                    
+                    const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/frames/api/get-image-uuid/` + uuid + "/");                    
                     const {data_url} = response.data
                     setOriginalDataURL(data_url)
                } catch (error) {
