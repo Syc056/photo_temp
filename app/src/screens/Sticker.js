@@ -413,7 +413,7 @@ function Sticker() {
         sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));      
         // store toDataURL in local storage
         const stageRefTmp = printRefs[bgIdx];
-        localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL());
+        sessionStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL('image/jpeg', 0.7));
 
 
         navigate("/payment-number");        
@@ -1064,9 +1064,9 @@ function Sticker() {
                     // store session printRefs[bgIdx]
                     sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
                     // store session bgIdx
-                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx)); 
-                    const stageRefTmp = printRefs[bgIdx];
-                    localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL());
+                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));                     
+                    const stageRefTmp = printRefs[bgIdx ?? 0];
+                    localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL('image/jpeg', 0.7));
 
                     navigate("/payment-number");
                 }
