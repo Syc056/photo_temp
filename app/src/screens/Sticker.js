@@ -579,6 +579,7 @@ function Sticker() {
         const ipData = await ipResponse.json();
         const userIp = ipData.ip;
 
+        /**
         // Step 2: Fetch all devices
         const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
         const allDevices = await allDevicesResponse.json();
@@ -633,12 +634,13 @@ function Sticker() {
 
         const logPaymentResult = await logPaymentResponse.json();
         const updateSalesResult = await updateSalesResponse.json();
-        const printAmountResult = await printAmountResponse.json();
+        const printAmountResult = await printAmountResponse.json();        
 
         // Handle the responses as needed
         console.log('Update Sales Result:', updateSalesResult);
         console.log('Update Print Amount Result:', printAmountResult);
         console.log('Log Payment Result:', logPaymentResult);
+        */
 
         // const ip_response = await fetch("https://api.ipify.org?format=json")
         // const data = await ip_response.json()
