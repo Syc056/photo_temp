@@ -408,9 +408,13 @@ function Sticker() {
         // await uploadCloud();
 
         // store session printRefs[bgIdx]
-        sessionStorage.setItem('printRefs', printRefs);
+        sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
         // store session bgIdx
-        sessionStorage.setItem('bgIdx', bgIdx);
+        sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
+        // store session originalDataURL
+        const stageRefTemp = printRefs[bgIdx];
+        sessionStorage.setItem('originalDataURL', stageRefTemp.current.toDataURL());
+
 
         navigate("/payment-number");
 
@@ -1097,11 +1101,14 @@ function Sticker() {
             setCountdown((prevCountdown) => {
                 if (prevCountdown > 0) {
                     return prevCountdown - 1;
-                } else {                    
+                } else {
                     // store session printRefs[bgIdx]
-                    sessionStorage.setItem('printRefs', printRefs);
+                    sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
                     // store session bgIdx
-                    sessionStorage.setItem('bgIdx', bgIdx);
+                    sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));
+                    // store session originalDataURL
+                    const stageRefTemp = printRefs[bgIdx];
+                    sessionStorage.setItem('originalDataURL', stageRefTemp.current.toDataURL());
 
                     navigate("/payment-number");
                 }
@@ -1893,7 +1900,7 @@ function Sticker() {
                 </div>
                 <div className="sticker-print-btn" style={{ backgroundImage: `url(${printButton})` }} onClick={printFrameWithSticker} onMouseEnter={hoverPrintButton} onMouseLeave={hoverPrintButton}></div>
                 <div className='sticker-countdown'>{countdown}s</div>
-            </div>            
+            </div>
         </div>
     );
 }

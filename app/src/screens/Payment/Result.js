@@ -26,6 +26,7 @@ function QR() {
      const [continueButton, setContinueButton] = useState(continue_en);
      const [printRefs, setPrintRefs] = useState([]);
      const [bgIdx, setBgIdx] = useState(0);
+     const [originalDataURL, setOriginalDataURL] = useState(null);
      const [selectedFrame, setSelectedFrame] = useState(null);     
      const [clickPrint, setClickPrint] = useState(false);
 
@@ -49,14 +50,19 @@ function QR() {
      }, []);
 
      useEffect(() => {
-          const printRefs = sessionStorage.getItem('printRefs');
+          const printRefs = JSON.parse(sessionStorage.getItem('printRefs'));
           if (printRefs) {
                setPrintRefs(printRefs);
           }
 
-          const bgIdx = sessionStorage.getItem('bgIdx');
+          const bgIdx = JSON.parse(sessionStorage.getItem('bgIdx'));
           if (bgIdx) {
                setBgIdx(bgIdx);
+          }
+
+          const originalDataURL = sessionStorage.getItem('originalDataURL');
+          if (originalDataURL) {
+               setOriginalDataURL(originalDataURL);
           }
 
           // Retrieve selected frame from session storage
@@ -101,12 +107,11 @@ function QR() {
      const uploadCloud = () => {
           try {
                // if empty printRefs or printRefs[bgIdx] is null
-               if (!printRefs || !printRefs[bgIdx]) {
+               if (!printRefs || !printRefs[bgIdx] || !originalDataURL) {
                     return;
                }
-               console.log("printRefs[bgIdx]>>>", printRefs[bgIdx])
-               const stageRef = printRefs[bgIdx];
-               const originalDataURL = stageRef.current.toDataURL();
+               console.log("originalDataURL>>>", originalDataURL)
+                              
                let rotated = null;
                rotateImageDataURL(originalDataURL, 90)
                     .then(rotatedDataURL => {
