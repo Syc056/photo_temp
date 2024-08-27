@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/print', print_photo, name='print_photo'), 
     
     # WEB
-    path('', FrameList.as_view(), name='frames')    
+    path('', FrameList.as_view(), name='frames'),    
 
     # Store dataURL
     path('api/save-image-uuid', save_image_uuid, name='save_image_uuid'),
