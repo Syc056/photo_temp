@@ -381,6 +381,20 @@
      /* Cover the entire div */
      transition: background-image 0.3s; 
 }
+.price-field-total{
+     position: absolute;
+     top: 50%;
+    left: 10%;
+     width: 80%;
+     height: 80%;
+     /* Set height of the div */
+     background-image: url('../assets/Common/price-field.png');
+     /* Specify the path to your initial background image */
+     background-size: contain;
+     background-repeat: no-repeat;
+     /* Cover the entire div */
+     transition: background-image 0.3s; 
+}
 .check-box{
      cursor: pointer;
      position: absolute;
@@ -396,6 +410,15 @@
      background-repeat: no-repeat;
      /* Cover the entire div */
      transition: background-image 0.3s; 
+}
+.payment-countdown {
+     text-align: center;
+     right: -250px;
+     top: 10%;
+     position: relative;
+     font-size: 40px;
+     color: #606060;
+     font-family: fantasy;     
 }
 .check{
      position: absolute;
@@ -426,6 +449,15 @@
      height: 100%;
      color: #606060;
      font-size: 50px;
+     position: absolute;
+     text-align: center;
+     /* left: 0%;   */
+}
+.price-total{
+     width: 88%;
+     height: 100%;
+     color: #606060;
+     font-size: 100px;
      position: absolute;
      text-align: center;
      /* left: 0%;   */

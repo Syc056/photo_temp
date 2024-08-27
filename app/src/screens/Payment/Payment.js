@@ -110,14 +110,14 @@ function Payment() {
       setVnpayButton(bank_mn);
       setCashButton(cash_mn);
       setPromoButton(promo_mn);
-    } 
+    }
   }, [])
-  const playAudio = async() => {
-    const res=await getAudio({file_name:"choose_pay_method.wav"})
-      }
-useEffect(()=>{
-playAudio()
-},[])
+  const playAudio = async () => {
+    const res = await getAudio({ file_name: "choose_pay_method.wav" })
+  }
+  useEffect(() => {
+    playAudio()
+  }, [])
   const hoverMouseEffect = (image) => {
     const storedLanguage = sessionStorage.getItem('language');
     if (storedLanguage == 'en') {
@@ -140,7 +140,7 @@ playAudio()
       } else if (image === 'promo') {
         setPromoButton(promoButton === promo_kr_click ? promo_kr : promo_kr_click);
       }
-    } 
+    }
     else if (storedLanguage == 'mn') {
       if (image === 'zalopay') {
         setZalopayButton(zalopayButton === qpay_mn_click ? qpay_mn : qpay_mn_click);
@@ -151,7 +151,7 @@ playAudio()
       } else if (image === 'promo') {
         setPromoButton(promoButton === promo_mn_click ? promo_mn : promo_mn_click);
       }
-    } 
+    }
     else {
       if (image === 'zalopay') {
         setZalopayButton(zalopayButton === zalopay_vn_click ? zalopay_vn : zalopay_vn_click);
@@ -176,9 +176,9 @@ playAudio()
   }
 
   const goToPay = (method) => {
-    sessionStorage.setItem("payMethod",method)
-    
-    
+    sessionStorage.setItem("payMethod", method)
+
+
     console.log(sessionStorage.getItem("payMethod"))
     getClickAudio()
     if (method === 'cash') {
@@ -187,21 +187,21 @@ playAudio()
       navigate('/payment-qr');
     } else if (method === 'zalopay') {
       navigate('/payment-qr');
-    } 
+    }
     else if (method === 'vnpay') {
-  
+
       navigate('/payment-qr');
     }
     else if (method === 'promo') {
       navigate('/payment-promo');
     }
-  }
+  }  
 
   return (
     <div className='payment-container' style={{ backgroundImage: `url(${background})` }}>
       <div className="go-back" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => navigate("/payment-total")} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
       <div className="payment-line">
-        <div className="payment-method" style={{ backgroundImage: `url(${cashButton})` }} onMouseEnter={() => hoverMouseEffect('cash')} onMouseLeave={() => hoverMouseEffect('cash')} onClick={() => goToPay('cash')}></div>        
+        <div className="payment-method" style={{ backgroundImage: `url(${cashButton})` }} onMouseEnter={() => hoverMouseEffect('cash')} onMouseLeave={() => hoverMouseEffect('cash')} onClick={() => goToPay('cash')}></div>
         <div className="payment-method" style={{ backgroundImage: `url(${vnpayButton})` }} onMouseEnter={() => hoverMouseEffect('vnpay')} onMouseLeave={() => hoverMouseEffect('vnpay')} onClick={() => goToPay('vnpay')}></div>
         <div className="payment-method" style={{ backgroundImage: `url(${zalopayButton})` }} onMouseEnter={() => hoverMouseEffect('zalopay')} onMouseLeave={() => hoverMouseEffect('zalopay')} onClick={() => goToPay('zalopay')}></div>
         <div className="payment-method" style={{ backgroundImage: `url(${promoButton})` }} onMouseEnter={() => hoverMouseEffect('promo')} onMouseLeave={() => hoverMouseEffect('promo')} onClick={() => goToPay('promo')}></div>

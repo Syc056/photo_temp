@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import background_en from '../../assets/PaymentTotal/BG.png';
 import background_vn from '../../assets/PaymentNum/Common/vn/BG.png';
 import backgrond_kr from '../../assets/PaymentNum/Common/kr/BG.png';
@@ -47,6 +47,9 @@ function PaymentTotal(props) {
   const [confirmClick, setConfirmClick] = useState(false);
   const [confirmUrl, setConfirmUrl] = useState(confirmDefault)
   const navigate = useNavigate()
+  const timerRef = useRef(null);
+  const [countdown, setCountdown] = useState(20);
+
   const hoverGoBackBtn = (goBackBG) => {
     if (goBackBG === 'ko') {
       setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
@@ -93,7 +96,7 @@ function PaymentTotal(props) {
     setPhotoNum(p => (p > 1 ? p - 1 : p));
   };
   const goToPayment = async () => {
-    getClickAudio()    
+    getClickAudio()
     navigate('/payment');
   }
   const onMouseConfirmEnter = (lang) => {
@@ -122,6 +125,19 @@ function PaymentTotal(props) {
     const totalPayMoney = sessionStorage.getItem("totalPayMoney");
     return totalPayMoney;
   }
+
+  const startTimer = () => {
+    timerRef.current = setInterval(async () => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          navigate("/payment");
+        }
+      });
+    }, 1000);
+  };
+
   return (
     <div
       className='payment-number-container'
@@ -130,14 +146,15 @@ function PaymentTotal(props) {
       <div
         className='payment-number-center'
 
-      >        
-        <div className="price-field" style={{ backgroundImage: `url(${priceField})` }} >
+      >
+        <div className="price-field-total" style={{ backgroundImage: `url(${priceField})` }} >
 
           <div
-            className='price'
+            className='price-total'
           >{getDong()}đ</div>
-        </div>        
+        </div>
       </div>
+      <div className='payment-countdown'>{countdown}s</div>
       <div
         className="payment-number-confirm-layout-button"
         style={{

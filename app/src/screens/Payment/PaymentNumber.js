@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import background_en from '../../assets/PaymentNum/Common/BG.png';
 import background_vn from '../../assets/PaymentNum/Common/vn/BG.png';
 import backgrond_kr from '../../assets/PaymentNum/Common/kr/BG.png';
@@ -47,6 +47,9 @@ function PaymentNumber(props) {
   const [confirmClick, setConfirmClick] = useState(false);
   const [confirmUrl, setConfirmUrl] = useState(confirmDefault)
   const navigate = useNavigate()
+  const timerRef = useRef(null);
+  const [countdown, setCountdown] = useState(20);
+
   const hoverGoBackBtn = (goBackBG) => {
     if (goBackBG === 'ko') {
       setGoBackBg(goBackBg === goback_kr ? goback_kr_hover : goback_kr);
@@ -138,6 +141,19 @@ function PaymentNumber(props) {
 
     return amount + 50000 * (photoNum - 1)
   }
+
+  const startTimer = () => {
+    timerRef.current = setInterval(async () => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          navigate("/payment-total");
+        }
+      });
+    }, 1000);
+  };
+
   return (
     <div
       className='payment-number-container'
@@ -190,6 +206,7 @@ function PaymentNumber(props) {
           />}
         </div>
       </div>
+      <div className='payment-countdown'>{countdown}s</div>
       <div
         className="payment-number-confirm-layout-button"
         style={{
