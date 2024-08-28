@@ -1639,7 +1639,7 @@ function Sticker() {
     }, [isSel])
     return (
         <div className='sticker-container' style={{ backgroundImage: `url(${backgroundImage})` }}>
-            <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/filter")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
+            <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/photo-preview")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
             {/* 프린트용 */}
             <div className='print'>
                 <Stage
