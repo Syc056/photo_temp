@@ -49,7 +49,7 @@ function PhotoPreview() {
         }
         
         if (storedSelectedFrame.frame === 'Stripx2') {
-            setTotalSnapshotPhoto(4);
+            setTotalSnapshotPhoto(8);
         } else if (storedSelectedFrame.frame === '2cut-x2') {
             setTotalSnapshotPhoto(2);
         } else if (storedSelectedFrame.frame === '4-cutx2') {
