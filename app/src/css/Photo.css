@@ -584,8 +584,8 @@
 }
 
 .choose-photo-item-4cut-0-0 {
-     width: 150px;
-     height: 110px;
+     width: 200px;
+     height: 160px;
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
@@ -608,15 +608,15 @@
 }
 
 .choose-photo-item-4cut-0-1 {
-     width: 150px;
-     height: 110px;
+     width: 200px;
+     height: 160px;
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 31.8%;
-     left: 50%;
+     top: 15.8%;
+     left: 51%;
 }
 
 .choose-photo-item-4cut-0-1-right {
@@ -632,15 +632,15 @@
 }
 
 .choose-photo-item-4cut-1-0 {
-     width: 150px;
-     height: 110px;
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 47.8%;
-     left: 27.6%;
+     width: 200px;
+    height: 160px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 39.8%;
+    left: 20.6%;
 }
 
 .choose-photo-item-4cut-1-0-right {
@@ -656,15 +656,15 @@
 }
 
 .choose-photo-item-4cut-1-1 {
-     width: 150px;
-     height: 110px;
+     width: 200px;
+     height: 160px;
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 47.8%;
-     left: 50%;
+     top: 39.8%;
+     left: 51%;
 }
 
 .choose-photo-item-4cut-1-1-right {
