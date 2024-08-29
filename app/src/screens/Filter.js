@@ -233,8 +233,6 @@ function Filter() {
                 url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
             }));            
 
-            setCapturePhotos(finalFormattedImages);
-
             setPhotos(finalFormattedImages);
 
             // loop photos.images and setSelectedPhotos with array photo id
@@ -296,10 +294,10 @@ function Filter() {
             }
         }
 
-        const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));
-        if (storedSelectedPhotos) {
-            setSelectedPhotos(storedSelectedPhotos);
-        }
+        // const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));
+        // if (storedSelectedPhotos) {
+        //     setSelectedPhotos(storedSelectedPhotos);
+        // }
 
         const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
         if (storedSelectedFrame) {
