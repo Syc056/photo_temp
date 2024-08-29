@@ -98,7 +98,7 @@ import continue_vn from '../assets/Common/vn/continue.png';
 import continue_vn_hover from '../assets/Common/vn/continue_click.png';
 import continue_mn from '../assets/Common/mn/continue.png';
 import continue_mn_hover from '../assets/Common/mn/continue_click.png';
-import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
+import { getAudio, getClickAudio, originAxiosInstance, getPhotos } from '../api/config';
 import { useEffect, useState, useRef } from 'react';
 import Uid from "react-uuid"
 
@@ -325,11 +325,11 @@ function Filter() {
         }
     });
 
-    useEffect(() => {
-        if (uuid) {
-            startTimer();
-        }
-    }, [uuid]);
+    // useEffect(() => {
+    //     if (uuid) {
+    //         startTimer();
+    //     }
+    // }, [uuid]);
 
     const handleMouseEnter = (image) => {
         setHoveredImage(image);
@@ -879,8 +879,7 @@ function Filter() {
                     <div className="filter-image" style={{ backgroundImage: `url(${bw})` }} onClick={() => handleFilter(4)} onMouseEnter={() => hoverFilterEffect('bw')} onMouseLeave={() => hoverFilterEffect('bw')}></div>
                     <div className="filter-image" style={{ backgroundImage: `url(${smooth})` }} onClick={() => handleFilter(5)} onMouseEnter={() => hoverFilterEffect('smooth')} onMouseLeave={() => hoverFilterEffect('smooth')}></div>
                 </div>
-            </div>
-            <div className='filter-countdown'>{countdown}s</div>
+            </div>            
             <div className="bottom-filter" style={{ backgroundImage: `url(${continueButton})` }} onMouseEnter={() => hoverContinueButton()} onMouseLeave={() => hoverContinueButton()} onClick={() => goToSticker()}></div>
         </div>
     );
