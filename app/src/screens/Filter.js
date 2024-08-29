@@ -131,6 +131,7 @@ function Filter() {
     const [selectedId, setSelectedId] = useState([]);
     const [clickedId, setClickedId] = useState(null);
     const [countdown, setCountdown] = useState(20);
+    const [photos, setPhotos] = useState([]);
     const effectFloat = 0.05;
     const uuid = sessionStorage.getItem("uuid");
 
@@ -208,7 +209,40 @@ function Filter() {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
     };
 
-    const photos = JSON.parse(sessionStorage.getItem('photos'))["images"];
+    useEffect(() => {
+        asyncGetPhotos();
+    }, [uuid]);
+
+    const asyncGetPhotos = async () => {      
+        if (uuid === null) {
+            return;
+        }          
+        const photos = await getPhotos(uuid);        
+
+        if (photos && photos.images) {
+            const formattedImages = photos.images.map(img => {
+                const imageName = img.url.split('/').pop();
+                return {
+                    ...img,
+                    url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
+                };
+            });
+
+            const finalFormattedImages = formattedImages.map(img => ({
+                ...img,
+                url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
+            }));            
+
+            setCapturePhotos(finalFormattedImages);
+
+            setPhotos(finalFormattedImages);
+
+            // loop photos.images and setSelectedPhotos with array photo id
+            setSelectedPhotos(finalFormattedImages.map(photo => photo.id));
+        } else {
+            console.log("No photos available."); 
+        }
+    };
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
