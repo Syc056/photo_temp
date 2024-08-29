@@ -38,6 +38,8 @@ function Photo() {
     const [selectedLayout, setSelectedLayout] = useState(null);
     const [totalSnapshotPhoto, setTotalSnapshotPhoto] = useState(0);
 
+    const [status, setStatus] = useState('working');
+
     const timerRef = useRef(null);
 
     useEffect(() => {
@@ -184,9 +186,9 @@ function Photo() {
                     clearInterval(timerRef.current);
                     takeSnapshot().then(() => {
                         setCountdown(8);
-                        if (photoCount < totalSnapshotPhoto) {
+                        if (status === "working") {
                             startTimer();
-                        }
+                        }                        
                     });
                     return 8;
                 }
@@ -205,15 +207,15 @@ function Photo() {
                 ...latestImage,
                 url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
             };
-            if (photos.videos!=undefined) {
-                if (photos.videos.length!=0) {
-                          const videoUrl=photos.videos[0].url.replace("get_photo","download_photo")
-            console.log('videoUrl>>>',videoUrl)
-            sessionStorage.setItem("videoUrl",videoUrl)
+            if (photos.videos != undefined) {
+                if (photos.videos.length != 0) {
+                    const videoUrl = photos.videos[0].url.replace("get_photo", "download_photo")
+                    console.log('videoUrl>>>', videoUrl)
+                    sessionStorage.setItem("videoUrl", videoUrl)
                 }
-           
+
             }
-           
+
             setCapturePhotos((prevPhotos) => {
                 const newPhotos = [...prevPhotos];
                 newPhotos[currentPhotoCount] = {
@@ -331,7 +333,8 @@ function Photo() {
     useEffect(() => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
-            navigate('/photo-preview');
+            setStatus("done");
+            // navigate('/photo-preview');
         }
     }, [capturePhotos, navigate]);
 
@@ -381,7 +384,7 @@ function Photo() {
     };
 
     useEffect(() => {
-        if (uuid) {
+        if (uuid && status === 'working') {
             const initializeLiveView = async () => {
                 await startLiveView();
             };
@@ -391,7 +394,7 @@ function Photo() {
         return () => {
             clearInterval(timerRef.current);
         };
-    }, [uuid]);
+    }, [uuid, status]);
 
     const playTakePhotoAudio = async () => {
         await getAudio({ file_name: "take_photo.wav" });

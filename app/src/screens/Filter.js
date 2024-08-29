@@ -292,12 +292,7 @@ function Filter() {
                 setIntensity(intensity_mn);
                 setGoBackButton(goback_mn);
             }
-        }
-
-        // const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));
-        // if (storedSelectedPhotos) {
-        //     setSelectedPhotos(storedSelectedPhotos);
-        // }
+        }        
 
         const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
         if (storedSelectedFrame) {
