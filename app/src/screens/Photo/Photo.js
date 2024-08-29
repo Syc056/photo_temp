@@ -16,7 +16,7 @@ import load_vn from '../../assets/Photo/Load/vn/BG.png';
 import load_mn from '../../assets/Photo/Load/mn/BG.png';
 import ok_button from '../../assets/Photo/Snap/OkInactive.png';
 import take_again_button from '../../assets/Photo/Snap/TakeAgainInactive.png';
-import ok_active_button from '../../assets/Photo/Snap/Ok.png';
+import ok_active_button from '../../assets/Photo/Snap/OK.png';
 import take_again_active_button from '../../assets/Photo/Snap/TakeAgain.png';
 import offline_wc from '../../assets/Photo/OFFLINE.jpg';
 import { getAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
