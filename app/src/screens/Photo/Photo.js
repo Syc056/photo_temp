@@ -16,6 +16,8 @@ import load_vn from '../../assets/Photo/Load/vn/BG.png';
 import load_mn from '../../assets/Photo/Load/mn/BG.png';
 import ok_button from '../../assets/Photo/Snap/OkInactive.png';
 import take_again_button from '../../assets/Photo/Snap/TakeAgainInactive.png';
+import ok_active_button from '../../assets/Photo/Snap/Ok.png';
+import take_again_active_button from '../../assets/Photo/Snap/TakeAgain.png';
 import offline_wc from '../../assets/Photo/OFFLINE.jpg';
 import { getAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 import Uid from "react-uuid"
@@ -37,6 +39,9 @@ function Photo() {
     const [myBackground, setMyBackground] = useState(null);
     const [selectedLayout, setSelectedLayout] = useState(null);
     const [totalSnapshotPhoto, setTotalSnapshotPhoto] = useState(0);
+
+    const [okButtonUrl, setOkButtonUrl] = useState(ok_button);
+    const [takeAgainButtonUrl, setTakeAgainButtonUrl] = useState(take_again_button);
 
     const [status, setStatus] = useState('working');
 
@@ -66,7 +71,7 @@ function Photo() {
         const sessionSelectedLayout = sessionStorage.getItem('selectedLayout');
         const parsedSelectedLayout = JSON.parse(sessionSelectedLayout);
         const layoutData = parsedSelectedLayout[0];
-        console.log(parsedSelectedLayout);
+        // console.log(parsedSelectedLayout);
         if (layoutData) {
             setSelectedLayout(layoutData.photo_cover);
         }
@@ -201,7 +206,7 @@ function Photo() {
         sessionStorage.setItem("getphotos", photos);
         if (photos && photos.images && photos.images.length > 0) {
             const latestImage = photos.images[photos.images.length - 1];
-            console.log(photos)
+            console.log('latestImage>>>', latestImage)
             const imageName = latestImage.url.split('/').pop();
             const formattedImage = {
                 ...latestImage,
@@ -333,8 +338,7 @@ function Photo() {
     useEffect(() => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
-            setStatus("done");
-            // navigate('/photo-preview');
+            setStatus("done");            
         }
     }, [capturePhotos, navigate]);
 
@@ -390,6 +394,12 @@ function Photo() {
             };
             initializeLiveView();
             startTimer();
+        }
+
+        if (status === 'done') {
+            setOkButtonUrl(ok_active_button);
+        } else {
+            setOkButtonUrl(ok_button);
         }
         return () => {
             clearInterval(timerRef.current);
@@ -471,8 +481,8 @@ function Photo() {
                         {capturePhotos && showSelectedPhotos()}
                     </div>
                     <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
-                    <div className='ok-photo-button' style={{ backgroundImage: `url(${ok_button})` }}></div>
-                    <div className='take-again-button' style={{ backgroundImage: `url(${take_again_button})` }}></div>
+                    <div className='ok-photo-button' style={{ backgroundImage: `url(${okButtonUrl})` }}></div>
+                    <div className='take-again-button' style={{ backgroundImage: `url(${takeAgainButtonUrl})` }}></div>
                 </div>
                 <div className="middle-photo-div">
                     {!capturing && (
