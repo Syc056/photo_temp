@@ -92,7 +92,7 @@ function Photo() {
             // remove all selected photos
             setSelectedReTakePhotos([]);
         }
-        
+
         if (selectedReTakePhotos.includes(selectedId)) {
             const filteredIds = selectedReTakePhotos.filter((id) => id !== selectedId);
             setSelectedReTakePhotos(filteredIds);
@@ -110,9 +110,6 @@ function Photo() {
     };
 
     useEffect(() => {
-        if (selectedReTakePhotos.length === 0) {
-            setStatus('done');
-        }
         if (selectedReTakePhotos.length > 0 && status === 'done') {
             setTakeAgainButtonUrl(take_again_active_button);
         }
