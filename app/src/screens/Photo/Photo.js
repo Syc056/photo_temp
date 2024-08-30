@@ -267,7 +267,7 @@ function Photo() {
                 const firstRetakePhoto = selectedReTakePhotos[0];
                 
                 // get id of firstRetakePhoto
-                const firstRetakePhotoIndex = capturePhotos[firstRetakePhoto].id;
+                const firstRetakePhotoIndex = firstRetakePhoto.id;
                 console.log('firstRetakePhotoIndex>>>', firstRetakePhotoIndex)
                 
                 // loop capturePhotos and find photo with id = firstRetakePhotoIndex
@@ -505,6 +505,7 @@ function Photo() {
 
     const goToFilter = () => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
+            sessionStorage.setItem("photos", JSON.stringify(capturePhotos));
             sessionStorage.setItem("uuid", uuid);
             navigate("/filter");
         }

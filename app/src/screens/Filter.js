@@ -210,37 +210,11 @@ function Filter() {
     };
 
     useEffect(() => {
-        asyncGetPhotos();
-    }, [uuid]);
-
-    const asyncGetPhotos = async () => {      
-        if (uuid === null) {
-            return;
-        }          
-        const photos = await getPhotos(uuid);        
-
-        if (photos && photos.images) {
-            const formattedImages = photos.images.map(img => {
-                const imageName = img.url.split('/').pop();
-                return {
-                    ...img,
-                    url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
-                };
-            });
-
-            const finalFormattedImages = formattedImages.map(img => ({
-                ...img,
-                url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
-            }));            
-
-            setPhotos(finalFormattedImages);
-
-            // loop photos.images and setSelectedPhotos with array photo id
-            setSelectedPhotos(finalFormattedImages.map(photo => photo.id));
-        } else {
-            console.log("No photos available."); 
-        }
-    };
+        const photos = JSON.parse(sessionStorage.getItem('photos'));
+        if (photos === null) return;
+        setPhotos(photos);
+        setSelectedPhotos(photos.map(photo => photo.id));
+    }, []);    
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
