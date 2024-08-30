@@ -130,12 +130,13 @@ function Filter() {
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
     const [clickedId, setClickedId] = useState(null);
-    const [countdown, setCountdown] = useState(20);
-    const [photos, setPhotos] = useState([]);
+    const [countdown, setCountdown] = useState(20);    
     const effectFloat = 0.05;
     const uuid = sessionStorage.getItem("uuid");
 
     const timerRef = useRef(null);
+
+    const photos = JSON.parse(sessionStorage.getItem('photos'))["images"];
 
     const handlePhotoClick = (selectedIndex) => {
         if (selectedId.includes(selectedIndex)) {
@@ -207,13 +208,7 @@ function Filter() {
 
     const chunkArray = (arr, size) => {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
-    };
-
-    useEffect(() => {
-        const photos = JSON.parse(sessionStorage.getItem('photos'));
-        if (photos === null) return;
-        setPhotos(photos);        
-    }, []);    
+    };    
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
