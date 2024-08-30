@@ -87,7 +87,12 @@ function Photo() {
         }
     }, []);
 
-    const handleRetakPhoto = (selectedId) => {
+    const handleRetakePhoto = (selectedId) => {
+        if (selectedReTakePhotos.length > 0) {
+            // remove all selected photos
+            setSelectedReTakePhotos([]);
+        }
+        
         if (selectedReTakePhotos.includes(selectedId)) {
             const filteredIds = selectedReTakePhotos.filter((id) => id !== selectedId);
             setSelectedReTakePhotos(filteredIds);
@@ -105,7 +110,10 @@ function Photo() {
     };
 
     useEffect(() => {
-        if (selectedReTakePhotos.length > 0) {
+        if (selectedReTakePhotos.length === 0) {
+            setStatus('done');
+        }
+        if (selectedReTakePhotos.length > 0 && status === 'done') {
             setTakeAgainButtonUrl(take_again_active_button);
         }
     }, [selectedReTakePhotos]);
@@ -221,6 +229,11 @@ function Photo() {
         }, 1000);
     };
 
+    const reTakePhoto = () => {
+        setStatus("working");
+        setCountdown(8);                     
+    };
+
     const getLatestPhoto = async (currentPhotoCount) => {
         const photos = await getPhotos(uuid);
         sessionStorage.setItem("getphotos", photos);
@@ -241,14 +254,33 @@ function Photo() {
 
             }
 
-            setCapturePhotos((prevPhotos) => {
-                const newPhotos = [...prevPhotos];
-                newPhotos[currentPhotoCount] = {
-                    id: formattedImage.id,
-                    url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
-                };
-                return newPhotos;
-            });
+            // if retake photo
+            if (selectedReTakePhotos.length > 0) {
+                // get retake photo
+                const firstRetakePhoto = selectedReTakePhotos[0];
+                // get retake photo index
+                const firstRetakePhotoIndex = capturePhotos.findIndex((photo) => photo.id === firstRetakePhoto);
+                // replace retake photo with photo in capturePhotos with index
+                setCapturePhotos((prevPhotos) => {
+                    const newPhotos = [...prevPhotos];
+                    newPhotos[firstRetakePhotoIndex] = {
+                        id: formattedImage.id,
+                        url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
+                    };
+                    return newPhotos;
+                });
+                // remove all photos in selectedReTakePhotos
+                setSelectedReTakePhotos([]);
+            } else {
+                setCapturePhotos((prevPhotos) => {
+                    const newPhotos = [...prevPhotos];
+                    newPhotos[currentPhotoCount] = {
+                        id: formattedImage.id,
+                        url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
+                    };
+                    return newPhotos;
+                });
+            }            
         } else {
             navigate(-1);
             console.log("No photos available.");
@@ -262,6 +294,7 @@ function Photo() {
                     <div
                         className="choose-photo-item-3cut-top-line"
                         style={{ backgroundImage: `url(${capturePhotos[0].url})`, transform: "scaleX(-1)" }}
+                        onClick={() => handleRetakePhoto(0)}
                     />
                 </div>
             );
@@ -275,6 +308,7 @@ function Photo() {
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                 style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                onClick={() => handleRetakePhoto(selectedIndex)}
                             />
                         ))}
                     </div>
@@ -287,6 +321,7 @@ function Photo() {
                         <div
                             className="choose-photo-item-5cut-last-line"
                             style={{ backgroundImage: `url(${capturePhotos[capturePhotos.length - 1].url})`, transform: "scaleX(-1)" }}
+                            onClick={() => handleRetakePhoto(capturePhotos.length - 1)}
                         />
                     </div>
                 );
@@ -299,6 +334,7 @@ function Photo() {
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    onClick={() => handleRetakePhoto(selectedIndex)}
                                 />
                             ))}
                         </div>
@@ -315,6 +351,7 @@ function Photo() {
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                                     style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    onClick={() => handleRetakePhoto(selectedIndex)}
                                 />
                             ))}
                         </div>
@@ -332,6 +369,7 @@ function Photo() {
                             style={{
                                 backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform: "scaleX(-1)"
                             }}
+                            onClick={() => handleRetakePhoto(selectedIndex)}
                         />
                     ))}
                 </div>
@@ -502,7 +540,7 @@ function Photo() {
                     </div>
                     <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
                     <div className='ok-photo-button' style={{ backgroundImage: `url(${okButtonUrl})` }}></div>
-                    <div className='take-again-button' style={{ backgroundImage: `url(${takeAgainButtonUrl})` }}></div>
+                    <div className='take-again-button' style={{ backgroundImage: `url(${takeAgainButtonUrl})` }} onClick={reTakePhoto}></div>
                 </div>
                 <div className="middle-photo-div">
                     {!capturing && (
