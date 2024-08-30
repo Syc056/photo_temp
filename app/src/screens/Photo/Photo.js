@@ -272,7 +272,9 @@ function Photo() {
                 console.log('firstRetakePhotoIndex>>>', firstRetakePhotoIndex)
 
                 // call api to delete the photo inside uuid
-                await deletePhoto(uuid, firstRetakePhotoIndex);
+                // get the photo name and photo type
+                const photoName = firstRetakePhoto.url.split('/').pop();
+                await deletePhoto(uuid, photoName);
                 
                 // loop capturePhotos and find photo with id = firstRetakePhotoIndex
                 const newCapturePhotos = capturePhotos.map((photo, index) => {
