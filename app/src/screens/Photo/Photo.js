@@ -259,8 +259,7 @@ function Photo() {
 
             }
 
-            // if retake photo
-            let mySelectedPhotos = [];
+            // if retake photo            
             if (selectedReTakePhotos.length > 0) {
                 console.log('selectedReTakePhotos>>>', selectedReTakePhotos)
                 
@@ -284,35 +283,20 @@ function Photo() {
                         return photo;
                     }
                 });
-                setCapturePhotos(newCapturePhotos);  
-                
-                mySelectedPhotos = newCapturePhotos;
+                setCapturePhotos(newCapturePhotos);                                  
                 
                 // remove all photos in selectedReTakePhotos
                 setSelectedReTakePhotos([]);
             } else {
-                const newPhotos = [...capturePhotos];
-                newPhotos[currentPhotoCount] = {
-                    id: formattedImage.id,
-                    url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
-                };
-                setCapturePhotos(newPhotos);
-
-                mySelectedPhotos = newPhotos;
-            }            
-
-            const finalFormattedImages = mySelectedPhotos.map(img => ({
-                ...img,
-                url: img.url
-            }));
-
-            sessionStorage.setItem('photos', JSON.stringify({                 
-                images: finalFormattedImages 
-            }));
-
-            // loop id of capturePhotos and set in sessionStorage
-            const selectedPhotos = mySelectedPhotos.map((photo) => photo.id);            
-            sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
+                setCapturePhotos((prevPhotos) => {
+                    const newPhotos = [...prevPhotos];
+                    newPhotos[currentPhotoCount] = {
+                        id: formattedImage.id,
+                        url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
+                    };
+                    return newPhotos;
+                });
+            }                        
         } else {
             navigate(-1);
             console.log("No photos available.");
