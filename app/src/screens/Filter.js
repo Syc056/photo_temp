@@ -533,7 +533,7 @@ function Filter() {
                             <div
                                 key={photoIndex}
                                 className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                style={{ backgroundImage: `url(${photos[photoIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                 onClick={() => handlePhotoClick(selectedIndex)}
                             />
                         ))}
@@ -559,7 +559,7 @@ function Filter() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                    style={{ backgroundImage: `url(${photos[photoIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                     onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
@@ -576,7 +576,7 @@ function Filter() {
                                 <div
                                     key={photoIndex}
                                     className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
+                                    style={{ backgroundImage: `url(${photos[photoIndex].url})`, transform: "scaleX(-1)", filter: getImageStyle(selectedIndex) }}
                                     onClick={() => handlePhotoClick(selectedIndex)}
                                 />
                             ))}
@@ -593,7 +593,7 @@ function Filter() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
-                                backgroundImage: `url(${photos[selectedIndex].url})`, transform: "scaleX(-1)",
+                                backgroundImage: `url(${photos[photoIndex].url})`, transform: "scaleX(-1)",
                                 filter: getImageStyle(selectedIndex),
                             }}
                             onClick={() => handlePhotoClick(selectedIndex)}
