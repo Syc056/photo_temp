@@ -88,9 +88,13 @@ function Photo() {
     }, []);
 
     const handleRetakePhoto = (selectedId) => {
+        console.log('Selected retake:', selectedId);
         if (selectedReTakePhotos.length > 0) {
             // remove all selected photos
             setSelectedReTakePhotos([]);
+            // set inactive retake
+            setOkButtonUrl(ok_active_button);
+            setTakeAgainButtonUrl(take_again_button);
         }
 
         if (selectedReTakePhotos.includes(selectedId)) {
@@ -99,6 +103,7 @@ function Photo() {
         } else {
             setSelectedReTakePhotos([...selectedReTakePhotos, selectedId]);            
         }        
+        setOkButtonUrl(ok_button);
     };
 
     const sleep = (ms) => {
@@ -186,7 +191,9 @@ function Photo() {
             }
         }
 
-        if (selectedIndex && selectedReTakePhotos.includes(selectedIndex)) {
+        // console.log('selectedIndexStyle: ', selectedIndex)
+        // console.log('array selectedRetakePhotos: ', selectedReTakePhotos)
+        if (selectedReTakePhotos.length > 0 && selectedReTakePhotos[selectedReTakePhotos.length - 1] === selectedIndex) {
             className += ' clicked';
         }
         return className;
@@ -232,6 +239,7 @@ function Photo() {
     };
 
     const getLatestPhoto = async (currentPhotoCount) => {
+        console.log('currentPhotoCount>>>', currentPhotoCount)
         const photos = await getPhotos(uuid);
         sessionStorage.setItem("getphotos", photos);
         if (photos && photos.images && photos.images.length > 0) {
@@ -374,6 +382,96 @@ function Photo() {
         }
     };
 
+    const showClickArea = () => {
+        if (selectedFrame === '3-cutx2' && capturePhotos.length > 0) {
+            const firstPhotoTpl = (
+                <div className="choose-photo-row">
+                    <div
+                        className="choose-photo-item-3cut-top-line"
+                        style={{ backgroundImage: `url(${capturePhotos[0].url})`, transform: "scaleX(-1)" }}
+                        onClick={() => handleRetakePhoto(0)}
+                    />
+                </div>
+            );
+            const selectedPhotoRows = chunkArray(capturePhotos.slice(1), 2);
+            return [
+                firstPhotoTpl,
+                ...selectedPhotoRows.map((row, rowIndex) => (
+                    <div key={rowIndex} className="choose-photo-row">
+                        {row.map((selectedIndex, photoIndex) => (
+                            <div
+                                key={photoIndex}
+                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                onClick={() => handleRetakePhoto(selectedIndex)}
+                            />
+                        ))}
+                    </div>
+                )),
+            ];
+        } else if (selectedFrame === '5-cutx2' && capturePhotos.length > 0) {
+            if (capturePhotos.length === 5) {
+                const lastPhotoTpl = (
+                    <div className="choose-photo-row">
+                        <div
+                            className="choose-photo-item-5cut-last-line"
+                            style={{ backgroundImage: `url(${capturePhotos[capturePhotos.length - 1].url})`, transform: "scaleX(-1)" }}
+                            onClick={() => handleRetakePhoto(capturePhotos.length - 1)}
+                        />
+                    </div>
+                );
+                const selectedPhotoRows = chunkArray(capturePhotos.slice(0, capturePhotos.length - 1), 2);
+                return [
+                    selectedPhotoRows.map((row, rowIndex) => (
+                        <div key={rowIndex} className="choose-photo-row">
+                            {row.map((selectedIndex, photoIndex) => (
+                                <div
+                                    key={photoIndex}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    onClick={() => handleRetakePhoto(selectedIndex)}
+                                />
+                            ))}
+                        </div>
+                    )),
+                    lastPhotoTpl,
+                ];
+            } else {
+                const selectedPhotoRows = chunkArray(capturePhotos, 2);
+                return [
+                    selectedPhotoRows.map((row, rowIndex) => (
+                        <div key={rowIndex} className="choose-photo-row">
+                            {row.map((selectedIndex, photoIndex) => (
+                                <div
+                                    key={photoIndex}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    onClick={() => handleRetakePhoto(selectedIndex)}
+                                />
+                            ))}
+                        </div>
+                    )),
+                ];
+            }
+        } else {
+            const selectedPhotoRows = chunkArray(capturePhotos, 2);
+            return selectedPhotoRows.map((row, rowIndex) => (
+                <div key={rowIndex} className="choose-photo-row">
+                    {row.map((selectedIndex, photoIndex) => (
+                        <div
+                            key={photoIndex}
+                            className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                            style={{
+                                backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform: "scaleX(-1)"
+                            }}
+                            onClick={() => handleRetakePhoto(selectedIndex)}
+                        />
+                    ))}
+                </div>
+            ));
+        }
+    };
+
     const playCntSound = async () => {
         await getAudio({ file_name: "count.wav" });
     };
@@ -393,7 +491,9 @@ function Photo() {
     useEffect(() => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
-            setStatus("done");            
+            setStatus("done");       
+            setOkButtonUrl(ok_active_button);
+            setTakeAgainButtonUrl(take_again_button);     
         }
     }, [capturePhotos, navigate]);
 
@@ -413,6 +513,7 @@ function Photo() {
             setLoadBgImage(load_mn);
         }
     }, []);
+
 
     const togglePreviewSet = () => {
         setShowFirstSet((prevShowFirstSet) => !prevShowFirstSet);
@@ -536,6 +637,7 @@ function Photo() {
                         {capturePhotos && showSelectedPhotos()}
                     </div>
                     <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
+                    {showClickArea()}
                     <div className='ok-photo-button' style={{ backgroundImage: `url(${okButtonUrl})` }}></div>
                     <div className='take-again-button' style={{ backgroundImage: `url(${takeAgainButtonUrl})` }} onClick={reTakePhoto}></div>
                 </div>
