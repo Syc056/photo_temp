@@ -726,6 +726,7 @@ function Filter() {
         }));
         sessionStorage.setItem('photos', JSON.stringify(withFilterPhotos));
         sessionStorage.setItem('filter', JSON.stringify(filterEffect));
+        sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
         storeImageCanvas();
     };
 
