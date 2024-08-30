@@ -262,11 +262,14 @@ function Photo() {
             // if retake photo
             if (selectedReTakePhotos.length > 0) {
                 console.log('selectedReTakePhotos>>>', selectedReTakePhotos)
+                
                 // get retake photo
                 const firstRetakePhoto = selectedReTakePhotos[0];
-                // get retake photo id                
-                const firstRetakePhotoIndex = capturePhotos.findIndex((photo) => photo.id === firstRetakePhoto);
+                
+                // get id of firstRetakePhoto
+                const firstRetakePhotoIndex = capturePhotos[firstRetakePhoto].id;
                 console.log('firstRetakePhotoIndex>>>', firstRetakePhotoIndex)
+                
                 // loop capturePhotos and find photo with id = firstRetakePhotoIndex
                 const newCapturePhotos = capturePhotos.map((photo, index) => {
                     if (index === firstRetakePhotoIndex) {
