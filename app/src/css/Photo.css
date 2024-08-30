@@ -583,6 +583,33 @@
      border-radius: 10px;
 }
 
+.choose-photo-item-4cut-0-0-right.clicked,
+.choose-photo-item-4cut-0-1-right.clicked,
+.choose-photo-item-4cut-1-0-right.clicked,
+.choose-photo-item-4cut-1-1-right.clicked,
+.choose-photo-item-3cut-0-0-right.clicked,
+.choose-photo-item-3cut-0-1-right.clicked,
+.choose-photo-item-2cut-0-0-right.clicked,
+.choose-photo-item-2cut-0-1-right.clicked,
+.choose-photo-item6-0-0-right.clicked,
+.choose-photo-item6-0-1-right.clicked,
+.choose-photo-item6-1-0-right.clicked,
+.choose-photo-item6-1-1-right.clicked,
+.choose-photo-item6-2-0-right.clicked,
+.choose-photo-item6-2-1-right.clicked,
+.choose-photo-item-0-0-right.clicked,
+.choose-photo-item-0-1-right.clicked,
+.choose-photo-item-1-0-right.clicked,
+.choose-photo-item-1-1-right.clicked,
+.choose-photo-item-2-0-right.clicked,
+.choose-photo-item-2-1-right.clicked,
+.choose-photo-item-3-0-right.clicked,
+.choose-photo-item-3-1-right.clicked {
+     border: 6px solid red;
+     box-sizing: border-box;
+     border-radius: 10px;
+}
+
 .choose-photo-item-4cut-0-0 {
      width: 200px;
      height: 160px;

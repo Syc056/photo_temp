@@ -42,6 +42,7 @@ function Photo() {
 
     const [okButtonUrl, setOkButtonUrl] = useState(ok_button);
     const [takeAgainButtonUrl, setTakeAgainButtonUrl] = useState(take_again_button);
+    const [selectedReTakePhotos, setSelectedReTakePhotos] = useState([]);
 
     const [status, setStatus] = useState('working');
 
@@ -86,6 +87,15 @@ function Photo() {
         }
     }, []);
 
+    const handleRetakPhoto = (selectedId) => {
+        if (selectedReTakePhotos.includes(selectedId)) {
+            const filteredIds = selectedReTakePhotos.filter((id) => id !== selectedId);
+            setSelectedReTakePhotos(filteredIds);
+        } else {
+            setSelectedReTakePhotos([...selectedReTakePhotos, selectedId]);            
+        }        
+    };
+
     const sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     };
@@ -93,6 +103,12 @@ function Photo() {
     const chunkArray = (arr, size) => {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
     };
+
+    useEffect(() => {
+        if (selectedReTakePhotos.length > 0) {
+            setTakeAgainButtonUrl(take_again_active_button);
+        }
+    }, [selectedReTakePhotos]);
 
     const displayClassNameForPhoto = (rowIndex, photoIndex, selectedIndex) => {
         let className = 'choose-photo-item';
@@ -163,6 +179,10 @@ function Photo() {
             } else if (rowIndex === 1 && photoIndex === 1) {
                 className = 'choose-photo-item-5cut-1-1';
             }
+        }
+
+        if (selectedIndex && selectedReTakePhotos.includes(selectedIndex)) {
+            className += ' clicked';
         }
         return className;
     };
