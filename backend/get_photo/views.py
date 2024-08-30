@@ -277,7 +277,18 @@ def serve_photo_(request, file_path):
 
 
 
-
+@csrf_exempt
+def delete_photo(request, folder_id, image):
+    if request.method == 'GET':
+        try:
+            upload_dir = os.path.join(settings.BASE_DIR, 'uploads', folder_id)
+            file_path = os.path.join(upload_dir, image)
+            os.remove(file_path)                        
+            return JsonResponse({'status': 'success', 'message': 'File has been deleted successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 
 
