@@ -69,6 +69,18 @@ export const getPhotos = async (uuid) => {
   }
 };
 
+export const deletePhoto = async (uuid, photoNum) => {
+  try {
+    const { data, status } = await axiosInstance.delete(`/delete_photo/`, {
+      params: { uuid: uuid, photoNum: photoNum }
+    });
+    return data;
+  } catch (error) {
+    console.error("Error deleting photo:", error);
+    return false;
+  }
+};
+
 export const sendCaptureReq = async (uuid,photoNum) => {
   const { data } = await axiosInstance.post('/capture', { uuid:uuid,photoNum:photoNum });
   return data;

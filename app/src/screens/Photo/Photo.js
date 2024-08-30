@@ -19,7 +19,7 @@ import take_again_button from '../../assets/Photo/Snap/TakeAgainInactive.png';
 import ok_active_button from '../../assets/Photo/Snap/OK.png';
 import take_again_active_button from '../../assets/Photo/Snap/TakeAgain.png';
 import offline_wc from '../../assets/Photo/OFFLINE.jpg';
-import { getAudio, getPhotos, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
+import { getAudio, getPhotos, deletePhoto, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 import Uid from "react-uuid"
 
 function Photo() {
@@ -270,6 +270,9 @@ function Photo() {
                 // get id of firstRetakePhoto
                 const firstRetakePhotoIndex = firstRetakePhoto.id;
                 console.log('firstRetakePhotoIndex>>>', firstRetakePhotoIndex)
+
+                // call api to delete the photo inside uuid
+                await deletePhoto(uuid, firstRetakePhotoIndex);
                 
                 // loop capturePhotos and find photo with id = firstRetakePhotoIndex
                 const newCapturePhotos = capturePhotos.map((photo, index) => {
