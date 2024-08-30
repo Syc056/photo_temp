@@ -497,6 +497,13 @@ function Photo() {
         }
     }, [capturePhotos, navigate]);
 
+    const goToFilter = () => {
+        if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
+            sessionStorage.setItem("uuid", uuid);
+            navigate("/filter");
+        }
+    };
+
     useEffect(() => {
         const language = sessionStorage.getItem('language');
         if (language === 'en') {
@@ -638,7 +645,7 @@ function Photo() {
                     </div>
                     <div className={displayClassNameForLayout()} style={{ backgroundImage: `url(${selectedLayout})` }}></div>
                     {showClickArea()}
-                    <div className='ok-photo-button' style={{ backgroundImage: `url(${okButtonUrl})` }}></div>
+                    <div className='ok-photo-button' style={{ backgroundImage: `url(${okButtonUrl})` }} onClick={goToFilter}></div>
                     <div className='take-again-button' style={{ backgroundImage: `url(${takeAgainButtonUrl})` }} onClick={reTakePhoto}></div>
                 </div>
                 <div className="middle-photo-div">
