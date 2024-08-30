@@ -506,6 +506,11 @@ function Photo() {
     const goToFilter = () => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("photos", JSON.stringify(capturePhotos));
+            
+            // loop id of capturePhotos and set in sessionStorage
+            const selectedPhotos = capturePhotos.map((photo) => photo.id);            
+            sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
+
             sessionStorage.setItem("uuid", uuid);
             navigate("/filter");
         }

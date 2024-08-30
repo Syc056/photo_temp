@@ -212,8 +212,7 @@ function Filter() {
     useEffect(() => {
         const photos = JSON.parse(sessionStorage.getItem('photos'));
         if (photos === null) return;
-        setPhotos(photos);
-        setSelectedPhotos(photos.map(photo => photo.id));
+        setPhotos(photos);        
     }, []);    
 
     useEffect(() => {
@@ -271,6 +270,11 @@ function Filter() {
         const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
         if (storedSelectedFrame) {
             setSelectedFrame(storedSelectedFrame.frame);
+        }
+
+        const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));
+        if (storedSelectedPhotos) {
+            setSelectedPhotos(storedSelectedPhotos);
         }
     }, []);
 
