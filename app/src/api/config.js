@@ -71,7 +71,7 @@ export const getPhotos = async (uuid) => {
 
 export const deletePhoto = async (uuid, photoName) => {
   try {
-    const { data, status } = await originAxiosInstance.get(`/get_photo/delete/{uuid}/{photoName}`);
+    const { data, status } = await originAxiosInstance.get(`/get_photo/delete/${uuid}/${photoName}`);
     return data;
   } catch (error) {
     console.error("Error deleting photo:", error);
