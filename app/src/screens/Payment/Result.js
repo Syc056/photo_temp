@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import i18n from '../../translations/i18n';
 import "../../css/Payment.css";
+import HomeButton from '../HomeButton';
 
 //Background
 import background_en from '../../assets/Payment/Result/BG.png';
@@ -354,6 +355,7 @@ function QR() {
      return (
           <div className='payment-result-container' style={{ backgroundImage: `url(${backround})` }}>
                <div style={{ backgroundImage: `url(${continueButton})` }} className="done-result-button" onClick={printFrameWithSticker} onMouseEnter={hoverContinueButton} onMouseLeave={hoverContinueButton}></div>
+               <HomeButton />               
           </div>
      );
 }

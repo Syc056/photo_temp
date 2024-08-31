@@ -34,6 +34,8 @@ import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
 import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getClickAudio, sendDongNum } from '../../api/config';
 
+import HomeButton from '../HomeButton';
+
 function PaymentNumber(props) {
   const [background, setBackground] = useState(background_en);
   const [minusBtn, setMinusBtn] = useState(minusDefault)
@@ -227,6 +229,8 @@ function PaymentNumber(props) {
         }}
         onMouseLeave={() => { onMouseConfirmLeave(language) }}
       ></div>
+
+      <HomeButton />
     </div>
   );
 }

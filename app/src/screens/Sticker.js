@@ -13,6 +13,7 @@ import Konva from 'konva';
 import useImage from 'use-image';
 import { StickerItem } from '../screens/StickerItem';
 import axios from 'axios';
+import HomeButton from './HomeButton';
 // Sticker
 import { stickers } from './stickers.data';
 
@@ -83,6 +84,7 @@ import CustomCarousel from '../components/CustomCarousel';
 import VerticalCustomCarousel from '../components/VerticalCustomCarousel';
 import { getAudio, getClickAudio, getPhotos, originAxiosInstance } from '../api/config';
 let playAddEmojiSound = false;
+
 function Sticker() {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -394,13 +396,40 @@ function Sticker() {
         playPrintAudio()
         setClickPrint(true);
 
-        callPrinter();
-        await uploadCloud();
+        // callPrinter();
+        // await uploadCloud();
 
         // setTimeout(() => {
         //     navigate("/print");
         // }, 3000);
+
+        saveImageCanvas();
     };
+
+    const saveImageCanvas = () => {
+        const stageRef = printRefs[bgIdx];
+        const originalDataURL = stageRef.current.toDataURL();
+
+        try {
+            const formData = new FormData();
+            formData.append("image", originalDataURL);
+            formData.append("uuid", uuid);
+            originAxiosInstance.post(
+                `${process.env.REACT_APP_BACKEND}/frames/api/save-image-uuid`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            ).then(response => {
+                console.log('Canvas saved with UUID:', uuid);
+                navigate("/payment-number");
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     function rotateImageDataURL(dataURL, degrees) {
         return new Promise((resolve, reject) => {
@@ -1663,6 +1692,8 @@ function Sticker() {
                 </div>
                 <div className="sticker-print-btn" style={{ backgroundImage: `url(${printButton})` }} onClick={printFrameWithSticker} onMouseEnter={hoverPrintButton} onMouseLeave={hoverPrintButton}></div>
             </div>
+
+            <HomeButton />
         </div>
     );
 }

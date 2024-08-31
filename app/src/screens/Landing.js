@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import i18n from '../translations/i18n';
 import styles from "../css/Landing.css";
+import HomeButton from './HomeButton';
 
 // Background
 import background_en from '../assets/Landing/BG.png';
@@ -187,6 +188,7 @@ function Landing() {
                          </div>
                     </section>
                </main>
+               <HomeButton />
           </div>
      );
 }

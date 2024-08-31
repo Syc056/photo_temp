@@ -101,6 +101,9 @@ import continue_mn_hover from '../assets/Common/mn/continue_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
 import { useEffect, useState } from 'react';
 
+// HomeButton
+import HomeButton from './HomeButton';
+
 function Filter() {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -812,6 +815,8 @@ function Filter() {
                 </div>
             </div>
             <div className="bottom-filter" style={{ backgroundImage: `url(${continueButton})` }} onMouseEnter={() => hoverContinueButton()} onMouseLeave={() => hoverContinueButton()} onClick={() => goToSticker()}></div>
+
+            <HomeButton />
         </div>
     );
 }
