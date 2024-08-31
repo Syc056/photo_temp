@@ -525,6 +525,8 @@ function Photo() {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {            
             sessionStorage.setItem("uuid", uuid);
             sessionStorage.setItem('choosePhotos', JSON.stringify(capturePhotos.map(photo => photo.id)));
+            // log capturePhotos id
+            console.log("Capture photos >>", capturePhotos.map(photo => photo.id));
 
             const result = await copyImageApi();
             navigate("/filter");
