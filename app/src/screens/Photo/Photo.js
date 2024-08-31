@@ -106,6 +106,12 @@ function Photo() {
         setOkButtonUrl(ok_button);
     };
 
+    useEffect(() => {
+        if (selectedReTakePhotos.length === 0 && status === 'done') {
+            setOkButtonUrl(ok_active_button);
+        }
+    }, [selectedReTakePhotos]);
+
     const sleep = (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     };

@@ -611,15 +611,15 @@
 }
 
 .choose-photo-item-4cut-0-0 {
-     width: 200px;
-     height: 160px;
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 15.8%;
-     left: 20.6%;
+    width: 150px;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 31.8%;
+    left: 27.6%;
 }
 
 .choose-photo-item-4cut-0-0-right {
@@ -635,15 +635,15 @@
 }
 
 .choose-photo-item-4cut-0-1 {
-     width: 200px;
-     height: 160px;
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 15.8%;
-     left: 51%;
+     width: 150px;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 31.8%;
+    left: 50%;
 }
 
 .choose-photo-item-4cut-0-1-right {
@@ -659,15 +659,15 @@
 }
 
 .choose-photo-item-4cut-1-0 {
-     width: 200px;
-    height: 160px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 1%;
-    position: absolute;
-    top: 39.8%;
-    left: 20.6%;
+     width: 150px;
+     height: 110px;
+     background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center;
+     margin: 1%;
+     position: absolute;
+     top: 47.8%;
+     left: 27.6%;
 }
 
 .choose-photo-item-4cut-1-0-right {
@@ -683,15 +683,15 @@
 }
 
 .choose-photo-item-4cut-1-1 {
-     width: 200px;
-     height: 160px;
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 39.8%;
-     left: 51%;
+     width: 150px;
+    height: 110px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 47.8%;
+    left: 50%;
 }
 
 .choose-photo-item-4cut-1-1-right {
@@ -767,8 +767,8 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 30%;
-     left: 37%;
+     top: 31%;
+     left: 36.4%;
 }
 
 .choose-photo-item-2cut-0-1 {
@@ -791,177 +791,153 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 30%;
-     left: 67%;
+     top: 31%;
+     left: 60%;
 }
 
 /** Frame 6 cut **/
 .choose-photo-item6-0-0 {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 18%;
-     left: 26%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 7%;
+    left: 26.3%;
 }
 
 .choose-photo-item6-0-0-right {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 8%;
-     left: 26%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 7%;
+    left: 33.3%;
 }
 
 .choose-photo-item6-0-1 {
      width: 163.2px;
-     /* 가로 크기 */
      height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 18%;
-     left: 51%;
+     top: 7%;
+     left: 51.3%;
 }
 
 .choose-photo-item6-0-1-right {
      width: 163.2px;
-     /* 가로 크기 */
      height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 8%;
-     left: 51%;
+     top: 7%;
+     left: 58.2%;
 }
 
 .choose-photo-item6-1-0 {
      width: 163.2px;
-     /* 가로 크기 */
      height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 41%;
-     left: 26%;
+     top: 30%;
+     left: 26.3%;
 }
 
 .choose-photo-item6-1-0-right {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 31%;
-     left: 26%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 30%;
+    left: 33.2%;
 }
 
 .choose-photo-item6-1-1 {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 41%;
-     left: 51%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 30%;
+    left: 51.3%;
 }
 
 .choose-photo-item6-1-1-right {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 31%;
-     left: 51%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 30.3%;
+    left: 58.3%;
 }
 
 .choose-photo-item6-2-0 {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 64%;
-     left: 26%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 53%;
+    left: 26.3%;
 }
 
 .choose-photo-item6-2-0-right {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 54%;
-     left: 26%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 53%;
+    left: 33.3%;
 }
 
 .choose-photo-item6-2-1 {
      width: 163.2px;
-     /* 가로 크기 */
      height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
      background-size: cover;
      background-repeat: no-repeat;
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 64%;
-     left: 51%;
+     top: 53%;
+     left: 51.3%;
 }
 
 .choose-photo-item6-2-1-right {
      width: 163.2px;
-     /* 가로 크기 */
-     height: 162px;
-     /* 세로 크기: 가로 크기의 1.02배 */
-     background-size: cover;
-     background-repeat: no-repeat;
-     background-position: center;
-     margin: 1%;
-     position: absolute;
-     top: 54%;
-     left: 51%;
+    height: 162px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 1%;
+    position: absolute;
+    top: 53.3%;
+    left: 58.3%;
 }
 
 /** Frame 6 cut-end **/
