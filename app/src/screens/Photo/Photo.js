@@ -22,6 +22,9 @@ import offline_wc from '../../assets/Photo/OFFLINE.jpg';
 import { getAudio, getPhotos, deletePhoto, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 import Uid from "react-uuid"
 
+// Home Button
+import HomeButton from '../HomeButton';
+
 function Photo() {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -675,6 +678,8 @@ function Photo() {
                         />
                     )}
                 </div>
+
+                <HomeButton />
             </div>
         )
     );

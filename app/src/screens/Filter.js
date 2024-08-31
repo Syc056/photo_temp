@@ -102,6 +102,9 @@ import { getAudio, getClickAudio, originAxiosInstance, getPhotos } from '../api/
 import { useEffect, useState, useRef } from 'react';
 import Uid from "react-uuid"
 
+// Home button
+import HomeButton from '../HomeButton';
+
 function Filter() {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -875,6 +878,7 @@ function Filter() {
                 </div>
             </div>            
             <div className="bottom-filter" style={{ backgroundImage: `url(${continueButton})` }} onMouseEnter={() => hoverContinueButton()} onMouseLeave={() => hoverContinueButton()} onClick={() => goToSticker()}></div>
+            <HomeButton />
         </div>
     );
 }

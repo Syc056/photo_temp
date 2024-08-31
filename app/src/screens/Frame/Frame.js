@@ -29,6 +29,9 @@ import confirm_en_hover from '../../assets/Frame/Layout/confirm_click.png';
 // Other
 import FrameCarousel from '../../components/FrameCarousel';
 
+// Home Button
+import HomeButton from '../HomeButton';
+
 
 function Frame() {
   const [hoveredImage, setHoveredImage] = useState(null);
@@ -234,7 +237,9 @@ function Frame() {
           handleClick={handleClick}
           width={definedWidth}
         />
-      </div>      
+      </div>   
+
+      <HomeButton />   
     </div>
   );
 };

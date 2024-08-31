@@ -30,7 +30,12 @@ import confirm_vn_hover from '../../assets/Frame/Layout/Confirm/vn/confirm_click
 import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
 import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../../api/config';
+
+// Carousel Image Choice
 import LayoutCarousel from '../../components/LayoutCarousel';
+
+// Home Button
+import HomeButton from '../HomeButton';
 
 function Layout() {
      const [layoutBackground, setLayoutBackground] = useState(null);
@@ -358,6 +363,8 @@ function Layout() {
                     style={{ backgroundImage: `url(${confirmClick === confirmButton ? confirmHoverButton : confirmButton})` }}
                     onClick={goToPayment}
                ></div>
+
+               <HomeButton />
           </div>
      );
 };

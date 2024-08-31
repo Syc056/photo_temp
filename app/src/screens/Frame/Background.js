@@ -38,6 +38,9 @@ import background_vn from '../../assets/Frame/Style/vn/BG.png';
 import background_mn from '../../assets/Frame/Style/mn/BG.png';
 import { originAxiosInstance } from '../../api/config';
 
+// Home button
+import HomeButton from '../HomeButton';
+
 function Background() {
      const { t } = useTranslation();
      const navigate = useNavigate();
@@ -188,6 +191,8 @@ function Background() {
                          </div>
                     ))}
                </div>
+
+               <HomeButton />
           </div>
      );
 }
