@@ -103,7 +103,7 @@ import { useEffect, useState, useRef } from 'react';
 import Uid from "react-uuid"
 
 // Home button
-import HomeButton from '../HomeButton';
+import HomeButton from './HomeButton';
 
 function Filter() {
     const { t } = useTranslation();
