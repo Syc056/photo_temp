@@ -132,9 +132,6 @@ function Sticker() {
         width: "",
         height: ""
     });
-    const [countdown, setCountdown] = useState(20);
-
-    const timerRef = useRef(null);
     // const printRatio=JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="2cut-x2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="4-cutx2"||JSON.parse(sessionStorage.getItem('selectedFrame')).frame==="6-cutx2"?8:7;
 
     function getPrintRatio() {
@@ -158,12 +155,6 @@ function Sticker() {
         if (photos === null) return;
         setPhotos(photos);
     }, []);
-
-    // useEffect(() => {
-    //     if (uuid) {
-    //         startTimer();
-    //     }
-    // }, [uuid]);
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
@@ -396,44 +387,20 @@ function Sticker() {
     };
 
     const printFrameWithSticker = async (event,) => {
-        // if (isSel) {
-        //     setIsSel(false)
-        // }
-        // if (clickPrint === true) {
-        //     return;
-        // }
+        if (clickPrint === true) {
+            return;
+        }
 
         playPrintAudio()
         setClickPrint(true);
-        // await uploadCloud();
 
-        saveImageCanvas();
+        callPrinter();
+        await uploadCloud();
+
+        // setTimeout(() => {
+        //     navigate("/print");
+        // }, 3000);
     };
-
-    const saveImageCanvas = () => {
-        const stageRef = printRefs[bgIdx];
-        const originalDataURL = stageRef.current.toDataURL();
-
-        try {
-            const formData = new FormData();
-            formData.append("image", originalDataURL);
-            formData.append("uuid", uuid);
-            originAxiosInstance.post(
-                `${process.env.REACT_APP_BACKEND}/frames/api/save-image-uuid`,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-            ).then(response => {
-                console.log('Canvas saved with UUID:', uuid);
-                navigate("/payment-number");
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     function rotateImageDataURL(dataURL, degrees) {
         return new Promise((resolve, reject) => {
@@ -486,7 +453,6 @@ function Sticker() {
                                 sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
                                 sessionStorage.setItem('qr', qrVal);
                                 console.log("qr val>>>", qrVal)
-                                callPrinter();
                                 navigate("/print");
                             }
 
@@ -504,11 +470,26 @@ function Sticker() {
         }
     };
     const convertUrl = (url) => {
-        let newUrl = url
+        // 'uploads'를 'get_photos/uploads'로 변경
+        let newUrl = url.replace('uploads', 'get_photo/uploads');
+
+        // URL을 슬래시('/')로 분리
+        const urlParts = newUrl.split('/');
+
+        // UUID를 제거하고 슬래시를 하나로 유지
+        const newUrlParts = urlParts.filter((part, index) => {
+            // UUID의 형태를 가지는 부분을 제거
+            if (index === 4 && /^[0-9a-fA-F-]{36}$/.test(part)) {
+                return false;
+            }
+            return true;
+        });
+
+        // URL 다시 합치기
+        newUrl = newUrlParts.join('/');
 
         return newUrl;
     };
-
     const callPrinter = async () => {
         const stageRef = printRefs[bgIdx];
         if (!stageRef.current) {
@@ -525,246 +506,80 @@ function Sticker() {
 
         const formData = new FormData();
         formData.append("photo", newFile);
-        let newPhotoNum = selectedFrame === "Stripx2" ? photoNum : (parseInt(photoNum) + 1).toString();
-        formData.append("uuid", uuid);
-        formData.append("frame", selectedFrame);
-        // formData.append("photoNum", newPhotoNum);
+        let newPhotoNum = parseInt(photoNum)
+        if (selectedFrame === "Stripx2") {
+            newPhotoNum = (parseInt(photoNum)).toString()
+        } else {
+            newPhotoNum = (parseInt(photoNum) + 1).toString()
+        }
+        formData.append("uuid", uuid); // uuid 
+        formData.append("frame", selectedFrame); // frame 개별 필드로 추가
+        formData.append("photoNum", newPhotoNum); // photoNum 
 
-        // try {
-        const response = await originAxiosInstance.post(
-            `${process.env.REACT_APP_BACKEND}/frames/api/print`,
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        try {
+            const response = await originAxiosInstance.post(
+                `${process.env.REACT_APP_BACKEND}/frames/api/print`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }
-            }
-        );
+            );
 
-        console.log('Print response:', response.data);
+            const printUrl = response.data.print_url;
+            const printData = response.data.print_data;
+            const uploadsDataPath = response.data.print_data.file_path;
 
-        const printUrl = response.data.print_url;
-        const printData = response.data.print_data;
+            const res = await getPhotos(uuid);
+            const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
 
-        const myImage = sessionStorage.getItem('uploadedCloudPhotoUrl');
-
-        for (let i = 0; i < newPhotoNum; i++) {
-            // const fileResponse = await fetch(res.images[i].url.replace('uploads', 'get_photo/uploads'));
-            // const fileResponse = await fetch(res.images[i].url);
-            const fileResponse = await fetch(myImage);
+            let newUrl = convertUrl(filtered[0].url)
+            const fileResponse = await fetch(newUrl);
             const fileBlob = await fileResponse.blob();
 
             const formDataToFlask = new FormData();
             formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
             formDataToFlask.append('frame', printData.frame);
 
-            console.log(`${i} : ` + String(formDataToFlask))
 
+            for (let i = 0; i < photoNum; i++) {
+                const fileResponse = await fetch(filtered[0].url.replace('uploads', 'get_photo/uploads'));
+                const fileBlob = await fileResponse.blob();
 
+                const formDataToFlask = new FormData();
+                formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
+                formDataToFlask.append('frame', printData.frame);
 
-            const localPrintResponse = await fetch(printUrl, {
-                method: 'POST',
-                body: formDataToFlask,
-            });
+                const localPrintResponse = await fetch(printUrl, {
+                    method: 'POST',
+                    body: formDataToFlask,
+                });
 
-            if (localPrintResponse.ok) {
-                console.log(`Print job ${i + 1} started successfully.`);
-            } else {
-                console.log(`Failed to start print job ${i + 1}.`);
+                if (localPrintResponse.ok) {
+                    console.log(`Print job ${i + 1} started successfully.`);
+                } else {
+                    console.log(`Failed to start print job ${i + 1}.`);
+                }
             }
+        } catch (error) {
+            console.error('Error during printing process:', error);
         }
 
+        //     const localPrintResponse = await fetch(printUrl, {
+        //         method: 'POST',
+        //         body: formDataToFlask,
+        //     });
 
-        const ipResponse = await fetch("https://api.ipify.org?format=json");
-        const ipData = await ipResponse.json();
-        const userIp = ipData.ip;
-
-        /**
-        // Step 2: Fetch all devices
-        const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
-        const allDevices = await allDevicesResponse.json();
-
-        // Step 3: Find the device with the matching IP address
-        const device = allDevices.find(device => device.ip === userIp);
-
-        if (!device) {
-            console.error(`No device found with IP address: ${userIp}`);
-            return;
-        }
-
-        const deviceId = device.id;
-        const sales = sessionStorage.getItem('sales')
-
-        const testformData = {
-            "Sales": sales // 예제 변경값
-        };
-
-        const updateSalesResponse = await fetch(`http://3.26.21.10:9000/api/update_sales/${deviceId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(testformData)
-        });
-
-        const printAmountResponse = await fetch(`http://3.26.21.10:9000/api/update_print_amount/${deviceId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ remaining_amount: device.remaining_amount - newPhotoNum }) // 예제 변경값
-        });
-
-        const paymentMethod = sessionStorage.getItem("payMethod")
-        // Step 6: Log the payment
-        const logPaymentData = {
-            device: device.name,
-            device_code: device.device_code,
-            payment_amount: sales, // 예제 변경값
-            payment_method: paymentMethod, // 실제 결제 방식으로 변경 필요
-        };
-
-        const logPaymentResponse = await fetch(`http://3.26.21.10:9000/api/log_payment`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(logPaymentData)
-        });
-
-        const logPaymentResult = await logPaymentResponse.json();
-        const updateSalesResult = await updateSalesResponse.json();
-        const printAmountResult = await printAmountResponse.json();        
-
-        // Handle the responses as needed
-        console.log('Update Sales Result:', updateSalesResult);
-        console.log('Update Print Amount Result:', printAmountResult);
-        console.log('Log Payment Result:', logPaymentResult);
-        */
-
-        // const ip_response = await fetch("https://api.ipify.org?format=json")
-        // const data = await ip_response.json()
-
-        // const all_device = await fetch(`${process.env.REACT_APP_BACKEND}/api/devices`, {
-        //     method: 'POST',
-        //     body: formDataToFlask,
-        // });
-
-        // const sales_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/edit_device/${data.ip}`, {
-        //     method: 'POST',
-        //     body: formDataToFlask,
-        // });
-        // const print_amount_calc = await fetch(`${process.env.REACT_APP_BACKEND}/api/update_print_amount/${data.ip}`, {
-        //     method: 'POST',
-        //     body: formDataToFlask,
-        // });
-
-
-        // @app.route('/api/update_print_amount/<int:id>', methods=['PUT'])
-        // def update_print_amount(id):
-        //     data = request.get_json()
-        //     device = Device.query.get_or_404(id)
-        //     device.remaining_amount = data['remaining_amount']
-        //     db.session.commit()
-        //     return jsonify({'message': 'Print amount updated successfully'}), 200
-
+        //     if (localPrintResponse.ok) {
+        //         console.log('Print job started successfully.');
+        //     } else {
+        //         console.log('Failed to start print job.');
+        //     }
         // } catch (error) {
         //     console.error('Error during printing process:', error);
         // }
     };
-
-
-    // const callPrinter = async () => {
-    //     const stageRef = printRefs[bgIdx];
-    //     if (!stageRef.current) {
-    //         return;
-    //     }
-
-    //     const originalDataURL = stageRef.current.toDataURL();
-    //     const blobBin = atob(originalDataURL.split(',')[1]);
-    //     const array = [];
-    //     for (let i = 0; i < blobBin.length; i++) {
-    //         array.push(blobBin.charCodeAt(i));
-    //     }
-    //     const newFile = new Blob([new Uint8Array(array)], { type: 'image/png' });
-
-    //     const formData = new FormData();
-    //     formData.append("photo", newFile);
-    //     let newPhotoNum=parseInt(photoNum)
-    //     if (selectedFrame==="Stripx2") {
-    //         newPhotoNum=(parseInt(photoNum)).toString()
-    //     } else {
-    //         newPhotoNum=(parseInt(photoNum)+1).toString()
-    //     }
-    //             formData.append("uuid",uuid ); // uuid 
-    //     formData.append("frame", selectedFrame); // frame 개별 필드로 추가
-    //     // formData.append("photoNum",newPhotoNum ); // photoNum 
-
-    //     // try {
-    //         const response = await originAxiosInstance.post(
-    //             `${process.env.REACT_APP_BACKEND}/frames/api/print`,
-    //             formData,
-    //             {
-    //                 headers: {
-    //                     'Content-Type': 'multipart/form-data'
-    //                 }
-    //             }
-    //         );
-    //     console.log("print datas>>>",response.data)
-    //         const printUrl = response.data.print_url;
-    //         const printData = response.data.print_data;
-    //         // const uploadsDataPath = response.data.print_data.file_path;
-
-    //         const res = await getPhotos(uuid);
-    //         // const filtered = res.unsorted_images.filter(img => img.url.includes(uploadsDataPath));
-
-    //         // let newUrl=convertUrl(filtered[0].url) 
-    //         let newUrl=convertUrl(res[0].url) 
-    //         const fileResponse = await fetch(newUrl);
-    //         const fileBlob = await fileResponse.blob();
-
-    //         const formDataToFlask = new FormData();
-    //         formDataToFlask.append('file', new Fisle([fileBlob], "print_image.png", { type: fileBlob.type }));
-    //         formDataToFlask.append('frame', printData.frame);
-
-
-    //         for (let i = 0; i < photoNum; i++) {
-    //             const fileResponse = await fetch(filtered[0].url.replace('uploads', 'get_photo/uploads'));
-    //             const fileBlob = await fileResponse.blob();
-
-    //             const formDataToFlask = new FormData();
-    //             formDataToFlask.append('file', new File([fileBlob], "print_image.png", { type: fileBlob.type }));
-    //             formDataToFlask.append('frame', printData.frame);
-
-    //             const localPrintResponse = await fetch(printUrl, {
-    //                 method: 'POST',
-    //                 body: formDataToFlask,
-    //             });
-
-    //             if (localPrintResponse.ok) {
-    //                 console.log(`Print job ${i + 1} started successfully.`);
-    //             } else {
-    //                 console.log(`Failed to start print job ${i + 1}.`);
-    //             }
-    //         }
-    // } catch (error) {
-    //     console.error('Error during printing process:', error);
-    // }
-
-    //     const localPrintResponse = await fetch(printUrl, {
-    //         method: 'POST',
-    //         body: formDataToFlask,
-    //     });
-
-    //     if (localPrintResponse.ok) {
-    //         console.log('Print job started successfully.');
-    //     } else {
-    //         console.log('Failed to start print job.');
-    //     }
-    // } catch (error) {
-    //     console.error('Error during printing process:', error);
-    // }
-    // };
 
     const hoverGoBackButton = () => {
         if (language === 'en') {
@@ -1072,27 +887,6 @@ function Sticker() {
 
         return { x: newStickerX, y: newStickerY, width: newStickerWidth, height: newStickerHeight };
     }
-
-    // const startTimer = () => {
-    //     timerRef.current = setInterval(async () => {
-    //         setCountdown((prevCountdown) => {
-    //             if (prevCountdown > 0) {
-    //                 return prevCountdown - 1;
-    //             } else {
-    //                 // store session printRefs[bgIdx]
-    //                 sessionStorage.setItem('printRefs', JSON.stringify(printRefs));
-    //                 // store session bgIdx
-    //                 setBgIdx(0);
-    //                 sessionStorage.setItem('bgIdx', JSON.stringify(bgIdx));                     
-    //                 const stageRefTmp = printRefs[bgIdx];
-    //                 localStorage.setItem('originalDataURL', stageRefTmp.current.toDataURL('image/jpeg', 0.7));
-
-    //                 navigate("/payment-number");
-    //             }
-    //         });
-    //     }, 1000);
-    // };
-
     useEffect(() => {
         const loadImages = () => {
             const imagePromises = selectedPhotos.map(index => {
@@ -1124,11 +918,52 @@ function Sticker() {
 
         loadImages();
     }, [selectedPhotos]);
+    // useEffect(() => {
+    //     const loadImages = () => {
+    //         const imagePromises = selectedPhotos.map(index => {
+    //             return new Promise((resolve, reject) => {
+    //                 const photo = photos[index];
+    //                 const tempImg = new Image();
+    //                 tempImg.crossOrigin = 'Anonymous';
+    //                 tempImg.src = photo.url;
 
+    //                 tempImg.onload = () => {
+    //                     // 필터 적용
+    //                     // const filteredImg = applyFilters(tempImg, photo.filter);
+    //                     // resolve(filteredImg);
+    //                 };
+
+    //                 tempImg.onerror = (err) => reject(err);
+    //             });
+    //         });
+
+    //         Promise.all(imagePromises)
+    //             .then((tempImgs) => {
+    //                 setTempImage(tempImgs);
+    //                 console.log("이미지 로딩 끝", tempImgs);
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Error loading images:", error);
+    //             });
+    //     };
+
+    //     loadImages();
+    // }, [selectedPhotos]);
     useEffect(() => {
         if (frameSize.width === "" || frameSize.height === "") return;
 
         const loadImages = () => {
+            // const tempImgs = selectedPhotos.map(index => {
+            //     const photo = photos[index];
+            //     const tempImg = new Image();
+            //     tempImg.crossOrigin = 'Anonymous';
+            //     tempImg.src = photo.url;
+            //     applyStyles(tempImg, { width: 800, height: 800, filter: photo.filter });
+            //     return tempImg;
+            // });
+
+            // setTempImage(tempImgs);
+
             const element = document.querySelector('.image');
             if (element) {
                 const targetWidth = frameSize.width;
@@ -1345,19 +1180,19 @@ function Sticker() {
             );
         }
         else if (selectedFrame === "Stripx2") {
-            const calcedHeight = height / 4.9;
-            const calcedWidth = calcedHeight * 1.48;
+            const calcedHeight = height / 5.3;
+            const calcedWidth = calcedHeight * 1.47;
 
-            const x11 = 10;
-            const x12 = calcedWidth + x11 + 20;
-            const y1 = 28;
+            const x11 = 22;
+            const x12 = calcedWidth + x11 + 22;
+            const y1 = 40;
 
             return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 8);
+                            const y = y1 + rowIndex * (calcedHeight + 22);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
@@ -1384,18 +1219,18 @@ function Sticker() {
         }
 
         if (selectedFrame === "2cut-x2") {
-            const calcedWidth = width / 2.23;
-            const calcedHeight = calcedWidth * 1.16;
-            const x11 = 18;
-            const x12 = calcedWidth + x11 + 10;
-            const y1 = 28;
+            const calcedWidth = width / 2.3;
+            const calcedHeight = calcedWidth * 1.13;
+            const x11 = 20;
+            const x12 = calcedWidth + x11 + 20;
+            const y1 = 40;
 
             return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 8);
+                            const y = y1 + rowIndex * (calcedHeight + 12);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
@@ -1421,11 +1256,11 @@ function Sticker() {
             );
         }
         else if (selectedFrame === "4-cutx2") {
-            const calcedHeight = height / 2.54;
-            const calcedWidth = calcedHeight * 1.34;
-            const x11 = 60;
-            const x12 = calcedWidth + x11 + 16;
-            const y1 = 26;
+            const calcedHeight = height / 2.4;
+            const calcedWidth = calcedHeight * 1.33;
+            const x11 = 50;
+            const x12 = calcedWidth + x11 + 30;
+            const y1 = 22;
 
             return imgTag.length === 0 ? <></> : (
                 <>
@@ -1459,18 +1294,18 @@ function Sticker() {
 
         }
         else {
-            const calcedWidth = (width / 2.4);
-            const calcedHeight = width / 2.42;
-            const x11 = 22;
-            const x12 = calcedWidth + x11 + 7;
-            const y1 = 20;
+            const calcedWidth = (width / 2.4) * 1.02;
+            const calcedHeight = width / 2.4;
+            const x11 = 16;
+            const x12 = calcedWidth + x11 + 20;
+            const y1 = 22;
 
             return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 8);
+                            const y = y1 + rowIndex * (calcedHeight + 12);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
@@ -1630,13 +1465,6 @@ function Sticker() {
     // )
     // return ()=>clearTimeout(timer)
     // },[])
-    //off isSelected
-    useEffect(() => {
-        if (isSel) {
-            setTimeout(() => { setIsSel(false) }, 1000)
-        }
-
-    }, [isSel])
     return (
         <div className='sticker-container' style={{ backgroundImage: `url(${backgroundImage})` }}>
             <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/filter")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
@@ -1658,7 +1486,6 @@ function Sticker() {
                     <Layer>
                         {backgroundList[bgIdx] && (
                             <KonvaImage
-
                                 image={backgroundList[bgIdx].img}
                                 width={frameSize.width * getPrintRatio()}
                                 height={frameSize.height * getPrintRatio() - 20}
@@ -1835,7 +1662,6 @@ function Sticker() {
                     <div className="sticker-category-item" style={{ backgroundImage: `url(${y2k})` }} onClick={() => filterStickerByCategory('Y2K')} onMouseEnter={() => hoverStickerButton('y2k')} onMouseLeave={() => hoverStickerButton('y2k')}></div>
                 </div>
                 <div className="sticker-print-btn" style={{ backgroundImage: `url(${printButton})` }} onClick={printFrameWithSticker} onMouseEnter={hoverPrintButton} onMouseLeave={hoverPrintButton}></div>
-                {/* <div className='sticker-countdown'>{countdown}s</div> */}
             </div>
         </div>
     );

@@ -517,9 +517,12 @@ function Photo() {
         }
     }, [capturePhotos, navigate]);
 
-    const goToFilter = () => {
+    const goToFilter = async() => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {            
             sessionStorage.setItem("uuid", uuid);
+            sessionStorage.setItem('choosePhotos', JSON.stringify(capturePhotos.map(photo => photo.id)));
+
+            const result = await copyImageApi();
             navigate("/filter");
         }
     };
@@ -600,6 +603,39 @@ function Photo() {
     useEffect(() => {
         playAudio();
     }, []);
+
+    const copyImageApi = async () => {
+        const sessionSelectedLayout = sessionStorage.getItem('selectedLayout');
+        if (!sessionSelectedLayout) {
+            return;
+        }
+
+        const parsedSelectedLayout = JSON.parse(sessionSelectedLayout);
+        const layoutData = parsedSelectedLayout[0];
+
+        const copyImageUrl = `${process.env.REACT_APP_BACKEND}/frames/api/copy-image`;
+        const copyImageData = {
+            photo_url: layoutData.photo,
+            photo_cover: layoutData.photo_cover
+        };
+
+        try {
+            const response = await fetch(copyImageUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(copyImageData)
+            });
+            const data = await response.json();
+            sessionStorage.setItem('copiedPhoto', data.photo_path);
+            sessionStorage.setItem('copiedPhotoCover', data.photo_cover_path);
+            return true;
+        } catch (error) {
+            console.error(`Failed to copy image: ${error}`);
+            return false;
+        }
+    };
 
     const getLiveStyle = () => {
         const frame = JSON.parse(sessionStorage.getItem('selectedFrame')).frame;

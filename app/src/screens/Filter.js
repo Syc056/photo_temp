@@ -98,12 +98,8 @@ import continue_vn from '../assets/Common/vn/continue.png';
 import continue_vn_hover from '../assets/Common/vn/continue_click.png';
 import continue_mn from '../assets/Common/mn/continue.png';
 import continue_mn_hover from '../assets/Common/mn/continue_click.png';
-import { getAudio, getClickAudio, originAxiosInstance, getPhotos } from '../api/config';
-import { useEffect, useState, useRef } from 'react';
-import Uid from "react-uuid"
-
-// Home button
-import HomeButton from './HomeButton';
+import { getAudio, getClickAudio, originAxiosInstance } from '../api/config';
+import { useEffect, useState } from 'react';
 
 function Filter() {
     const { t } = useTranslation();
@@ -132,14 +128,8 @@ function Filter() {
     const [goBackButton, setGoBackButton] = useState(goback_en);
     const [clickedButton, setClickedButton] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
-    const [clickedId, setClickedId] = useState(null);
-    const [countdown, setCountdown] = useState(20);
-    const [photos, setPhotos] = useState([]);
+    const [clickedId, setClickedId] = useState(null)
     const effectFloat = 0.05;
-    const uuid = sessionStorage.getItem("uuid");
-
-    const timerRef = useRef(null);
-
     const handlePhotoClick = (selectedIndex) => {
         if (selectedId.includes(selectedIndex)) {
             const filteredIds = selectedId.filter((id) => id !== selectedIndex);
@@ -212,38 +202,7 @@ function Filter() {
         return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
     };
 
-    useEffect(() => {
-        asyncGetPhotos();
-    }, [uuid]);
-
-    const asyncGetPhotos = async () => {      
-        if (uuid === null) {
-            return;
-        }          
-        const photos = await getPhotos(uuid);        
-
-        if (photos && photos.images) {
-            const formattedImages = photos.images.map(img => {
-                const imageName = img.url.split('/').pop();
-                return {
-                    ...img,
-                    url: `${process.env.REACT_APP_BACKEND}/serve_photo/${uuid}/${imageName}`
-                };
-            });
-
-            const finalFormattedImages = formattedImages.map(img => ({
-                ...img,
-                url: img.url.replace(/\\/g, '/').replace('serve_photo', 'get_photo/uploads')
-            }));            
-
-            setPhotos(finalFormattedImages);
-
-            // loop photos.images and setSelectedPhotos with array photo id
-            setSelectedPhotos(finalFormattedImages.map(photo => photo.id));
-        } else {
-            console.log("No photos available."); 
-        }
-    };
+    const photos = JSON.parse(sessionStorage.getItem('photos'))["images"];
 
     useEffect(() => {
         const storedLanguage = sessionStorage.getItem('language');
@@ -295,7 +254,12 @@ function Filter() {
                 setIntensity(intensity_mn);
                 setGoBackButton(goback_mn);
             }
-        }        
+        }
+
+        const storedSelectedPhotos = JSON.parse(sessionStorage.getItem('choosePhotos'));
+        if (storedSelectedPhotos) {
+            setSelectedPhotos(storedSelectedPhotos);
+        }
 
         const storedSelectedFrame = JSON.parse(sessionStorage.getItem('selectedFrame'));
         if (storedSelectedFrame) {
@@ -320,12 +284,6 @@ function Filter() {
             setSelectedLayout(layoutData.photo_cover);
         }
     });
-
-    // useEffect(() => {
-    //     if (uuid) {
-    //         startTimer();
-    //     }
-    // }, [uuid]);
 
     const handleMouseEnter = (image) => {
         setHoveredImage(image);
@@ -729,7 +687,6 @@ function Filter() {
         }));
         sessionStorage.setItem('photos', JSON.stringify(withFilterPhotos));
         sessionStorage.setItem('filter', JSON.stringify(filterEffect));
-        sessionStorage.setItem('choosePhotos', JSON.stringify(selectedPhotos));
         storeImageCanvas();
     };
 
@@ -820,35 +777,12 @@ function Filter() {
             setContinueButton(continueButton === continue_mn_hover ? continue_mn : continue_mn_hover);
         }
     };
-
     const playAudio = async () => {
         const res = await getAudio({ file_name: "choose_filter.wav" })
     }
-
-    const startTimer = () => {
-        timerRef.current = setInterval(async () => {
-            setCountdown((prevCountdown) => {
-                if (prevCountdown > 0) {
-                    return prevCountdown - 1;
-                } else {
-                    // navigate to next screen
-                    setClickedButton(true);
-                    const withFilterPhotos = photos.map((p) => ({
-                        ...p,
-                        filter: getImageStyle(p.id),
-                    }));
-                    sessionStorage.setItem('photos', JSON.stringify(withFilterPhotos));
-                    sessionStorage.setItem('filter', JSON.stringify(filterEffect));
-                    storeImageCanvas();
-                }
-            });
-        }, 1000);
-    };
-
     useEffect(() => {
         playAudio()
     }, [])
-
     return (
         <div className='filter-container' style={{ backgroundImage: `url(${background})` }}>
             <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/photo")} onMouseEnter={() => hoverGoBackButton()} onMouseLeave={() => hoverGoBackButton()}></div>
@@ -876,9 +810,8 @@ function Filter() {
                     <div className="filter-image" style={{ backgroundImage: `url(${bw})` }} onClick={() => handleFilter(4)} onMouseEnter={() => hoverFilterEffect('bw')} onMouseLeave={() => hoverFilterEffect('bw')}></div>
                     <div className="filter-image" style={{ backgroundImage: `url(${smooth})` }} onClick={() => handleFilter(5)} onMouseEnter={() => hoverFilterEffect('smooth')} onMouseLeave={() => hoverFilterEffect('smooth')}></div>
                 </div>
-            </div>            
+            </div>
             <div className="bottom-filter" style={{ backgroundImage: `url(${continueButton})` }} onMouseEnter={() => hoverContinueButton()} onMouseLeave={() => hoverContinueButton()} onClick={() => goToSticker()}></div>
-            <HomeButton />
         </div>
     );
 }
