@@ -524,6 +524,14 @@ function Photo() {
     const goToFilter = async() => {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {            
             sessionStorage.setItem("uuid", uuid);
+
+            sessionStorage.setItem('photos', JSON.stringify({                
+                images: capturePhotos
+            }));
+            // log capturePhotos
+            console.log("Capture photos >>", capturePhotos);
+
+
             sessionStorage.setItem('choosePhotos', JSON.stringify(capturePhotos.map(photo => photo.id)));
             // log capturePhotos id
             console.log("Capture photos >>", capturePhotos.map(photo => photo.id));
