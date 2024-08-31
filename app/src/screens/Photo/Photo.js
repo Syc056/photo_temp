@@ -284,14 +284,18 @@ function Photo() {
                 const photoName = firstRetakePhoto.url.split('/').pop();
                 await deletePhoto(uuid, photoName);
                 
-                // loop capturePhotos and find photo with id = firstRetakePhotoIndex
-                const newCapturePhotos = capturePhotos.map((photo, index) => {
-                    if (index === firstRetakePhotoIndex) {
-                        return formattedImage;
-                    } else {
-                        return photo;
+                
+                // loop capturePhotos and find photo with id = firstRetakePhotoIndex.  then replace url with formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
+                const newCapturePhotos = capturePhotos.map((photo) => {
+                    if (photo.id === firstRetakePhotoIndex) {
+                        return {
+                            ...photo,
+                            url: formattedImage.url.replace(/\\/g, '/').replace('serve_photo', `get_photo/uploads`)
+                        };
                     }
+                    return photo;
                 });
+
                 setCapturePhotos(newCapturePhotos);                                  
                 
                 // remove all photos in selectedReTakePhotos
