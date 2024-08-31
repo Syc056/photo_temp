@@ -413,8 +413,8 @@
 }
 .payment-countdown {
      text-align: center;
-     right: 7px;
-     top: 32%;
+     left: 20px;
+     top: 31%;
      position: relative;
      font-size: 50px;
      color: #606060;
