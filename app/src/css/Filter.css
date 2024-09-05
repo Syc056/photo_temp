@@ -18,11 +18,11 @@
 }
 
 .left-big-frame {
-     position: absolute;
-     top: 20%;
-     left: 3%;
-     width: 45%;
-     height: 75%;
+     position: relative;
+     top: 50px;
+     left: -400px;
+     width: 700px;
+     height: 750px;
      background-image: url('../assets/Common/frame.png');
      background-size: contain;
      background-repeat: no-repeat;
@@ -423,7 +423,7 @@
 
 .left-choose-container {
      position: absolute;
-     top: 10%;
+     top: 9%;
      left: 12%;
      width: 79%;
      height: 82%;
