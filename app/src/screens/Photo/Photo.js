@@ -91,22 +91,12 @@ function Photo() {
     }, []);
 
     const handleRetakePhoto = (selectedId) => {
-        console.log('Selected retake:', selectedId);
-        if (selectedReTakePhotos.length > 0) {
-            // remove all selected photos
-            setSelectedReTakePhotos([]);
-            // set inactive retake
-            setOkButtonUrl(ok_active_button);
-            setTakeAgainButtonUrl(take_again_button);
-        }
+        console.log('Selected retake:', selectedId);        
 
-        if (selectedReTakePhotos.includes(selectedId)) {
-            const filteredIds = selectedReTakePhotos.filter((id) => id !== selectedId);
-            setSelectedReTakePhotos(filteredIds);
-        } else {
-            setSelectedReTakePhotos([...selectedReTakePhotos, selectedId]);            
-        }        
-        setOkButtonUrl(ok_button);
+        // only set one item selectedID for retake
+        setSelectedReTakePhotos([selectedId]);       
+        setOkButtonUrl(ok_active_button);
+        setTakeAgainButtonUrl(take_again_button);
     };
 
     useEffect(() => {
@@ -396,7 +386,7 @@ function Photo() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
-                                backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform: "scaleX(-1)"
+                                backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)"
                             }}
                             onClick={() => handleRetakePhoto(selectedIndex)}
                         />
