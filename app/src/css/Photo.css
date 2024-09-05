@@ -951,7 +951,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 9%;
+     top: 8%;
      left: 23.9%;
 }
 .choose-photo-item-0-0-right {
@@ -974,7 +974,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 9%;
+     top: 8%;
      left: 52%;
 }
 .choose-photo-item-0-1-right {
@@ -997,7 +997,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 26.5%;
+     top: 25%;
      left: 23.9%;
 }
 .choose-photo-item-1-0-right {
@@ -1020,7 +1020,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 26.5%;
+     top: 25%;
      left: 52%;
 }
 .choose-photo-item-1-1-right {
@@ -1043,7 +1043,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 44%;
+     top: 43;
      left: 23.9%;
 }
 .choose-photo-item-2-0-right {
@@ -1066,7 +1066,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 44%;
+     top: 43%;
      left: 52%;
 }
 .choose-photo-item-2-1-right {
@@ -1089,7 +1089,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 61%;
+     top: 60%;
      left: 23.9%;
 }
 .choose-photo-item-3-0-right {
@@ -1112,7 +1112,7 @@
      background-position: center;
      margin: 1%;
      position: absolute;
-     top: 61%;
+     top: 60%;
      left: 52%;
 }
 .choose-photo-item-3-1-right {
@@ -1263,9 +1263,9 @@
 
 
 .left-choose-photos-4cut {
-     margin-top: 12%;
-     margin-left: 8%;
-     width: 85%;
+     margin-top: 19%;
+     margin-left: 24%;
+     width: 55%;
      height: 59%;
      position: initial;
      background-size: contain;

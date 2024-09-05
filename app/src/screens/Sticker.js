@@ -1252,14 +1252,14 @@ function Sticker() {
             const calcedHeight = calcedWidth * 1.13;
             const x11 = 20;
             const x12 = calcedWidth + x11 + 20;
-            const y1 = 40;
+            const y1 = 33;
 
             return imgTag.length === 0 ? <></> : (
                 <>
                     {chunkArray(imgTag, 2).map((row, rowIndex) => (
                         row.map((tag, photoIndex) => {
                             const x = photoIndex === 0 ? x11 : x12;
-                            const y = y1 + rowIndex * (calcedHeight + 12);
+                            const y = y1 + rowIndex * (calcedHeight + 6);
                             const crop = getCrop(
                                 { width: tag.width, height: tag.height },
                                 { width: calcedWidth, height: calcedHeight }
