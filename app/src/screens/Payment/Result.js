@@ -235,66 +235,66 @@ function QR() {
           const ipData = await ipResponse.json();
           const userIp = ipData.ip;
 
-          // Step 2: Fetch all devices
-          const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
-          const allDevices = await allDevicesResponse.json();
+          // // Step 2: Fetch all devices
+          // const allDevicesResponse = await fetch(`http://3.26.21.10:9000/api/devices`);
+          // const allDevices = await allDevicesResponse.json();
 
-          // Step 3: Find the device with the matching IP address
-          const device = allDevices.find(device => device.ip === userIp);
+          // // Step 3: Find the device with the matching IP address
+          // const device = allDevices.find(device => device.ip === userIp);
 
-          if (!device) {
-               console.error(`No device found with IP address: ${userIp}`);
-               return;
-          }
+          // if (!device) {
+          //      console.error(`No device found with IP address: ${userIp}`);
+          //      return;
+          // }
 
-          const deviceId = device.id;
-          const sales = sessionStorage.getItem('sales')
+          // const deviceId = device.id;
+          // const sales = sessionStorage.getItem('sales')
 
-          const testformData = {
-               "Sales": sales // 예제 변경값
-          };
+          // const testformData = {
+          //      "Sales": sales // 예제 변경값
+          // };
 
-          const updateSalesResponse = await fetch(`http://3.26.21.10:9000/api/update_sales/${deviceId}`, {
-               method: 'PUT',
-               headers: {
-                    'Content-Type': 'application/json'
-               },
-               body: JSON.stringify(testformData)
-          });
+          // const updateSalesResponse = await fetch(`http://3.26.21.10:9000/api/update_sales/${deviceId}`, {
+          //      method: 'PUT',
+          //      headers: {
+          //           'Content-Type': 'application/json'
+          //      },
+          //      body: JSON.stringify(testformData)
+          // });
 
-          const printAmountResponse = await fetch(`http://3.26.21.10:9000/api/update_print_amount/${deviceId}`, {
-               method: 'PUT',
-               headers: {
-                    'Content-Type': 'application/json'
-               },
-               body: JSON.stringify({ remaining_amount: device.remaining_amount - newPhotoNum }) // 예제 변경값
-          });
+          // const printAmountResponse = await fetch(`http://3.26.21.10:9000/api/update_print_amount/${deviceId}`, {
+          //      method: 'PUT',
+          //      headers: {
+          //           'Content-Type': 'application/json'
+          //      },
+          //      body: JSON.stringify({ remaining_amount: device.remaining_amount - newPhotoNum }) // 예제 변경값
+          // });
 
-          const paymentMethod = sessionStorage.getItem("payMethod")
-          // Step 6: Log the payment
-          const logPaymentData = {
-               device: device.name,
-               device_code: device.device_code,
-               payment_amount: sales, // 예제 변경값
-               payment_method: paymentMethod, // 실제 결제 방식으로 변경 필요
-          };
+          // const paymentMethod = sessionStorage.getItem("payMethod")
+          // // Step 6: Log the payment
+          // const logPaymentData = {
+          //      device: device.name,
+          //      device_code: device.device_code,
+          //      payment_amount: sales, // 예제 변경값
+          //      payment_method: paymentMethod, // 실제 결제 방식으로 변경 필요
+          // };
 
-          const logPaymentResponse = await fetch(`http://3.26.21.10:9000/api/log_payment`, {
-               method: 'POST',
-               headers: {
-                    'Content-Type': 'application/json'
-               },
-               body: JSON.stringify(logPaymentData)
-          });
+          // const logPaymentResponse = await fetch(`http://3.26.21.10:9000/api/log_payment`, {
+          //      method: 'POST',
+          //      headers: {
+          //           'Content-Type': 'application/json'
+          //      },
+          //      body: JSON.stringify(logPaymentData)
+          // });
 
-          const logPaymentResult = await logPaymentResponse.json();
-          const updateSalesResult = await updateSalesResponse.json();
-          const printAmountResult = await printAmountResponse.json();
+          // const logPaymentResult = await logPaymentResponse.json();
+          // const updateSalesResult = await updateSalesResponse.json();
+          // const printAmountResult = await printAmountResponse.json();
 
-          // Handle the responses as needed
-          console.log('Update Sales Result:', updateSalesResult);
-          console.log('Update Print Amount Result:', printAmountResult);
-          console.log('Log Payment Result:', logPaymentResult);
+          // // Handle the responses as needed
+          // console.log('Update Sales Result:', updateSalesResult);
+          // console.log('Update Print Amount Result:', printAmountResult);
+          // console.log('Log Payment Result:', logPaymentResult);
 
           // const ip_response = await fetch("https://api.ipify.org?format=json")
           // const data = await ip_response.json()

@@ -476,7 +476,7 @@ function Photo() {
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
                             style={{
-                                backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform: "scaleX(-1)"
+                                backgroundImage: `url(${capturePhotos.find(photo => photo.id === selectedIndex.id).url})`, transform: "scaleX(-1)"
                             }}
                             onClick={() => handleRetakePhoto(selectedIndex)}
                         />
