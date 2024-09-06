@@ -1287,9 +1287,9 @@ function Sticker() {
         else if (selectedFrame === "4-cutx2") {
             const calcedHeight = height / 2.4;
             const calcedWidth = calcedHeight * 1.33;
-            const x11 = 50;
-            const x12 = calcedWidth + x11 + 20;
-            const y1 = 22;
+            const x11 = 52;
+            const x12 = calcedWidth + x11 + 17;
+            const y1 = 26;
 
             return imgTag.length === 0 ? <></> : (
                 <>
