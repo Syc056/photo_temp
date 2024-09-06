@@ -387,8 +387,7 @@ function Photo() {
             const firstPhotoTpl = (
                 <div className="choose-photo-row">
                     <div
-                        className="choose-photo-item-3cut-top-line"
-                        style={{ backgroundImage: `url(${capturePhotos[0].url})`, transform: "scaleX(-1)" }}
+                        className="choose-photo-item-3cut-top-line"                        
                         onClick={() => handleRetakePhoto(0)}
                     />
                 </div>
@@ -401,8 +400,7 @@ function Photo() {
                         {row.map((selectedIndex, photoIndex) => (
                             <div
                                 key={photoIndex}
-                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}                                
                                 onClick={() => handleRetakePhoto(selectedIndex)}
                             />
                         ))}
@@ -414,8 +412,7 @@ function Photo() {
                 const lastPhotoTpl = (
                     <div className="choose-photo-row">
                         <div
-                            className="choose-photo-item-5cut-last-line"
-                            style={{ backgroundImage: `url(${capturePhotos[capturePhotos.length - 1].url})`, transform: "scaleX(-1)" }}
+                            className="choose-photo-item-5cut-last-line"                            
                             onClick={() => handleRetakePhoto(capturePhotos.length - 1)}
                         />
                     </div>
@@ -427,8 +424,7 @@ function Photo() {
                             {row.map((selectedIndex, photoIndex) => (
                                 <div
                                     key={photoIndex}
-                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}                                    
                                     onClick={() => handleRetakePhoto(selectedIndex)}
                                 />
                             ))}
@@ -444,8 +440,7 @@ function Photo() {
                             {row.map((selectedIndex, photoIndex) => (
                                 <div
                                     key={photoIndex}
-                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                                    style={{ backgroundImage: `url(${capturePhotos[selectedIndex].url})`, transform: "scaleX(-1)" }}
+                                    className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}                                    
                                     onClick={() => handleRetakePhoto(selectedIndex)}
                                 />
                             ))}
@@ -461,9 +456,6 @@ function Photo() {
                         <div
                             key={photoIndex}
                             className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                            style={{
-                                backgroundImage: `url(${capturePhotos.find(photo => photo.id === selectedIndex.id).url})`, transform: "scaleX(-1)"
-                            }}
                             onClick={() => handleRetakePhoto(selectedIndex)}
                         />
                     ))}
