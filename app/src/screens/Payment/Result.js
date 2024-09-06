@@ -49,6 +49,13 @@ function QR() {
      }, []);
 
      useEffect(() => {
+          // set timeout after 3 seconds call printFrameWithSticker
+          setTimeout(() => {
+               printFrameWithSticker();
+          }, 3000);
+     });
+
+     useEffect(() => {
           const fetchImageUuid = async () => {
                try {
                     const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/frames/api/get-image-uuid/` + uuid + "/");                    
