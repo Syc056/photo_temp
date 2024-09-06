@@ -317,6 +317,7 @@
   letter-spacing: normal;
   font-size: 36px;
   font-family: var(--font-dela-gothic-one);
+  bottom: 50px;
 }
 @media screen and (max-width: 1225px) {
   .social-container-wrapper {
