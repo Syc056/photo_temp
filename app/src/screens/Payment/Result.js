@@ -131,7 +131,7 @@ function QR() {
                                         sessionStorage.setItem('qr', qrVal);
                                         console.log("qr val>>>", qrVal)
                                         callPrinter();
-                                        navigate("/print");
+                                        navigate("/landing");
                                    }
 
                               })
