@@ -353,8 +353,8 @@ function QR() {
      }
 
      return (
-          <div className='payment-result-container' style={{ backgroundImage: `url(${backround})` }}>
-               <div style={{ backgroundImage: `url(${continueButton})` }} className="done-result-button" onClick={printFrameWithSticker} onMouseEnter={hoverContinueButton} onMouseLeave={hoverContinueButton}></div>
+          <div className='payment-result-container' style={{ backgroundImage: `url(${backround})` }} onClick={printFrameWithSticker}>
+               <div style={{ backgroundImage: `url(${continueButton})` }} className="done-result-button" onMouseEnter={hoverContinueButton} onMouseLeave={hoverContinueButton}></div>
                <HomeButton />               
           </div>
      );
