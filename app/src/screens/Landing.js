@@ -34,15 +34,34 @@ function Landing() {
      const uuid = sessionStorage.getItem("uuid");
 
      const [background, setBackground] = useState(background_en);
+     const [thankYou, setThankYou] = useState("THANK YOU");
+     const [beingWith, setBeingWith] = useState("FOR BEING WITH PHOTOMONG");
+     const [haveQuestion, setHaveQuestion] = useState("Have any questions?");
+     const [getTouch, setGetTouch] = useState("Get in touch with us");
+     const [scanQr, setScanQr] = useState("Scan to get your photo");
+     const [thankYouPhoto, setThankYouPhoto] = useState("Thank you!");
+
     
      useEffect(() => {
           const storedLanguage = sessionStorage.getItem('language');
           if (storedLanguage === 'en') {
                setBackground(background_en);
+               setThankYou("THANK YOU");
+               setBeingWith("FOR BEING WITH PHOTOMONG");
+               setHaveQuestion("Have any questions?");
+               setGetTouch("Get in touch with us");
+               setScanQr("Scan to get your photo");
+               setThankYouPhoto("Thank you!");
           } else if (storedLanguage === 'ko') {
                setBackground(background_kr);
           } else if (storedLanguage === 'vi') {
                setBackground(background_vn);
+               setThankYou("Cám ơn bạn đã sử dụng dịch vụ của Photomong");
+               setBeingWith("Hẹn gặp bạn vào lần tới nha");
+               setHaveQuestion("Have any questions?");
+               setGetTouch("Get in touch with us");
+               setScanQr("Quét QR để lưu ảnh và Gif");
+               setThankYouPhoto("Photomong cám ơn quý khách");
           }else if (storedLanguage === 'mn') {
                setBackground(background_mn);
           }
@@ -75,8 +94,8 @@ function Landing() {
                <div className="thank-you-for-being-with-photo-wrapper">
                     <h3 className="thank-you-for-container">
                          <span className="thank-you-for-container1">
-                              <p className="thank-you">THANK YOU</p>
-                              <p className="for-being-with">FOR BEING WITH PHOTOMONG</p>
+                              <p className="thank-you">{thankYou}</p>
+                              <p className="for-being-with">{beingWith}</p>
                          </span>
                     </h3>
                </div>
@@ -135,8 +154,8 @@ function Landing() {
                                    <div className="separator" />
                                    <div className="have-any-questions-container">
                                         <span>
-                                             <p className="have-any-questions">Have any questions?</p>
-                                             <p className="get-in-touch">Get in touch with us</p>
+                                             <p className="have-any-questions">{haveQuestion}</p>
+                                             <p className="get-in-touch">{getTouch}</p>
                                         </span>
                                    </div>
                               </div>
@@ -181,8 +200,8 @@ function Landing() {
                               </div>
                               <div className="follow-us-on-sns-to-get-more-i-wrapper">
                                    <div className="follow-us-on-container">
-                                        <p className="follow-us-on">Follow us on SNS</p>
-                                        <p className="to-get-more">to get more information</p>
+                                        <p className="follow-us-on">{scanQr}</p>
+                                        <p className="to-get-more">{thankYouPhoto}</p>
                                    </div>
                               </div>
                          </div>
