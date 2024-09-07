@@ -185,7 +185,7 @@ function Photo() {
     };
 
     const takeSnapshot = async () => {
-        // setFlash(true);
+        setFlash(true);
         //TODO        
         await sleep(100);
         setCapturing(true);
@@ -195,7 +195,7 @@ function Photo() {
         } catch (error) {
             console.error('Failed to capture image:', error);
         }
-        // setFlash(false);
+        setFlash(false);
         setCapturing(false);
     };
 
