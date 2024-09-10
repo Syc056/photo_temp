@@ -143,8 +143,11 @@ function Sticker() {
     };
 
     useEffect(() => {
-        const photos = JSON.parse(sessionStorage.getItem('photos'));
-        if (photos === null) return;
+        const photos = JSON.parse(sessionStorage.getItem('photos'));        
+        if (photos === null) return;        
+        sessionStorage.setItem('photos', JSON.stringify({
+            images: photos
+        }));
         setPhotos(photos);
     }, []);
 
@@ -383,8 +386,8 @@ function Sticker() {
             return;
         }
 
-        playPrintAudio()
-        setClickPrint(true);
+        // playPrintAudio()
+        // setClickPrint(true);
 
         // callPrinter();
         // await uploadCloud();
@@ -413,7 +416,7 @@ function Sticker() {
                     }
                 }
             ).then(response => {
-                console.log('Canvas saved with UUID:', uuid);
+                // console.log('Canvas saved with UUID:', uuid);
                 navigate("/payment-number");
             });
         } catch (error) {
@@ -471,7 +474,7 @@ function Sticker() {
                             if (qrVal) {
                                 sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
                                 sessionStorage.setItem('qr', qrVal);
-                                console.log("qr val>>>", qrVal)
+                                // console.log("qr val>>>", qrVal)
                                 navigate("/print");
                             }
 
@@ -1465,7 +1468,7 @@ function Sticker() {
     
     return (
         <div className='sticker-container' style={{ backgroundImage: `url(${backgroundImage})` }}>
-            <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/photo")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
+            <div className="go-back" style={{ backgroundImage: `url(${goBackButton})` }} onClick={() => navigate("/filter")} onMouseEnter={hoverGoBackButton} onMouseLeave={hoverGoBackButton}></div>
             {/* 프린트용 */}
             <div className='print'>
                 <Stage

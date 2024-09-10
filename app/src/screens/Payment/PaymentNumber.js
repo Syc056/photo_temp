@@ -144,8 +144,8 @@ function PaymentNumber(props) {
     }
     const sales = sessionStorage.setItem("sales", amount + 50000 * (photoNum - 1));
     const test = sessionStorage.getItem('sales')
-    console.log(test)
-    console.log(photoNum)
+    // console.log(test)
+    // console.log(photoNum)
 
     sessionStorage.setItem("totalPayMoney", amount + 50000 * (photoNum - 1));
 

@@ -88,7 +88,7 @@ function Photo() {
     }, []);
 
     const handleRetakePhoto = (selectedId) => {
-        console.log('Selected retake:', selectedId);
+        // console.log('Selected retake:', selectedId);
 
         // only set one item selectedID for retake
         setSelectedReTakePhotos([selectedId]);
@@ -183,12 +183,13 @@ function Photo() {
 
     const takeSnapshot = async () => {
         setFlash(true);
+        setPhotoCount((prevCount) => prevCount + 1);
         //TODO        
         await sleep(100);
         setCapturing(true);
         try {
-            await sendCaptureReq(uuid);
-            setPhotoCount((prevCount) => prevCount + 1);
+            playTakePhotoAudio();
+            await sendCaptureReq(uuid);            
         } catch (error) {
             console.error('Failed to capture image:', error);
         }
@@ -221,12 +222,12 @@ function Photo() {
     };
 
     const getLatestPhoto = async (currentPhotoCount) => {
-        console.log('currentPhotoCount>>>', currentPhotoCount)
+        // console.log('currentPhotoCount>>>', currentPhotoCount)
         const photos = await getPhotos(uuid);
         sessionStorage.setItem("getphotos", photos);
         if (photos && photos.images && photos.images.length > 0) {
             const latestImage = photos.images[photos.images.length - 1];
-            console.log('latestImage>>>', latestImage)
+            // console.log('latestImage>>>', latestImage)
             const imageName = latestImage.url.split('/').pop();
             const formattedImage = {
                 ...latestImage,
@@ -235,7 +236,7 @@ function Photo() {
             if (photos.videos != undefined) {
                 if (photos.videos.length != 0) {
                     const videoUrl = photos.videos[0].url.replace("get_photo", "download_photo")
-                    console.log('videoUrl>>>', videoUrl)
+                    // console.log('videoUrl>>>', videoUrl)
                     sessionStorage.setItem("videoUrl", videoUrl)
                 }
 
@@ -243,14 +244,14 @@ function Photo() {
 
             // if retake photo            
             if (selectedReTakePhotos.length > 0) {
-                console.log('selectedReTakePhotos>>>', selectedReTakePhotos)
+                // console.log('selectedReTakePhotos>>>', selectedReTakePhotos)
 
                 // get retake photo
                 const firstRetakePhoto = selectedReTakePhotos[0];
 
                 // get id of firstRetakePhoto
                 const firstRetakePhotoIndex = firstRetakePhoto.id;
-                console.log('firstRetakePhotoIndex>>>', firstRetakePhotoIndex)
+                // console.log('firstRetakePhotoIndex>>>', firstRetakePhotoIndex)
 
                 // call api to delete the photo inside uuid
                 // get the photo name and photo type
@@ -467,8 +468,7 @@ function Photo() {
 
     useEffect(() => {
         if (uuid) {
-            if (photoCount > 0) {
-                playTakePhotoAudio();
+            if (photoCount > 0) {                
                 getLatestPhoto(photoCount - 1);
             }
             if (photoCount > 4) {
@@ -493,12 +493,12 @@ function Photo() {
                 images: capturePhotos
             }));
             // log capturePhotos
-            console.log("Capture photos >>", capturePhotos);
+            // console.log("Capture photos >>", capturePhotos);
 
 
             sessionStorage.setItem('choosePhotos', JSON.stringify(capturePhotos.map(photo => photo.id)));
             // log capturePhotos id
-            console.log("Capture photos >>", capturePhotos.map(photo => photo.id));
+            // console.log("Capture photos >>", capturePhotos.map(photo => photo.id));
 
             const result = await copyImageApi();
             navigate("/filter");

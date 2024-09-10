@@ -156,8 +156,8 @@ function Layout() {
 
 
                     const bgStyle = sessionStorage.getItem('styleBg')
-                    console.log(bgStyle)
-                    console.log(String(`${process.env.REACT_APP_BACKEND}/layouts/api/by-background/` + bgStyle + '/frame/' + frame))
+                    // console.log(bgStyle)
+                    // console.log(String(`${process.env.REACT_APP_BACKEND}/layouts/api/by-background/` + bgStyle + '/frame/' + frame))
                     const response = await originAxiosInstance.get(`${process.env.REACT_APP_BACKEND}/layouts/api/by-background/` + bgStyle + '/frame/' + frame);
                     const layoutDatas = response.data
                     const newBackgrounds = layoutDatas.map(item => ({
@@ -174,7 +174,7 @@ function Layout() {
                     */
                     const resAll = newBackgrounds
 
-                    console.log("collab bg>>>", resAll)
+                    // console.log("collab bg>>>", resAll)
 
                     if (frame === "4-cutx2") {
                          setLayouts(resAll.filter(r => r.title != "Cartoon-5cut-4"))
