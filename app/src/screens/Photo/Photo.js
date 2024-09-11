@@ -181,15 +181,15 @@ function Photo() {
         return className;
     };
 
-    const takeSnapshot = async () => {
-        setFlash(true);
-        setPhotoCount((prevCount) => prevCount + 1);
+    const takeSnapshot = async () => {                
         //TODO        
         await sleep(100);
         setCapturing(true);
         try {
+            setFlash(true);
             playTakePhotoAudio();
-            await sendCaptureReq(uuid);            
+            await sendCaptureReq(uuid);       
+            setPhotoCount((prevCount) => prevCount + 1);     
         } catch (error) {
             console.error('Failed to capture image:', error);
         }
