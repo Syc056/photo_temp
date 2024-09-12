@@ -666,7 +666,10 @@ function Photo() {
 
     return (
         flash ? (
+            <div>
             <div className={`photo-container`} style={{ backgroundImage: `url(${loadBgImage})` }} />
+            <HomeButton />
+            </div>
         ) : (
             <div className={`photo-container`} style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className="left-photo-div" style={{ backgroundImage: `url(${countdownImg})` }}>
