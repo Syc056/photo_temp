@@ -20,6 +20,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PaymentNumber from './screens/Payment/PaymentNumber';
 import PaymentTotal from './screens/Payment/PaymentTotal';
 import QrDownload from './screens/QrDownload';
+import ErrorBoundary from './screens/ErrorBoundary';
 
 function App() {
   return (
@@ -36,11 +37,23 @@ function App() {
         <Route path="/payment-cash" element={<Cash />} />
         <Route path="/payment-qr" element={<QR />} />
         <Route path="/payment-promo" element={<Promo />} />
-        <Route path="/photo" element={<Photo />} />
+        <Route path="/photo" element={
+          <ErrorBoundary>
+            <Photo />
+          </ErrorBoundary>
+        } />
         <Route path="/photo-preview" element={<PhotoPreview />} />
         <Route path="/photo-choose" element={<Choose />} />
-        <Route path="/filter" element={<Filter />} />
-        <Route path="/sticker" element={<Sticker />} />
+        <Route path="/filter" element={
+          <ErrorBoundary>
+            <Filter />
+          </ErrorBoundary>
+        } />
+        <Route path="/sticker" element={
+          <ErrorBoundary>
+            <Sticker />
+          </ErrorBoundary>
+        } />
         <Route path="/print" element={<Print />} />
         <Route path="/landing" element={<Landing/>} />
         <Route path="/download" element={<QrDownload/>} />
