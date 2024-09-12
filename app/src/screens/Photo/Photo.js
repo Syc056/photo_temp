@@ -217,8 +217,8 @@ function Photo() {
     };
 
     const reTakePhoto = () => {
-        setStatus("working");
-        setCountdown(8);
+        // setStatus("working");
+        // setCountdown(8);
     };
 
     const getLatestPhoto = async (currentPhotoCount) => {
