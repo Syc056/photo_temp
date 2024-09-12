@@ -365,16 +365,19 @@ function Photo() {
             const selectedPhotoRows = chunkArray(capturePhotos, 2);
             return selectedPhotoRows.map((row, rowIndex) => (
                 <div key={rowIndex} className="choose-photo-row">
-                    {row.map((selectedIndex, photoIndex) => (
-                        <div
-                            key={photoIndex}
-                            className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                            style={{
-                                backgroundImage: `url(${capturePhotos.find((photo) => photo.id === selectedIndex.id).url})`, transform: "scaleX(-1)"
-                            }}
-                            onClick={() => handleRetakePhoto(selectedIndex)}
-                        />
-                    ))}
+                    {row.map((selectedIndex, photoIndex) => {
+                        const selectedPhotoHere = capturePhotos.find((photo) => photo.id === selectedIndex.id);
+                        return (
+                            <div
+                                key={photoIndex}
+                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                style={{
+                                    backgroundImage: `url(${selectedPhotoHere ? selectedPhotoHere.url : ''})`, transform: "scaleX(-1)"
+                                }}
+                                onClick={() => handleRetakePhoto(selectedIndex)}
+                            />
+                        );
+                    })}
                 </div>
             ));
         }
