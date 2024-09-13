@@ -13,9 +13,9 @@ import load_kr from '../../assets/Photo/Load/kr/BG.png';
 import load_vn from '../../assets/Photo/Load/vn/BG.png';
 import load_mn from '../../assets/Photo/Load/mn/BG.png';
 import ok_button from '../../assets/Photo/Snap/OK.png';
-import ok_button_inactive from '../../assets/Photo/Snap/vn/OKInactive';
+import ok_button_inactive from '../../assets/Photo/Snap/OkInactive.png';
 import take_again_button from '../../assets/Photo/Snap/TakeAgain.png';
-import take_again_button_inactive from '../../assets/Photo/Snap/vn/TakeAgainInactive.png';
+import take_again_button_inactive from '../../assets/Photo/Snap/TakeAgainInactive.png';
 import { getAudio, getPhotos, deletePhoto, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 import Uid from "react-uuid"
 
@@ -201,6 +201,7 @@ function Photo() {
     const startTimer = () => {
         timerRef.current = setInterval(async () => {
             setCountdown((prevCountdown) => {
+                setTakeAgainButtonUrl(take_again_button_inactive);
                 if (prevCountdown > 0) {
                     return prevCountdown - 1;
                 } else {
@@ -218,6 +219,10 @@ function Photo() {
     };
 
     const reTakePhoto = () => {
+        // if retake button is inactive then do nothing
+        if (takeAgainButtonUrl === take_again_button_inactive) {
+            return;
+        }
         setStatus("working");
         setCountdown(8);
     };
@@ -485,12 +490,16 @@ function Photo() {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
             setStatus("done");
-            setOkButtonUrl(ok_button_active);            
+            setOkButtonUrl(ok_button);            
             // goToFilter();
         }
     }, [capturePhotos, navigate]);
 
     const goToFilter = async () => {
+        // if ok button is inactive, do not go to filter
+        if (okButtonUrl === ok_button_inactive) {
+            return;
+        }
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
 
