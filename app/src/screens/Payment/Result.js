@@ -170,7 +170,7 @@ function QR() {
           let newPhotoNum = selectedFrame === "Stripx2" ? photoNum : (parseInt(photoNum) + 1).toString();
           formData.append("uuid", uuid);
           formData.append("frame", selectedFrame);
-          // formData.append("photoNum", newPhotoNum);
+          formData.append("photoNum", newPhotoNum);
 
           // try {
           const response = await originAxiosInstance.post(
@@ -343,7 +343,7 @@ function QR() {
 
           playPrintAudio()
           setClickPrint(true);
-          await callPrinter();
+          callPrinter();
           await uploadCloud();
      };
 
