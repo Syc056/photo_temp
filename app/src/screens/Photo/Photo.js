@@ -13,9 +13,9 @@ import load_kr from '../../assets/Photo/Load/kr/BG.png';
 import load_vn from '../../assets/Photo/Load/vn/BG.png';
 import load_mn from '../../assets/Photo/Load/mn/BG.png';
 import ok_button from '../../assets/Photo/Snap/OK.png';
-import ok_button_vn from '../../assets/Photo/Snap/vn/OK.png';
+import ok_button_inactive from '../../assets/Photo/Snap/vn/OKInactive';
 import take_again_button from '../../assets/Photo/Snap/TakeAgain.png';
-import take_again_button_vn from '../../assets/Photo/Snap/vn/TakeAgain.png';
+import take_again_button_inactive from '../../assets/Photo/Snap/vn/TakeAgainInactive.png';
 import { getAudio, getPhotos, deletePhoto, sendCaptureReq, startLiveView, videoFeedUrl } from '../../api/config';
 import Uid from "react-uuid"
 
@@ -40,8 +40,8 @@ function Photo() {
     const [selectedLayout, setSelectedLayout] = useState(null);
     const [totalSnapshotPhoto, setTotalSnapshotPhoto] = useState(0);
 
-    const [okButtonUrl, setOkButtonUrl] = useState(ok_button);
-    const [takeAgainButtonUrl, setTakeAgainButtonUrl] = useState(take_again_button);
+    const [okButtonUrl, setOkButtonUrl] = useState(ok_button_inactive);
+    const [takeAgainButtonUrl, setTakeAgainButtonUrl] = useState(take_again_button_inactive);
     const [selectedReTakePhotos, setSelectedReTakePhotos] = useState([]);
 
     const [status, setStatus] = useState('working');
@@ -89,6 +89,7 @@ function Photo() {
 
     const handleRetakePhoto = (selectedId) => {
         // console.log('Selected retake:', selectedId);
+        setTakeAgainButtonUrl(take_again_button);
 
         // only set one item selectedID for retake
         setSelectedReTakePhotos([selectedId]);
@@ -217,8 +218,8 @@ function Photo() {
     };
 
     const reTakePhoto = () => {
-        // setStatus("working");
-        // setCountdown(8);
+        setStatus("working");
+        setCountdown(8);
     };
 
     const getLatestPhoto = async (currentPhotoCount) => {
@@ -484,7 +485,8 @@ function Photo() {
         if (capturePhotos.length > 0 && capturePhotos.length === totalSnapshotPhoto) {
             sessionStorage.setItem("uuid", uuid);
             setStatus("done");
-            goToFilter();
+            setOkButtonUrl(ok_button_active);            
+            // goToFilter();
         }
     }, [capturePhotos, navigate]);
 
@@ -512,16 +514,12 @@ function Photo() {
         const language = sessionStorage.getItem('language');
         if (language === 'en') {
             setBackgroundImage(background_en);
-            setLoadBgImage(load_en);
-            setOkButtonUrl(ok_button);
-            setTakeAgainButtonUrl(take_again_button);
+            setLoadBgImage(load_en);            
         } else if (language === 'ko') {
             setBackgroundImage(background_kr);
             setLoadBgImage(load_kr);
         } else if (language === 'vi') {
-            setBackgroundImage(background_vn);
-            setOkButtonUrl(ok_button_vn);
-            setTakeAgainButtonUrl(take_again_button_vn);
+            setBackgroundImage(background_vn);            
             setLoadBgImage(load_vn);
         } else if (language === 'mn') {
             setBackgroundImage(background_mn);

@@ -309,18 +309,22 @@ function PhotoPreview() {
                 ];
             }
         } else {
-            const selectedPhotoRows = chunkArray(capturePhotos, 2);            
+            const selectedPhotoRows = chunkArray(capturePhotos, 2);
             return selectedPhotoRows.map((row, rowIndex) => (
                 <div key={rowIndex} className="choose-photo-row">
-                    {row.map((selectedIndex, photoIndex) => (
-                        <div
-                            key={photoIndex}
-                            className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
-                            style={{
-                                backgroundImage: `url(${capturePhotos[photoIndex].url})`, transform:"scaleX(-1)"                                
-                            }}                            
-                        />
-                    ))}
+                    {row.map((selectedIndex, photoIndex) => {
+                        const selectedPhotoHere = capturePhotos[photoIndex];
+                        return (
+                            <div
+                                key={photoIndex}
+                                className={displayClassNameForPhoto(rowIndex, photoIndex, selectedIndex)}
+                                style={{
+                                    backgroundImage: `url(${selectedPhotoHere ? selectedPhotoHere.url : ''})`, transform: "scaleX(-1)"
+                                }}
+                                onClick={() => handleRetakePhoto(selectedIndex)}
+                            />
+                        );
+                    })}
                 </div>
             ));
         }
