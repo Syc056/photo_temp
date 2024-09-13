@@ -132,6 +132,7 @@ function QR() {
                               .then(response => {
                                    const data = response.data;
                                    const qrVal = data.photo_url;
+                                   callPrinter();
                                    if (qrVal) {
                                         sessionStorage.setItem('uploadedCloudPhotoUrl', qrVal);
                                         sessionStorage.setItem('qr', qrVal);
@@ -342,8 +343,7 @@ function QR() {
           }
 
           playPrintAudio()
-          setClickPrint(true);
-          callPrinter();
+          setClickPrint(true);          
           await uploadCloud();
      };
 
