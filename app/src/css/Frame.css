@@ -261,3 +261,25 @@
 }
 
 /** Layout **/
+
+.scroll-left {
+    position: absolute;
+    top: 43%;
+    left: 5%;
+    width: 9%;
+    height: 10%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: background-image 0.3s;
+}
+
+.scroll-right {
+    position: absolute;
+    top: 43%;
+    right: 3%;
+    width: 9%;
+    height: 10%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: background-image 0.3s;
+}

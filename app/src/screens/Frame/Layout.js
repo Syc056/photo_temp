@@ -29,6 +29,8 @@ import confirm_vn from '../../assets/Frame/Layout/Confirm/vn/confirm.png';
 import confirm_vn_hover from '../../assets/Frame/Layout/Confirm/vn/confirm_click.png';
 import confirm_mn from '../../assets/Frame/Layout/Confirm/mn/confirm.png';
 import confirm_mn_hover from '../../assets/Frame/Layout/Confirm/mn/confirm_click.png';
+import scroll_left from '../../assets/Photo/Snap/ScrollLeft.png';
+import scroll_right from '../../assets/Photo/Snap/ScrollRight.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../../api/config';
 
 // Carousel Image Choice
@@ -332,6 +334,12 @@ function Layout() {
      const playAudio = async () => {
           const res = await getAudio({ file_name: "choose_frame_style.wav" })
      }
+
+     const scrollPage = (scrollOffset) => {
+          const frameContainer = document.querySelector('.frame-carousel-container');
+          frameContainer.scrollLeft += scrollOffset;
+     }
+
      useEffect(() => {
           playAudio()
      }, [])     
@@ -352,11 +360,13 @@ function Layout() {
                     style={{
                     }}
                >
+                    <div className="scroll-left" style={{ backgroundImage: `url(${scroll_left})` }} onClick={() => scrollPage(-200)}></div>
                     <LayoutCarousel
                          clickedTitles={clickedTitles}
                          images={layouts}
                          handleClick={handleClick}
                     />
+                    <div className="scroll-right" style={{ backgroundImage: `url(${scroll_right})` } } onClick={() => scrollPage(200)}></div>
                </div>
                <div
                     className="confirm-layout-button"

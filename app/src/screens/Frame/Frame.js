@@ -20,6 +20,8 @@ import goback_vn from '../../assets/Common/vn/goback.png';
 import goback_vn_hover from '../../assets/Common/vn/gobackhover.png';
 import goback_mn from '../../assets/Common/mn/goback.png';
 import goback_mn_hover from '../../assets/Common/mn/gobackhover.png';
+import scroll_left from '../../assets/Photo/Snap/ScrollLeft.png';
+import scroll_right from '../../assets/Photo/Snap/ScrollRight.png';
 import { getAudio, getClickAudio, originAxiosInstance } from '../../api/config';
 
 // Language
@@ -215,6 +217,10 @@ function Frame() {
     navigate('/layout');
   }
 
+  const scrollPage = (scrollOffset) => {
+    const frameContainer = document.querySelector('.frame-carousel-container');
+    frameContainer.scrollLeft += scrollOffset;
+  }
 
   return (
     <div className='layout-container'
@@ -222,7 +228,7 @@ function Frame() {
         backgroundImage: `url(${frameBackground})`        
       }}
     >
-      <div className="go-back-frame" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => navigate("/background")} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>
+      <div className="go-back-frame" style={{ backgroundImage: `url(${goBackBg})` }} onClick={() => navigate("/background")} onMouseEnter={() => hoverGoBackBtn(language)} onMouseLeave={() => hoverGoBackBtn(language)}></div>      
       <div className="style-section"
         draggable={false}
         onDragStart={onDrag}
@@ -231,13 +237,15 @@ function Frame() {
         style={{
         }}
       >
+        <div className="scroll-left" style={{ backgroundImage: `url(${scroll_left})` }} onClick={() => scrollPage(-200)}></div>
         <FrameCarousel
           clickedTitles={clickedTitles}
           images={frames}
           handleClick={handleClick}
           width={definedWidth}
         />
-      </div>   
+        <div className="scroll-right" style={{ backgroundImage: `url(${scroll_right})` } } onClick={() => scrollPage(200)}></div>
+      </div>         
 
       <HomeButton />   
     </div>
