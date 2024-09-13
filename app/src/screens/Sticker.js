@@ -1206,8 +1206,8 @@ function Sticker() {
             const calcedWidth = calcedHeight * 1.45;
 
             const x11 = 18;
-            const x12 = calcedWidth + x11 + 29;
-            const y1 = 28;
+            const x12 = calcedWidth + x11 + 26;
+            const y1 = 36;
 
             return imgTag.length === 0 ? <></> : (
                 <>
