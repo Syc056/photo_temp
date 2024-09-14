@@ -140,8 +140,8 @@
      background-repeat: no-repeat;
      background-position: center;
      position: relative;
-     left: 10%;
-     bottom: 21%;
+     left: -9%;
+     bottom: 25%;
 }
 
 .minus-icon {
@@ -151,8 +151,8 @@
      background-repeat: no-repeat;
      background-position: center;
      position: relative;
-     left: 10%;
-     top: 19%;
+     left: -9.8%;
+     top: 22%;
 }
 
 .intensity-icon {
